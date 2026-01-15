@@ -2,8 +2,8 @@
 <html lang="he" dir="rtl" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Earnings Pro - Personal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Earnings Pro - Mobile Ready</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -26,125 +26,147 @@
             --modal-bg: rgba(0, 0, 0, 0.5);
             --btn-hover-bg: rgba(0, 0, 0, 0.05);
         }
-        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Rubik', sans-serif; margin: 0; padding: 0; overflow-y: scroll; }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Rubik', sans-serif; margin: 0; padding: 0; overflow-y: scroll; -webkit-tap-highlight-color: transparent; }
         
         /* Layout */
-        header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 15px 25px; position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow); }
-        .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .logo { font-size: 22px; font-weight: 700; color: var(--text-main); }
+        header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 10px 15px; position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow); }
+        
+        .top-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .logo { font-size: 20px; font-weight: 700; color: var(--text-main); white-space: nowrap; }
         .logo span { color: var(--accent-blue); }
-        .date-nav { display: flex; align-items: center; gap: 15px; background: var(--panel-bg); padding: 5px 15px; border-radius: 8px; border: 1px solid var(--border-color); }
-        .nav-btn { background: none; border: none; color: var(--text-main); font-size: 18px; cursor: pointer; padding: 5px 10px; border-radius: 4px; }
-        .nav-btn:hover { color: var(--accent-blue); background: var(--mini-card-hover); }
-        .current-date-display { font-weight: 500; min-width: 150px; text-align: center; direction: ltr; }
-        .right-actions { display: flex; gap: 10px; align-items: center; }
         
-        .theme-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .view-toggle { display: flex; gap: 4px; background: var(--panel-bg); padding: 4px; border-radius: 8px; border: 1px solid var(--border-color); }
-        .view-btn { border: none; background: transparent; color: var(--text-muted); padding: 6px 14px; font-size: 13px; font-weight: 500; border-radius: 6px; cursor: pointer; transition: 0.2s; }
-        .view-btn.active { background: var(--accent-blue); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        .view-btn:hover:not(.active) { background: var(--mini-card-hover); color: var(--text-main); }
+        .date-nav { display: flex; align-items: center; gap: 10px; background: var(--panel-bg); padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border-color); flex-grow: 1; justify-content: space-between; max-width: 400px; }
+        .nav-btn { background: none; border: none; color: var(--text-main); font-size: 18px; cursor: pointer; padding: 5px 12px; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+        .nav-btn:active { background: var(--mini-card-hover); }
+        .current-date-display { font-weight: 500; font-size: 14px; text-align: center; direction: ltr; min-width: 120px; }
         
-        /* Filters */
-        .controls-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
-        input, select { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 12px; border-radius: 6px; font-size: 14px; outline: none; font-family: 'Rubik', sans-serif; }
+        .right-actions { display: flex; gap: 8px; align-items: center; }
+        
+        .theme-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px; border-radius: 6px; cursor: pointer; }
+        .view-toggle { display: flex; gap: 2px; background: var(--panel-bg); padding: 3px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .view-btn { border: none; background: transparent; color: var(--text-muted); padding: 6px 10px; font-size: 12px; font-weight: 500; border-radius: 6px; cursor: pointer; }
+        .view-btn.active { background: var(--accent-blue); color: white; }
+        
+        /* Filters Row */
+        .controls-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+        input, select { 
+            background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); 
+            padding: 8px 12px; border-radius: 6px; font-size: 14px; outline: none; font-family: 'Rubik', sans-serif; 
+            height: 38px; box-sizing: border-box;
+        }
         #myListsFilter { border-color: var(--accent-gold); color: var(--accent-gold); font-weight: 500; }
-        #myListsFilter option { color: var(--text-main); }
         
-        .container { max-width: 1800px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 1800px; margin: 0 auto; padding: 15px; padding-bottom: 50px; }
         
-        /* Grid */
-        .date-section { margin-bottom: 30px; }
-        .date-header { font-size: 16px; color: var(--accent-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 15px; }
-        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+        /* --- RESPONSIVE MOBILE STYLES --- */
+        @media (max-width: 768px) {
+            header { padding: 10px; }
+            .top-row { gap: 10px; }
+            .logo { font-size: 18px; order: 1; }
+            .right-actions { order: 2; }
+            
+            /* תאריך יורד שורה במובייל */
+            .date-nav { order: 3; width: 100%; max-width: none; margin-top: 5px; }
+            
+            .controls-row { gap: 8px; }
+            /* פילטרים ברוחב מלא או חצי רוחב */
+            #searchInput { width: 100% !important; order: 1; }
+            select { flex: 1; min-width: 45%; order: 2; }
+            #stats-counter { width: 100%; text-align: center; order: 3; margin-top: 5px; }
+            
+            .cards-grid { grid-template-columns: 1fr 1fr; gap: 10px; } /* 2 עמודות במובייל */
+            
+            .stock-card { height: auto; min-height: 140px; }
+            .company-name { font-size: 11px; white-space: normal; line-height: 1.2; height: 28px; } /* שם חברה גולש */
+            
+            .modal-content { width: 95% !important; max-height: 85vh; }
+            .modal-content.large-modal { height: 90vh; }
+        }
+
+        /* Cards */
+        .date-section { margin-bottom: 25px; }
+        .date-header { font-size: 15px; color: var(--accent-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 12px; font-weight: 500; }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         
-        /* --- STOCK CARD --- */
         .stock-card { 
             background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; 
-            padding: 12px; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; 
-            position: relative; overflow: hidden; box-shadow: var(--shadow); transition: 0.2s; height: 130px; /* קצת יותר גבוה לכפתורים */
+            padding: 10px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; 
+            position: relative; overflow: hidden; box-shadow: var(--shadow); transition: 0.2s; height: 135px;
         }
-        .stock-card:hover { border-color: var(--accent-blue); }
         
-        .card-top { display: flex; justify-content: space-between; align-items: center; padding-left: 25px; }
-        .stock-logo { width: 32px; height: 32px; border-radius: 50%; background: #fff; object-fit: contain; padding: 2px; border: 1px solid #eee; flex-shrink: 0; }
+        .card-top { display: flex; justify-content: space-between; align-items: center; padding-left: 28px; /* מקום לכוכב */ }
+        .stock-logo { width: 30px; height: 30px; border-radius: 50%; background: #fff; object-fit: contain; padding: 2px; border: 1px solid #eee; flex-shrink: 0; }
         
         .text-info { text-align: left; direction: ltr; }
-        .symbol { font-size: 16px; font-weight: 700; color: var(--text-main); display: block; }
-        .market-cap { font-size: 11px; color: var(--text-muted); background: var(--mini-card-bg); padding: 1px 5px; border-radius: 3px; border: 1px solid var(--border-color); display: inline-block; }
-        .company-name { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; direction: ltr; text-align: left; display: block; width: 100%; }
+        .symbol { font-size: 15px; font-weight: 700; color: var(--text-main); display: block; }
+        .market-cap { font-size: 10px; color: var(--text-muted); background: var(--mini-card-bg); padding: 1px 4px; border-radius: 3px; border: 1px solid var(--border-color); display: inline-block; }
+        .company-name { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; direction: ltr; text-align: left; width: 100%; }
         
         .card-strip { position: absolute; top: 0; left: 0; width: 100%; height: 3px; }
-        .time-badge { font-size: 11px; display: inline-flex; align-items: center; gap: 4px; background: var(--time-badge-bg); padding: 2px 6px; border-radius: 4px; color: var(--time-badge-color); direction: rtl; }
+        .time-badge { font-size: 10px; display: inline-flex; align-items: center; gap: 3px; background: var(--time-badge-bg); padding: 2px 5px; border-radius: 4px; color: var(--time-badge-color); direction: rtl; }
         
         /* Star */
-        .star-btn { position: absolute; top: 8px; left: 8px; background: none; border: none; cursor: pointer; padding: 0; font-size: 18px; color: #444; z-index: 10; transition: 0.2s; }
-        .star-btn:hover { transform: scale(1.2); }
+        .star-btn { position: absolute; top: 5px; left: 5px; background: none; border: none; cursor: pointer; padding: 5px; font-size: 20px; color: #444; z-index: 10; }
         .star-btn.active { color: var(--accent-gold); }
         
-        /* --- ACTION BUTTONS (Links) --- */
-        .card-actions {
-            display: flex; gap: 6px; margin-top: auto; justify-content: flex-end; /* כפתורים בצד שמאל (LTR layout inside) */
-            direction: ltr; 
-        }
-        .action-btn {
-            display: flex; align-items: center; justify-content: center;
-            width: 26px; height: 26px; border-radius: 6px;
-            background: var(--panel-bg); border: 1px solid var(--border-color);
-            cursor: pointer; transition: 0.2s;
-            text-decoration: none;
-        }
-        .action-btn:hover { background: var(--btn-hover-bg); border-color: var(--accent-blue); transform: translateY(-2px); }
-        .action-icon { width: 16px; height: 16px; object-fit: contain; }
+        /* Action Buttons */
+        .card-actions { display: flex; gap: 8px; margin-top: auto; justify-content: flex-end; direction: ltr; }
+        .action-btn { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 6px; background: var(--panel-bg); border: 1px solid var(--border-color); cursor: pointer; text-decoration: none; }
+        .action-btn:active { background: var(--btn-hover-bg); border-color: var(--accent-blue); }
+        .action-icon { width: 18px; height: 18px; object-fit: contain; }
 
         /* Modal */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); z-index: 2000; display: none; justify-content: center; align-items: center; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(2px); }
         .modal-overlay.open { display: flex; }
-        .modal-content { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .modal-content.large-modal { width: 90%; max-width: 1000px; height: 80vh; display: flex; flex-direction: column; }
-        .modal-body-scroll { overflow-y: auto; flex: 1; padding: 10px; }
+        .modal-content { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: flex; flex-direction: column; }
+        
+        .modal-content.large-modal { width: 90%; max-width: 1000px; height: 80vh; }
+        .modal-body-scroll { overflow-y: auto; flex: 1; padding: 5px; -webkit-overflow-scrolling: touch; }
         .modal-header { font-size: 18px; font-weight: bold; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
-        .close-modal { cursor: pointer; color: var(--text-muted); font-size: 24px; }
-        .list-options { display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; margin-bottom: 15px; }
-        .list-option { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-radius: 6px; background: var(--panel-bg); cursor: pointer; }
-        .list-option:hover { background: var(--mini-card-hover); }
-        .list-option-left { display: flex; align-items: center; gap: 10px; flex: 1; }
-        .delete-list-btn { background: none; border: none; cursor: pointer; color: var(--accent-red); opacity: 0.6; transition: 0.2s; padding: 4px; }
-        .delete-list-btn:hover { opacity: 1; transform: scale(1.1); }
-        .new-list-row { display: flex; gap: 5px; margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 10px; }
-        .add-list-btn { background: var(--accent-blue); color: white; border: none; border-radius: 6px; cursor: pointer; padding: 0 12px; font-size: 18px; }
+        .close-modal { cursor: pointer; color: var(--text-muted); font-size: 24px; padding: 0 10px; }
+        
+        .list-options { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; margin-bottom: 15px; max-height: 200px; }
+        .list-option { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-radius: 6px; background: var(--panel-bg); cursor: pointer; }
+        .list-option input { width: 20px; height: 20px; margin: 0; }
+        
+        .new-list-row { display: flex; gap: 8px; margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 15px; }
+        .add-list-btn { background: var(--accent-blue); color: white; border: none; border-radius: 6px; cursor: pointer; padding: 0 15px; font-size: 20px; display: flex; align-items: center; }
 
         /* Calendar */
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
-        .calendar-day-header { text-align: center; color: var(--text-muted); padding: 10px; background: var(--day-header-bg); border-radius: 4px; }
-        .calendar-day { background: var(--card-bg); border: 1px solid var(--border-color); min-height: 150px; border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 8px; overflow: hidden; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+        /* ביטול לוח שנה 7 עמודות במובייל - נעשה לו גלילה אופקית */
+        @media (max-width: 600px) {
+            .calendar-grid { display: flex; overflow-x: auto; padding-bottom: 10px; gap: 10px; scroll-snap-type: x mandatory; }
+            .calendar-day-header { display: none; } /* נסתיר כותרות ימים במובייל כי זה בגלילה */
+            .calendar-day { min-width: 85vw; scroll-snap-align: center; }
+            .day-number { text-align: center; font-size: 16px; }
+        }
+        
+        .calendar-day-header { text-align: center; color: var(--text-muted); padding: 8px; background: var(--day-header-bg); border-radius: 4px; font-size: 13px; }
+        .calendar-day { background: var(--card-bg); border: 1px solid var(--border-color); min-height: 120px; border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
         .calendar-day.today { border: 1px solid var(--accent-blue); }
-        .day-number { font-size: 14px; color: var(--text-muted); margin-bottom: 5px; font-weight: bold; border-bottom: 1px solid var(--border-color); }
-        .show-more-btn { background: var(--panel-bg); color: var(--accent-blue); font-size: 11px; padding: 6px; text-align: center; border-radius: 4px; cursor: pointer; margin-top: auto; border: 1px dashed var(--border-color); transition: 0.2s; font-weight: 500; }
-        .show-more-btn:hover { background: var(--mini-card-hover); border-color: var(--accent-blue); }
+        .day-number { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; font-weight: bold; border-bottom: 1px solid var(--border-color); }
+        .show-more-btn { background: var(--panel-bg); color: var(--accent-blue); font-size: 11px; padding: 8px; text-align: center; border-radius: 4px; cursor: pointer; margin-top: auto; border: 1px dashed var(--border-color); }
 
-        /* Mini Card with Actions */
-        .mini-card { background: var(--mini-card-bg); border: 1px solid var(--border-color); border-radius: 4px; padding: 6px; display: flex; align-items: center; gap: 8px; position: relative; padding-left: 20px; overflow: hidden; height: 42px; flex-shrink: 0; }
-        .mini-card:hover { border-color: var(--accent-blue); }
-        .mini-logo { width: 20px; height: 20px; border-radius: 50%; background: white; object-fit: contain; flex-shrink: 0; }
+        .mini-card { background: var(--mini-card-bg); border: 1px solid var(--border-color); border-radius: 4px; padding: 4px; display: flex; align-items: center; gap: 6px; position: relative; padding-left: 15px; overflow: hidden; height: 38px; flex-shrink: 0; }
+        .mini-logo { width: 18px; height: 18px; border-radius: 50%; background: white; object-fit: contain; flex-shrink: 0; }
         .mini-info { display: flex; flex-direction: column; width: 100%; overflow: hidden; direction: ltr; text-align: left; }
         .mini-top { display: flex; justify-content: space-between; align-items: center; }
-        .mini-sym { font-weight: 700; font-size: 11px; }
-        .mini-cap { font-size: 9px; color: var(--text-muted); }
+        .mini-sym { font-weight: 700; font-size: 10px; }
+        .mini-cap { font-size: 8px; color: var(--text-muted); }
         .mini-strip { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
-        .mini-card .star-btn { font-size: 12px; top: 2px; left: 2px; }
-        .mini-actions { display: flex; gap: 4px; margin-right: auto; margin-left: 5px; } /* כפתורים במיני */
-        .mini-action-btn { width: 20px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); cursor: pointer; }
-        .mini-action-btn img { width: 12px; height: 12px; }
-        .mini-action-btn:hover { border-color: var(--accent-blue); }
+        .mini-card .star-btn { font-size: 10px; top: 1px; left: 1px; padding: 2px; }
+        .mini-actions { display: flex; gap: 4px; margin-right: auto; margin-left: 5px; }
+        .mini-action-btn { width: 18px; height: 18px; border-radius: 3px; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); cursor: pointer; text-decoration: none; }
+        .mini-action-btn img { width: 10px; height: 10px; }
 
-        /* Sectors Colors */
+        /* Sectors */
         .sec-tech { background: #0d6efd; } .bg-tech { background: rgba(13, 110, 253, 0.15); color: #0d6efd; }
         .sec-fin { background: #198754; } .bg-fin { background: rgba(25, 135, 84, 0.15); color: #198754; }
         .sec-health { background: #dc3545; } .bg-health { background: rgba(220, 53, 69, 0.15); color: #dc3545; }
         .sec-cons { background: #fd7e14; } .bg-cons { background: rgba(253, 126, 20, 0.15); color: #fd7e14; }
         .sec-other { background: #6c757d; } .bg-other { background: rgba(108, 117, 125, 0.15); color: #6c757d; }
-        .tag-text { font-size: 10px; padding: 3px 8px; border-radius: 10px; align-self: flex-start; margin-top: 5px; opacity: 0.9; }
+        .tag-text { font-size: 9px; padding: 2px 6px; border-radius: 8px; align-self: flex-start; margin-top: 4px; opacity: 0.9; }
     </style>
 </head>
 <body>
@@ -152,11 +174,6 @@
 <header>
     <div class="top-row">
         <div class="logo">Earnings<span>Pro</span></div>
-        <div class="date-nav">
-            <button class="nav-btn" onclick="changeDate(-1)">&#10094;</button>
-            <div class="current-date-display" id="dateDisplay"></div>
-            <button class="nav-btn" onclick="changeDate(1)">&#10095;</button>
-        </div>
         <div class="right-actions">
             <button class="theme-btn" onclick="toggleTheme()">🌗</button>
             <div class="view-toggle">
@@ -165,10 +182,15 @@
                 <button class="view-btn" onclick="switchView('week')" id="btn-week">שבועי</button>
             </div>
         </div>
+        <div class="date-nav">
+            <button class="nav-btn" onclick="changeDate(-1)">&#10094;</button>
+            <div class="current-date-display" id="dateDisplay"></div>
+            <button class="nav-btn" onclick="changeDate(1)">&#10095;</button>
+        </div>
     </div>
 
     <div class="controls-row">
-        <input type="text" id="searchInput" placeholder="חפש מניה..." style="width: 150px;">
+        <input type="text" id="searchInput" placeholder="חפש מניה...">
         <select id="myListsFilter">
             <option value="all">כל השוק</option>
             <option disabled>── רשימות שלי ──</option>
@@ -184,7 +206,7 @@
             <option value="10000000000">> 10 מיליארד</option>
             <option value="50000000000">> 50 מיליארד</option>
         </select>
-        <div style="margin-right: auto; color: var(--text-muted); font-size: 12px;" id="stats-counter"></div>
+        <div id="stats-counter" style="color:var(--text-muted); font-size:12px;"></div>
     </div>
 </header>
 
@@ -200,7 +222,7 @@
         </div>
         <div class="list-options" id="modalListsContainer"></div>
         <div class="new-list-row">
-            <input type="text" id="newListName" placeholder="רשימה חדשה..." style="width: 100%;">
+            <input type="text" id="newListName" placeholder="רשימה חדשה...">
             <button class="add-list-btn" onclick="createNewList()">+</button>
         </div>
     </div>
@@ -323,7 +345,7 @@
     function openDayModal(dateStr, stocks) {
         const d = new Date(dateStr);
         document.getElementById('dayModalTitle').innerText = 
-            `דיווחים לתאריך: ${dateStr} - ${d.toLocaleDateString('he-IL', {weekday:'long'})} (${stocks.length})`;
+            `דיווחים: ${dateStr} (${stocks.length})`;
         const grid = document.getElementById('dayModalGrid');
         grid.innerHTML = '';
         stocks.forEach(s => { grid.appendChild(createCard(s, 'full')); });
@@ -482,15 +504,21 @@
     function renderCalendarGrid(data, type) {
         const container = document.getElementById('main-container'); container.innerHTML = '';
         const grid = document.createElement('div'); grid.className = 'calendar-grid';
-        ['א','ב','ג','ד','ה','ו','ש'].forEach(d => {
-            const h = document.createElement('div'); h.className = 'calendar-day-header'; h.innerText = d; grid.appendChild(h);
-        });
+        
+        // כותרות ימים רק אם זה לא מובייל בתצוגת חודש
+        if (window.innerWidth > 600 || type !== 'month') {
+            ['א','ב','ג','ד','ה','ו','ש'].forEach(d => {
+                const h = document.createElement('div'); h.className = 'calendar-day-header'; h.innerText = d; grid.appendChild(h);
+            });
+        }
 
         let startD, endD, daysCount;
         if (type === 'month') {
             startD = new Date(navigationDate.getFullYear(), navigationDate.getMonth(), 1);
             daysCount = new Date(navigationDate.getFullYear(), navigationDate.getMonth()+1, 0).getDate();
-            for(let i=0; i<startD.getDay(); i++) grid.appendChild(document.createElement('div'));
+            if (window.innerWidth > 600) {
+                for(let i=0; i<startD.getDay(); i++) grid.appendChild(document.createElement('div'));
+            }
         } else {
             const d = new Date(navigationDate); const day = d.getDay();
             d.setDate(d.getDate() - day + (day === 0 ? -6 : 0));
@@ -540,13 +568,10 @@
         // URLs
         const tvUrl = `https://www.tradingview.com/chart/?symbol=${stock.symbol}`;
         const yahooUrl = `https://finance.yahoo.com/quote/${stock.symbol}`;
-
-        // ICONS (Google Favicons)
         const tvIcon = "https://www.google.com/s2/favicons?domain=tradingview.com";
         const yahooIcon = "https://www.google.com/s2/favicons?domain=finance.yahoo.com";
 
         const el = document.createElement('div');
-        // No Main Click
 
         if (type === 'full') {
             el.className = 'stock-card';
