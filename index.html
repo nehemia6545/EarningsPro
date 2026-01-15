@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Earnings Pro - Mobile Ready</title>
+    <title>Earnings Pro - Mobile Optimized</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -64,24 +64,78 @@
             .top-row { gap: 10px; }
             .logo { font-size: 18px; order: 1; }
             .right-actions { order: 2; }
-            
-            /* תאריך יורד שורה במובייל */
             .date-nav { order: 3; width: 100%; max-width: none; margin-top: 5px; }
             
             .controls-row { gap: 8px; }
-            /* פילטרים ברוחב מלא או חצי רוחב */
             #searchInput { width: 100% !important; order: 1; }
             select { flex: 1; min-width: 45%; order: 2; }
             #stats-counter { width: 100%; text-align: center; order: 3; margin-top: 5px; }
             
-            .cards-grid { grid-template-columns: 1fr 1fr; gap: 10px; } /* 2 עמודות במובייל */
-            
+            /* List View Grid on Mobile */
+            .cards-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
             .stock-card { height: auto; min-height: 140px; }
-            .company-name { font-size: 11px; white-space: normal; line-height: 1.2; height: 28px; } /* שם חברה גולש */
             
             .modal-content { width: 95% !important; max-height: 85vh; }
             .modal-content.large-modal { height: 90vh; }
+
+            /* --- NEW WEEKLY VIEW FOR MOBILE (Horizontal Scroll Rows) --- */
+            .calendar-grid.week-view {
+                display: flex; 
+                flex-direction: column; /* Stack days vertically */
+                gap: 15px;
+            }
+            
+            .calendar-grid.week-view .calendar-day-header { display: none; } /* Hide standard headers */
+            
+            .calendar-grid.week-view .calendar-day {
+                display: flex;
+                flex-direction: row;      /* Stocks go sideways */
+                overflow-x: auto;         /* Allow scrolling */
+                gap: 10px;
+                padding: 10px 10px 15px 10px;
+                min-height: 160px;        /* Fixed height for row */
+                border-left: 4px solid var(--accent-blue);
+                background: linear-gradient(to right, var(--card-bg) 90%, transparent); /* Fade effect hint */
+                align-items: flex-start;
+                scroll-snap-type: x mandatory;
+            }
+            
+            /* Make day title visible inside the card */
+            .mobile-day-title {
+                display: block !important;
+                position: absolute;
+                top: 0; right: 0;
+                background: var(--panel-bg);
+                color: var(--accent-blue);
+                padding: 4px 10px;
+                font-size: 12px;
+                font-weight: bold;
+                border-bottom-left-radius: 8px;
+                z-index: 5;
+                border-bottom: 1px solid var(--border-color);
+                border-left: 1px solid var(--border-color);
+            }
+
+            /* Make cards inside week view fixed width */
+            .calendar-grid.week-view .stock-card {
+                min-width: 160px; /* Fixed width for scrolling items */
+                width: 160px;
+                scroll-snap-align: start;
+                flex-shrink: 0;
+                margin-top: 25px; /* Space for the day title */
+            }
+            .calendar-grid.week-view .mini-card {
+                min-width: 140px;
+                flex-shrink: 0;
+                margin-top: 25px;
+            }
+            
+            .day-empty-msg {
+                margin-top: 30px; color: var(--text-muted); font-size: 12px; padding-right: 10px;
+            }
         }
+        
+        .mobile-day-title { display: none; } /* Hidden on desktop */
 
         /* Cards */
         .date-section { margin-bottom: 25px; }
@@ -94,7 +148,7 @@
             position: relative; overflow: hidden; box-shadow: var(--shadow); transition: 0.2s; height: 135px;
         }
         
-        .card-top { display: flex; justify-content: space-between; align-items: center; padding-left: 28px; /* מקום לכוכב */ }
+        .card-top { display: flex; justify-content: space-between; align-items: center; padding-left: 28px; }
         .stock-logo { width: 30px; height: 30px; border-radius: 50%; background: #fff; object-fit: contain; padding: 2px; border: 1px solid #eee; flex-shrink: 0; }
         
         .text-info { text-align: left; direction: ltr; }
@@ -132,23 +186,20 @@
         .new-list-row { display: flex; gap: 8px; margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 15px; }
         .add-list-btn { background: var(--accent-blue); color: white; border: none; border-radius: 6px; cursor: pointer; padding: 0 15px; font-size: 20px; display: flex; align-items: center; }
 
-        /* Calendar */
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
-        /* ביטול לוח שנה 7 עמודות במובייל - נעשה לו גלילה אופקית */
-        @media (max-width: 600px) {
-            .calendar-grid { display: flex; overflow-x: auto; padding-bottom: 10px; gap: 10px; scroll-snap-type: x mandatory; }
-            .calendar-day-header { display: none; } /* נסתיר כותרות ימים במובייל כי זה בגלילה */
-            .calendar-day { min-width: 85vw; scroll-snap-align: center; }
-            .day-number { text-align: center; font-size: 16px; }
-        }
+        /* Calendar Grid (Desktop Default) */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+        
+        /* Mobile Week View Overrides are in the @media block above */
         
         .calendar-day-header { text-align: center; color: var(--text-muted); padding: 8px; background: var(--day-header-bg); border-radius: 4px; font-size: 13px; }
-        .calendar-day { background: var(--card-bg); border: 1px solid var(--border-color); min-height: 120px; border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
+        .calendar-day { background: var(--card-bg); border: 1px solid var(--border-color); min-height: 120px; border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 6px; overflow: hidden; position: relative; }
         .calendar-day.today { border: 1px solid var(--accent-blue); }
         .day-number { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; font-weight: bold; border-bottom: 1px solid var(--border-color); }
+        
         .show-more-btn { background: var(--panel-bg); color: var(--accent-blue); font-size: 11px; padding: 8px; text-align: center; border-radius: 4px; cursor: pointer; margin-top: auto; border: 1px dashed var(--border-color); }
 
         .mini-card { background: var(--mini-card-bg); border: 1px solid var(--border-color); border-radius: 4px; padding: 4px; display: flex; align-items: center; gap: 6px; position: relative; padding-left: 15px; overflow: hidden; height: 38px; flex-shrink: 0; }
+        .mini-card:hover { border-color: var(--accent-blue); }
         .mini-logo { width: 18px; height: 18px; border-radius: 50%; background: white; object-fit: contain; flex-shrink: 0; }
         .mini-info { display: flex; flex-direction: column; width: 100%; overflow: hidden; direction: ltr; text-align: left; }
         .mini-top { display: flex; justify-content: space-between; align-items: center; }
@@ -160,7 +211,7 @@
         .mini-action-btn { width: 18px; height: 18px; border-radius: 3px; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); cursor: pointer; text-decoration: none; }
         .mini-action-btn img { width: 10px; height: 10px; }
 
-        /* Sectors */
+        /* Sectors Colors */
         .sec-tech { background: #0d6efd; } .bg-tech { background: rgba(13, 110, 253, 0.15); color: #0d6efd; }
         .sec-fin { background: #198754; } .bg-fin { background: rgba(25, 135, 84, 0.15); color: #198754; }
         .sec-health { background: #dc3545; } .bg-health { background: rgba(220, 53, 69, 0.15); color: #dc3545; }
@@ -244,13 +295,11 @@
     let allData = [];
     let currentView = 'list';
     let navigationDate = new Date();
-    
-    // --- Safe LocalStorage Init ---
     let userLists = {};
+
     try {
         const stored = localStorage.getItem('userLists');
         userLists = stored ? JSON.parse(stored) : { "מועדפים": [] };
-        if (typeof userLists !== 'object' || userLists === null) throw new Error("Corrupt data");
     } catch (e) {
         userLists = { "מועדפים": [] };
         localStorage.setItem('userLists', JSON.stringify(userLists));
@@ -258,30 +307,18 @@
     
     let currentModalSymbol = '';
 
-    // --- LIST MANAGEMENT ---
-    function saveUserLists() {
-        localStorage.setItem('userLists', JSON.stringify(userLists));
-        renderListsDropdown();
-        applyFilters();
-    }
-
+    function saveUserLists() { localStorage.setItem('userLists', JSON.stringify(userLists)); renderListsDropdown(); applyFilters(); }
+    
     function renderListsDropdown() {
         const select = document.getElementById('myListsFilter');
         const currentVal = select.value;
         while (select.options.length > 2) select.remove(2);
-
         Object.keys(userLists).forEach(listName => {
             const opt = document.createElement('option');
-            opt.value = listName;
-            opt.innerText = listName;
-            select.appendChild(opt);
+            opt.value = listName; opt.innerText = listName; select.appendChild(opt);
         });
-
-        if (Object.keys(userLists).includes(currentVal) || currentVal === 'all') {
-            select.value = currentVal;
-        } else {
-            select.value = 'all';
-        }
+        if (Object.keys(userLists).includes(currentVal) || currentVal === 'all') select.value = currentVal;
+        else select.value = 'all';
     }
 
     function openListModal(event, symbol) {
@@ -290,7 +327,6 @@
         document.getElementById('modalSymbol').innerText = symbol;
         const container = document.getElementById('modalListsContainer');
         container.innerHTML = '';
-
         Object.keys(userLists).forEach(listName => {
             const isChecked = userLists[listName].includes(symbol);
             const div = document.createElement('div');
@@ -340,33 +376,21 @@
 
     function closeModal(event) { if (event.target.id === 'listsModal') closeModalForce(); }
     function closeModalForce() { document.getElementById('listsModal').classList.remove('open'); }
-    
-    // --- DAY DETAILS MODAL ---
     function openDayModal(dateStr, stocks) {
         const d = new Date(dateStr);
-        document.getElementById('dayModalTitle').innerText = 
-            `דיווחים: ${dateStr} (${stocks.length})`;
-        const grid = document.getElementById('dayModalGrid');
-        grid.innerHTML = '';
+        document.getElementById('dayModalTitle').innerText = `דיווחים: ${dateStr} (${stocks.length})`;
+        const grid = document.getElementById('dayModalGrid'); grid.innerHTML = '';
         stocks.forEach(s => { grid.appendChild(createCard(s, 'full')); });
         document.getElementById('dayDetailsModal').classList.add('open');
     }
     function closeDayModal(event) { if (event.target.id === 'dayDetailsModal') closeDayModalForce(); }
     function closeDayModalForce() { document.getElementById('dayDetailsModal').classList.remove('open'); }
+    function isStockStarred(symbol) { for (const list in userLists) { if (userLists[list].includes(symbol)) return true; } return false; }
 
-    function isStockStarred(symbol) {
-        for (const list in userLists) {
-            if (userLists[list].includes(symbol)) return true;
-        }
-        return false;
-    }
-
-    // --- MAIN ---
     function toggleTheme() {
         const html = document.documentElement;
         html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     }
-
     function formatMoney(n) {
         if (!n) return "-";
         if (n >= 1e12) return +(n / 1e12).toFixed(2) + "T";
@@ -374,7 +398,6 @@
         if (n >= 1e6) return +(n / 1e6).toFixed(1) + "M";
         return n;
     }
-
     function getSectorMeta(sector) {
         if (!sector) return ['sec-other', 'bg-other'];
         const s = sector.toLowerCase();
@@ -395,17 +418,13 @@
             applyFilters();
         })
         .catch(err => {
-            console.error(err);
-            document.getElementById('main-container').innerHTML = `<div style='text-align:center;margin-top:50px;'>שגיאה בטעינת נתונים.<br>ודא שהשרת רץ (python3 -m http.server)</div>`;
+            document.getElementById('main-container').innerHTML = `<div style='text-align:center;margin-top:50px;'>שגיאה בטעינת נתונים.<br>ודא שהשרת רץ</div>`;
         });
 
     function populateSectors() {
         const sectors = [...new Set(allData.map(d => d.sector))].sort();
         const select = document.getElementById('sectorFilter');
-        sectors.forEach(s => {
-            const opt = document.createElement('option');
-            opt.value = s; opt.innerText = s; select.appendChild(opt);
-        });
+        sectors.forEach(s => { const opt = document.createElement('option'); opt.value = s; opt.innerText = s; select.appendChild(opt); });
     }
 
     function changeDate(delta) {
@@ -420,8 +439,7 @@
             document.getElementById('dateDisplay').innerText = navigationDate.toLocaleDateString('he-IL', { year: 'numeric', month: 'long' });
         } else {
             const d = new Date(navigationDate);
-            const day = d.getDay();
-            d.setDate(d.getDate() - day + (day === 0 ? -6 : 0));
+            const day = d.getDay(); d.setDate(d.getDate() - day + (day === 0 ? -6 : 0));
             const start = new Date(d);
             const end = new Date(d); end.setDate(end.getDate() + 6);
             document.getElementById('dateDisplay').innerText = `${start.toLocaleDateString('he-IL', opts)} - ${end.toLocaleDateString('he-IL', opts)}`;
@@ -441,19 +459,13 @@
             let matchesIndex = true;
             if (indexFilter === 'sp500') matchesIndex = item.inSp500;
             if (indexFilter === 'nasdaq100') matchesIndex = item.inNasdaq100;
-            
             let matchesList = true;
-            if (listFilter !== 'all') {
-                matchesList = (userLists[listFilter] || []).includes(item.symbol);
-            }
+            if (listFilter !== 'all') matchesList = (userLists[listFilter] || []).includes(item.symbol);
             return matchesSector && matchesCap && matchesIndex && matchesList;
         });
 
-        if (query) {
-            filtered = filtered.filter(item => item.symbol.toLowerCase().includes(query) || (item.name && item.name.toLowerCase().includes(query)));
-        } else {
-            filtered.sort((a, b) => new Date(a.earningsDate) - new Date(b.earningsDate));
-        }
+        if (query) filtered = filtered.filter(item => item.symbol.toLowerCase().includes(query) || (item.name && item.name.toLowerCase().includes(query)));
+        else filtered.sort((a, b) => new Date(a.earningsDate) - new Date(b.earningsDate));
 
         let displayData = [];
         if (currentView === 'month') {
@@ -467,7 +479,6 @@
         }
 
         document.getElementById('stats-counter').innerText = `נמצאו ${displayData.length}`;
-        
         if (currentView === 'list') renderListView(displayData);
         else renderCalendarGrid(displayData, currentView);
     }
@@ -484,8 +495,7 @@
     }
 
     function renderListView(data) {
-        const container = document.getElementById('main-container');
-        container.innerHTML = '';
+        const container = document.getElementById('main-container'); container.innerHTML = '';
         if (data.length === 0) { container.innerHTML = '<div style="text-align:center;color:#888;">אין תוצאות</div>'; return; }
         
         const grouped = {};
@@ -503,10 +513,12 @@
 
     function renderCalendarGrid(data, type) {
         const container = document.getElementById('main-container'); container.innerHTML = '';
-        const grid = document.createElement('div'); grid.className = 'calendar-grid';
+        const grid = document.createElement('div'); 
+        grid.className = `calendar-grid ${type === 'week' ? 'week-view' : ''}`;
         
-        // כותרות ימים רק אם זה לא מובייל בתצוגת חודש
-        if (window.innerWidth > 600 || type !== 'month') {
+        const isMobile = window.innerWidth <= 768;
+
+        if (!isMobile || type === 'month') {
             ['א','ב','ג','ד','ה','ו','ש'].forEach(d => {
                 const h = document.createElement('div'); h.className = 'calendar-day-header'; h.innerText = d; grid.appendChild(h);
             });
@@ -516,7 +528,7 @@
         if (type === 'month') {
             startD = new Date(navigationDate.getFullYear(), navigationDate.getMonth(), 1);
             daysCount = new Date(navigationDate.getFullYear(), navigationDate.getMonth()+1, 0).getDate();
-            if (window.innerWidth > 600) {
+            if (!isMobile) {
                 for(let i=0; i<startD.getDay(); i++) grid.appendChild(document.createElement('div'));
             }
         } else {
@@ -535,9 +547,20 @@
             const today = new Date().toISOString().split('T')[0];
             if (dateStr === today) cell.classList.add('today');
             
-            cell.innerHTML = `<div class="day-number">${current.getDate()}</div>`;
+            // For mobile week view, put the day title inside the cell
+            const dayName = current.toLocaleDateString('he-IL', {weekday:'long'});
+            const dateDisplay = current.getDate();
+            cell.innerHTML = `
+                <div class="mobile-day-title">${dayName} ${dateDisplay}</div>
+                <div class="day-number">${current.getDate()}</div>
+            `;
+            
             const dailyStocks = data.filter(s => s.earningsDate === dateStr).sort((a,b) => b.marketCap - a.marketCap);
             
+            if (dailyStocks.length === 0 && type === 'week' && isMobile) {
+                cell.innerHTML += `<div class="day-empty-msg">אין דיווחים</div>`;
+            }
+
             if (type === 'month' && dailyStocks.length > 4) {
                 const visibleStocks = dailyStocks.slice(0, 3);
                 visibleStocks.forEach(s => cell.appendChild(createCard(s, 'mini')));
@@ -545,13 +568,12 @@
                 const moreBtn = document.createElement('div');
                 moreBtn.className = 'show-more-btn';
                 moreBtn.innerText = `+${diff} נוספים...`;
-                moreBtn.onclick = (e) => {
-                    e.stopPropagation();
-                    openDayModal(dateStr, dailyStocks);
-                };
+                moreBtn.onclick = (e) => { e.stopPropagation(); openDayModal(dateStr, dailyStocks); };
                 cell.appendChild(moreBtn);
             } else {
-                dailyStocks.forEach(s => cell.appendChild(createCard(s, type === 'week' ? 'full' : 'mini')));
+                // In Mobile Week View, we use 'full' cards but they are styled to be horizontal
+                const cardType = (type === 'week' && isMobile) ? 'full' : (type === 'week' ? 'full' : 'mini');
+                dailyStocks.forEach(s => cell.appendChild(createCard(s, cardType)));
             }
             grid.appendChild(cell);
         }
@@ -564,8 +586,6 @@
         const starIcon = isStarred ? '★' : '☆';
         const [secClass, bgClass] = getSectorMeta(stock.sector);
         const timeIcon = stock.time === 'Before Market' ? '☀️' : (stock.time === 'After Market' ? '🌙' : '');
-        
-        // URLs
         const tvUrl = `https://www.tradingview.com/chart/?symbol=${stock.symbol}`;
         const yahooUrl = `https://finance.yahoo.com/quote/${stock.symbol}`;
         const tvIcon = "https://www.google.com/s2/favicons?domain=tradingview.com";
@@ -591,12 +611,8 @@
                     ${stock.time ? `<span class="time-badge">${timeIcon} ${stock.time === 'Before Market' ? 'לפני' : (stock.time === 'After Market' ? 'אחרי' : '')}</span>` : ''}
                 </div>
                 <div class="card-actions">
-                    <a href="${tvUrl}" target="_blank" class="action-btn" title="TradingView Graph">
-                        <img src="${tvIcon}" class="action-icon">
-                    </a>
-                    <a href="${yahooUrl}" target="_blank" class="action-btn" title="Yahoo Finance">
-                        <img src="${yahooIcon}" class="action-icon">
-                    </a>
+                    <a href="${tvUrl}" target="_blank" class="action-btn" title="TradingView Graph"><img src="${tvIcon}" class="action-icon"></a>
+                    <a href="${yahooUrl}" target="_blank" class="action-btn" title="Yahoo Finance"><img src="${yahooIcon}" class="action-icon"></a>
                 </div>
             `;
         } else {
@@ -610,12 +626,8 @@
                     <span class="mini-cap">$${formatMoney(stock.marketCap)}</span>
                 </div>
                 <div class="mini-actions">
-                    <a href="${tvUrl}" target="_blank" class="mini-action-btn" title="TV">
-                        <img src="${tvIcon}">
-                    </a>
-                    <a href="${yahooUrl}" target="_blank" class="mini-action-btn" title="YF">
-                        <img src="${yahooIcon}">
-                    </a>
+                    <a href="${tvUrl}" target="_blank" class="mini-action-btn"><img src="${tvIcon}"></a>
+                    <a href="${yahooUrl}" target="_blank" class="mini-action-btn"><img src="${yahooIcon}"></a>
                 </div>
             `;
         }
