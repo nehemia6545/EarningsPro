@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Earnings Pro - Mobile Optimized</title>
+    <title>Earnings Pro - Fixed Layout</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -28,196 +28,205 @@
         }
         body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Rubik', sans-serif; margin: 0; padding: 0; overflow-y: scroll; -webkit-tap-highlight-color: transparent; }
         
-        /* Layout */
-        header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 10px 15px; position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow); }
+        /* --- HEADER LAYOUT (DESKTOP FIXED) --- */
+        header { 
+            background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); 
+            padding: 0 20px; height: 70px; display: flex; flex-direction: column; justify-content: center;
+            position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow); 
+        }
         
-        .top-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .logo { font-size: 20px; font-weight: 700; color: var(--text-main); white-space: nowrap; }
+        .top-row { 
+            display: flex; justify-content: space-between; align-items: center; 
+            position: relative; /* קריטי למיקום אבסולוטי של התאריך */
+            height: 40px; width: 100%;
+        }
+        
+        .logo { font-size: 22px; font-weight: 700; color: var(--text-main); z-index: 2; }
         .logo span { color: var(--accent-blue); }
         
-        .date-nav { display: flex; align-items: center; gap: 10px; background: var(--panel-bg); padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border-color); flex-grow: 1; justify-content: space-between; max-width: 400px; }
-        .nav-btn { background: none; border: none; color: var(--text-main); font-size: 18px; cursor: pointer; padding: 5px 12px; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
-        .nav-btn:active { background: var(--mini-card-hover); }
-        .current-date-display { font-weight: 500; font-size: 14px; text-align: center; direction: ltr; min-width: 120px; }
+        /* Date Nav - Centered Absolutely on Desktop */
+        .date-nav { 
+            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); 
+            display: flex; align-items: center; gap: 15px; background: var(--panel-bg); 
+            padding: 5px 15px; border-radius: 8px; border: 1px solid var(--border-color); 
+            z-index: 1; 
+        }
         
-        .right-actions { display: flex; gap: 8px; align-items: center; }
+        .right-actions { display: flex; gap: 10px; align-items: center; z-index: 2; }
         
-        .theme-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px; border-radius: 6px; cursor: pointer; }
+        /* Controls Row */
+        .controls-row { display: flex; gap: 10px; align-items: center; margin-top: 10px; padding-bottom: 5px; overflow-x: auto; }
+        /* Hide scrollbar for controls */
+        .controls-row::-webkit-scrollbar { display: none; }
+        
+        /* Inputs & Buttons */
+        .nav-btn { background: none; border: none; color: var(--text-main); font-size: 18px; cursor: pointer; padding: 0 10px; }
+        .current-date-display { font-weight: 500; min-width: 140px; text-align: center; direction: ltr; }
+        .theme-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px; border-radius: 6px; cursor: pointer; }
+        
         .view-toggle { display: flex; gap: 2px; background: var(--panel-bg); padding: 3px; border-radius: 8px; border: 1px solid var(--border-color); }
-        .view-btn { border: none; background: transparent; color: var(--text-muted); padding: 6px 10px; font-size: 12px; font-weight: 500; border-radius: 6px; cursor: pointer; }
+        .view-btn { border: none; background: transparent; color: var(--text-muted); padding: 6px 12px; font-size: 13px; font-weight: 500; border-radius: 6px; cursor: pointer; transition: 0.2s; }
         .view-btn.active { background: var(--accent-blue); color: white; }
         
-        /* Filters Row */
-        .controls-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
-        input, select { 
-            background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); 
-            padding: 8px 12px; border-radius: 6px; font-size: 14px; outline: none; font-family: 'Rubik', sans-serif; 
-            height: 38px; box-sizing: border-box;
-        }
-        #myListsFilter { border-color: var(--accent-gold); color: var(--accent-gold); font-weight: 500; }
+        input, select { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0 12px; border-radius: 6px; font-size: 13px; outline: none; height: 32px; white-space: nowrap; }
         
-        .container { max-width: 1800px; margin: 0 auto; padding: 15px; padding-bottom: 50px; }
-        
-        /* --- RESPONSIVE MOBILE STYLES --- */
+        /* --- MOBILE LAYOUT OVERRIDES --- */
         @media (max-width: 768px) {
-            header { padding: 10px; }
-            .top-row { gap: 10px; }
-            .logo { font-size: 18px; order: 1; }
-            .right-actions { order: 2; }
-            .date-nav { order: 3; width: 100%; max-width: none; margin-top: 5px; }
+            header { height: auto; padding: 10px; }
             
-            .controls-row { gap: 8px; }
-            #searchInput { width: 100% !important; order: 1; }
-            select { flex: 1; min-width: 45%; order: 2; }
-            #stats-counter { width: 100%; text-align: center; order: 3; margin-top: 5px; }
-            
-            /* List View Grid on Mobile */
-            .cards-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-            .stock-card { height: auto; min-height: 140px; }
-            
-            .modal-content { width: 95% !important; max-height: 85vh; }
-            .modal-content.large-modal { height: 90vh; }
-
-            /* --- NEW WEEKLY VIEW FOR MOBILE (Horizontal Scroll Rows) --- */
-            .calendar-grid.week-view {
-                display: flex; 
-                flex-direction: column; /* Stack days vertically */
-                gap: 15px;
+            .top-row { 
+                flex-wrap: wrap; height: auto; position: static; /* ביטול קיבוע במובייל */
+                gap: 10px; margin-bottom: 10px;
             }
             
-            .calendar-grid.week-view .calendar-day-header { display: none; } /* Hide standard headers */
+            .logo { order: 1; font-size: 18px; }
+            .right-actions { order: 2; margin-right: auto; } /* Push to left */
+            
+            /* תאריך יורד שורה במובייל */
+            .date-nav { 
+                position: static; transform: none; order: 3; 
+                width: 100%; justify-content: space-between; margin-top: 5px; 
+            }
+            
+            .controls-row { flex-wrap: nowrap; margin-top: 5px; }
+            #searchInput { min-width: 120px; }
+            
+            /* Mobile Calendar Adjustments */
+            .calendar-grid { gap: 4px !important; }
+            
+            /* Month View Mobile: Compact Cells */
+            .calendar-day { 
+                min-height: 70px !important; /* תאים קטנים יותר */
+                padding: 2px !important;
+            }
+            
+            /* Week View Mobile: Compact Horizontal Scroll */
+            .calendar-grid.week-view .calendar-day {
+                min-height: 140px !important; /* פחות גבוה */
+                padding: 8px !important;
+            }
+            
+            .stock-card { height: auto; min-height: 120px; }
+        }
+
+        .container { max-width: 1800px; margin: 0 auto; padding: 20px; }
+
+        /* --- CALENDAR GRID --- */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+        
+        /* Mobile Week View (Horizontal Scroll) */
+        @media (max-width: 768px) {
+            .calendar-grid.week-view {
+                display: flex; flex-direction: column; gap: 15px;
+            }
+            .calendar-grid.week-view .calendar-day-header { display: none; }
             
             .calendar-grid.week-view .calendar-day {
-                display: flex;
-                flex-direction: row;      /* Stocks go sideways */
-                overflow-x: auto;         /* Allow scrolling */
-                gap: 10px;
-                padding: 10px 10px 15px 10px;
-                min-height: 160px;        /* Fixed height for row */
-                border-left: 4px solid var(--accent-blue);
-                background: linear-gradient(to right, var(--card-bg) 90%, transparent); /* Fade effect hint */
-                align-items: flex-start;
-                scroll-snap-type: x mandatory;
+                display: flex; flex-direction: row; overflow-x: auto; gap: 10px;
+                border-left: 3px solid var(--accent-blue);
+                background: linear-gradient(to right, var(--card-bg) 90%, transparent);
+                align-items: flex-start; scroll-snap-type: x mandatory;
             }
-            
-            /* Make day title visible inside the card */
-            .mobile-day-title {
-                display: block !important;
-                position: absolute;
-                top: 0; right: 0;
-                background: var(--panel-bg);
-                color: var(--accent-blue);
-                padding: 4px 10px;
-                font-size: 12px;
-                font-weight: bold;
-                border-bottom-left-radius: 8px;
-                z-index: 5;
-                border-bottom: 1px solid var(--border-color);
-                border-left: 1px solid var(--border-color);
-            }
-
-            /* Make cards inside week view fixed width */
             .calendar-grid.week-view .stock-card {
-                min-width: 160px; /* Fixed width for scrolling items */
-                width: 160px;
-                scroll-snap-align: start;
-                flex-shrink: 0;
-                margin-top: 25px; /* Space for the day title */
+                min-width: 150px; width: 150px; scroll-snap-align: start; flex-shrink: 0; margin-top: 20px;
             }
             .calendar-grid.week-view .mini-card {
-                min-width: 140px;
-                flex-shrink: 0;
-                margin-top: 25px;
+                min-width: 130px; flex-shrink: 0; margin-top: 20px;
             }
             
-            .day-empty-msg {
-                margin-top: 30px; color: var(--text-muted); font-size: 12px; padding-right: 10px;
+            .mobile-day-title {
+                display: block !important; position: absolute; top: 0; right: 0;
+                background: var(--panel-bg); color: var(--accent-blue);
+                padding: 3px 8px; font-size: 11px; font-weight: bold;
+                border-bottom-left-radius: 6px; z-index: 5;
+                border: 1px solid var(--border-color); border-top: none; border-right: none;
             }
         }
-        
-        .mobile-day-title { display: none; } /* Hidden on desktop */
+        .mobile-day-title { display: none; }
 
-        /* Cards */
-        .date-section { margin-bottom: 25px; }
-        .date-header { font-size: 15px; color: var(--accent-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; margin-bottom: 12px; font-weight: 500; }
+        .calendar-day-header { text-align: center; color: var(--text-muted); padding: 8px; background: var(--day-header-bg); border-radius: 4px; font-size: 13px; }
+        
+        .calendar-day { 
+            background: var(--card-bg); border: 1px solid var(--border-color); 
+            min-height: 120px; border-radius: 6px; padding: 6px; 
+            display: flex; flex-direction: column; gap: 4px; overflow: hidden; position: relative; 
+        }
+        .calendar-day.today { border: 1px solid var(--accent-blue); }
+        .day-number { font-size: 13px; color: var(--text-muted); margin-bottom: 2px; font-weight: bold; border-bottom: 1px solid var(--border-color); }
+
+        /* Show More Button */
+        .show-more-btn { background: var(--panel-bg); color: var(--accent-blue); font-size: 10px; padding: 4px; text-align: center; border-radius: 4px; cursor: pointer; margin-top: auto; border: 1px dashed var(--border-color); }
+
+        /* --- CARDS & MINIS --- */
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         
+        /* Mobile List Grid */
+        @media (max-width: 768px) {
+            .cards-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+        }
+
         .stock-card { 
             background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; 
             padding: 10px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; 
-            position: relative; overflow: hidden; box-shadow: var(--shadow); transition: 0.2s; height: 135px;
+            position: relative; overflow: hidden; box-shadow: var(--shadow); height: 130px;
         }
+        .stock-card:hover { border-color: var(--accent-blue); }
         
-        .card-top { display: flex; justify-content: space-between; align-items: center; padding-left: 28px; }
-        .stock-logo { width: 30px; height: 30px; border-radius: 50%; background: #fff; object-fit: contain; padding: 2px; border: 1px solid #eee; flex-shrink: 0; }
-        
+        .card-top { display: flex; justify-content: space-between; align-items: center; padding-left: 25px; }
+        .stock-logo { width: 28px; height: 28px; border-radius: 50%; background: #fff; object-fit: contain; padding: 1px; border: 1px solid #eee; flex-shrink: 0; }
         .text-info { text-align: left; direction: ltr; }
-        .symbol { font-size: 15px; font-weight: 700; color: var(--text-main); display: block; }
+        .symbol { font-size: 14px; font-weight: 700; color: var(--text-main); display: block; }
         .market-cap { font-size: 10px; color: var(--text-muted); background: var(--mini-card-bg); padding: 1px 4px; border-radius: 3px; border: 1px solid var(--border-color); display: inline-block; }
-        .company-name { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; direction: ltr; text-align: left; width: 100%; }
+        .company-name { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; direction: ltr; text-align: left; width: 100%; }
         
         .card-strip { position: absolute; top: 0; left: 0; width: 100%; height: 3px; }
         .time-badge { font-size: 10px; display: inline-flex; align-items: center; gap: 3px; background: var(--time-badge-bg); padding: 2px 5px; border-radius: 4px; color: var(--time-badge-color); direction: rtl; }
         
-        /* Star */
-        .star-btn { position: absolute; top: 5px; left: 5px; background: none; border: none; cursor: pointer; padding: 5px; font-size: 20px; color: #444; z-index: 10; }
+        .star-btn { position: absolute; top: 5px; left: 5px; background: none; border: none; cursor: pointer; padding: 2px; font-size: 18px; color: #444; z-index: 10; }
         .star-btn.active { color: var(--accent-gold); }
         
-        /* Action Buttons */
-        .card-actions { display: flex; gap: 8px; margin-top: auto; justify-content: flex-end; direction: ltr; }
-        .action-btn { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 6px; background: var(--panel-bg); border: 1px solid var(--border-color); cursor: pointer; text-decoration: none; }
-        .action-btn:active { background: var(--btn-hover-bg); border-color: var(--accent-blue); }
-        .action-icon { width: 18px; height: 18px; object-fit: contain; }
+        .card-actions { display: flex; gap: 6px; margin-top: auto; justify-content: flex-end; direction: ltr; }
+        .action-btn { display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 6px; background: var(--panel-bg); border: 1px solid var(--border-color); cursor: pointer; text-decoration: none; }
+        .action-icon { width: 14px; height: 14px; object-fit: contain; }
 
-        /* Modal */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(2px); }
-        .modal-overlay.open { display: flex; }
-        .modal-content { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: flex; flex-direction: column; }
-        
-        .modal-content.large-modal { width: 90%; max-width: 1000px; height: 80vh; }
-        .modal-body-scroll { overflow-y: auto; flex: 1; padding: 5px; -webkit-overflow-scrolling: touch; }
-        .modal-header { font-size: 18px; font-weight: bold; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
-        .close-modal { cursor: pointer; color: var(--text-muted); font-size: 24px; padding: 0 10px; }
-        
-        .list-options { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; margin-bottom: 15px; max-height: 200px; }
-        .list-option { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-radius: 6px; background: var(--panel-bg); cursor: pointer; }
-        .list-option input { width: 20px; height: 20px; margin: 0; }
-        
-        .new-list-row { display: flex; gap: 8px; margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 15px; }
-        .add-list-btn { background: var(--accent-blue); color: white; border: none; border-radius: 6px; cursor: pointer; padding: 0 15px; font-size: 20px; display: flex; align-items: center; }
-
-        /* Calendar Grid (Desktop Default) */
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
-        
-        /* Mobile Week View Overrides are in the @media block above */
-        
-        .calendar-day-header { text-align: center; color: var(--text-muted); padding: 8px; background: var(--day-header-bg); border-radius: 4px; font-size: 13px; }
-        .calendar-day { background: var(--card-bg); border: 1px solid var(--border-color); min-height: 120px; border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 6px; overflow: hidden; position: relative; }
-        .calendar-day.today { border: 1px solid var(--accent-blue); }
-        .day-number { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; font-weight: bold; border-bottom: 1px solid var(--border-color); }
-        
-        .show-more-btn { background: var(--panel-bg); color: var(--accent-blue); font-size: 11px; padding: 8px; text-align: center; border-radius: 4px; cursor: pointer; margin-top: auto; border: 1px dashed var(--border-color); }
-
-        .mini-card { background: var(--mini-card-bg); border: 1px solid var(--border-color); border-radius: 4px; padding: 4px; display: flex; align-items: center; gap: 6px; position: relative; padding-left: 15px; overflow: hidden; height: 38px; flex-shrink: 0; }
-        .mini-card:hover { border-color: var(--accent-blue); }
-        .mini-logo { width: 18px; height: 18px; border-radius: 50%; background: white; object-fit: contain; flex-shrink: 0; }
+        /* MINI CARD (Standard) */
+        .mini-card { background: var(--mini-card-bg); border: 1px solid var(--border-color); border-radius: 4px; padding: 4px; display: flex; align-items: center; gap: 6px; position: relative; padding-left: 15px; overflow: hidden; height: 36px; flex-shrink: 0; }
+        .mini-logo { width: 16px; height: 16px; border-radius: 50%; background: white; object-fit: contain; flex-shrink: 0; }
         .mini-info { display: flex; flex-direction: column; width: 100%; overflow: hidden; direction: ltr; text-align: left; }
         .mini-top { display: flex; justify-content: space-between; align-items: center; }
         .mini-sym { font-weight: 700; font-size: 10px; }
-        .mini-cap { font-size: 8px; color: var(--text-muted); }
         .mini-strip { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
-        .mini-card .star-btn { font-size: 10px; top: 1px; left: 1px; padding: 2px; }
         .mini-actions { display: flex; gap: 4px; margin-right: auto; margin-left: 5px; }
-        .mini-action-btn { width: 18px; height: 18px; border-radius: 3px; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); cursor: pointer; text-decoration: none; }
+        .mini-action-btn { width: 16px; height: 16px; border-radius: 3px; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); cursor: pointer; }
         .mini-action-btn img { width: 10px; height: 10px; }
 
-        /* Sectors Colors */
-        .sec-tech { background: #0d6efd; } .bg-tech { background: rgba(13, 110, 253, 0.15); color: #0d6efd; }
-        .sec-fin { background: #198754; } .bg-fin { background: rgba(25, 135, 84, 0.15); color: #198754; }
-        .sec-health { background: #dc3545; } .bg-health { background: rgba(220, 53, 69, 0.15); color: #dc3545; }
-        .sec-cons { background: #fd7e14; } .bg-cons { background: rgba(253, 126, 20, 0.15); color: #fd7e14; }
-        .sec-other { background: #6c757d; } .bg-other { background: rgba(108, 117, 125, 0.15); color: #6c757d; }
-        .tag-text { font-size: 9px; padding: 2px 6px; border-radius: 8px; align-self: flex-start; margin-top: 4px; opacity: 0.9; }
+        /* MOBILE MONTH VIEW DOTS (Tiny Indicators) */
+        .month-dot-container { display: flex; flex-wrap: wrap; gap: 2px; }
+        .month-dot { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 1px solid var(--border-color); object-fit: contain; }
+        .month-count-text { font-size: 10px; color: var(--accent-blue); font-weight: 500; margin-top: 2px; }
+
+        /* Date Section List */
+        .date-section { margin-bottom: 20px; }
+        .date-header { font-size: 14px; color: var(--accent-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-weight: 500; }
+
+        /* Modals */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(2px); }
+        .modal-overlay.open { display: flex; }
+        .modal-content { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; width: 320px; max-height: 80vh; display: flex; flex-direction: column; }
+        .modal-content.large-modal { width: 95%; max-width: 800px; height: 85vh; }
+        .modal-body-scroll { overflow-y: auto; flex: 1; padding: 5px; }
+        .modal-header { font-size: 16px; font-weight: bold; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .list-options { overflow-y: auto; flex: 1; }
+        .list-option { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-radius: 6px; background: var(--panel-bg); margin-bottom: 5px; }
+        .new-list-row { display: flex; gap: 5px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); }
+        .add-list-btn { background: var(--accent-blue); color: white; border: none; border-radius: 4px; width: 30px; font-size: 18px; }
+
+        /* Sectors */
+        .sec-tech { background: #0d6efd; } .sec-fin { background: #198754; } .sec-health { background: #dc3545; } .sec-cons { background: #fd7e14; } .sec-other { background: #6c757d; }
+        .tag-text { font-size: 9px; padding: 2px 6px; border-radius: 8px; opacity: 0.9; margin-top: 4px; }
+        .bg-tech { background: rgba(13, 110, 253, 0.15); color: #0d6efd; } .bg-fin { background: rgba(25, 135, 84, 0.15); color: #198754; } 
+        .bg-health { background: rgba(220, 53, 69, 0.15); color: #dc3545; } .bg-cons { background: rgba(253, 126, 20, 0.15); color: #fd7e14; } 
+        .bg-other { background: rgba(108, 117, 125, 0.15); color: #6c757d; }
     </style>
 </head>
 <body>
@@ -225,6 +234,11 @@
 <header>
     <div class="top-row">
         <div class="logo">Earnings<span>Pro</span></div>
+        <div class="date-nav">
+            <button class="nav-btn" onclick="changeDate(-1)">&#10094;</button>
+            <div class="current-date-display" id="dateDisplay"></div>
+            <button class="nav-btn" onclick="changeDate(1)">&#10095;</button>
+        </div>
         <div class="right-actions">
             <button class="theme-btn" onclick="toggleTheme()">🌗</button>
             <div class="view-toggle">
@@ -233,31 +247,15 @@
                 <button class="view-btn" onclick="switchView('week')" id="btn-week">שבועי</button>
             </div>
         </div>
-        <div class="date-nav">
-            <button class="nav-btn" onclick="changeDate(-1)">&#10094;</button>
-            <div class="current-date-display" id="dateDisplay"></div>
-            <button class="nav-btn" onclick="changeDate(1)">&#10095;</button>
-        </div>
     </div>
 
     <div class="controls-row">
         <input type="text" id="searchInput" placeholder="חפש מניה...">
-        <select id="myListsFilter">
-            <option value="all">כל השוק</option>
-            <option disabled>── רשימות שלי ──</option>
-        </select>
-        <select id="indexFilter">
-            <option value="all">כל המדדים</option>
-            <option value="sp500">S&P 500</option>
-            <option value="nasdaq100">Nasdaq 100</option>
-        </select>
+        <select id="myListsFilter"><option value="all">כל השוק</option><option disabled>── רשימות שלי ──</option></select>
+        <select id="indexFilter"><option value="all">כל המדדים</option><option value="sp500">S&P 500</option><option value="nasdaq100">Nasdaq 100</option></select>
         <select id="sectorFilter"><option value="all">כל הסקטורים</option></select>
-        <select id="capFilter">
-            <option value="0">שווי שוק: הכל</option>
-            <option value="10000000000">> 10 מיליארד</option>
-            <option value="50000000000">> 50 מיליארד</option>
-        </select>
-        <div id="stats-counter" style="color:var(--text-muted); font-size:12px;"></div>
+        <select id="capFilter"><option value="0">שווי: הכל</option><option value="10000000000">> 10B</option><option value="50000000000">> 50B</option></select>
+        <div id="stats-counter" style="color:var(--text-muted); font-size:11px; white-space:nowrap;"></div>
     </div>
 </header>
 
@@ -267,27 +265,16 @@
 
 <div class="modal-overlay" id="listsModal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="modal-header">
-            <span>שמור: <span id="modalSymbol" style="color:var(--accent-blue)"></span></span>
-            <span class="close-modal" onclick="closeModalForce()">✕</span>
-        </div>
+        <div class="modal-header"><span>שמור: <span id="modalSymbol" style="color:var(--accent-blue)"></span></span><span class="close-modal" onclick="closeModalForce()">✕</span></div>
         <div class="list-options" id="modalListsContainer"></div>
-        <div class="new-list-row">
-            <input type="text" id="newListName" placeholder="רשימה חדשה...">
-            <button class="add-list-btn" onclick="createNewList()">+</button>
-        </div>
+        <div class="new-list-row"><input type="text" id="newListName" placeholder="רשימה חדשה..."><button class="add-list-btn" onclick="createNewList()">+</button></div>
     </div>
 </div>
 
 <div class="modal-overlay" id="dayDetailsModal" onclick="closeDayModal(event)">
     <div class="modal-content large-modal" onclick="event.stopPropagation()">
-        <div class="modal-header">
-            <span id="dayModalTitle">דיווחים ליום...</span>
-            <span class="close-modal" onclick="closeDayModalForce()">✕</span>
-        </div>
-        <div class="modal-body-scroll">
-            <div class="cards-grid" id="dayModalGrid"></div>
-        </div>
+        <div class="modal-header"><span id="dayModalTitle">דיווחים</span><span class="close-modal" onclick="closeDayModalForce()">✕</span></div>
+        <div class="modal-body-scroll"><div class="cards-grid" id="dayModalGrid"></div></div>
     </div>
 </div>
 
@@ -300,131 +287,78 @@
     try {
         const stored = localStorage.getItem('userLists');
         userLists = stored ? JSON.parse(stored) : { "מועדפים": [] };
-    } catch (e) {
-        userLists = { "מועדפים": [] };
-        localStorage.setItem('userLists', JSON.stringify(userLists));
-    }
+    } catch (e) { userLists = { "מועדפים": [] }; localStorage.setItem('userLists', JSON.stringify(userLists)); }
     
     let currentModalSymbol = '';
 
     function saveUserLists() { localStorage.setItem('userLists', JSON.stringify(userLists)); renderListsDropdown(); applyFilters(); }
-    
     function renderListsDropdown() {
         const select = document.getElementById('myListsFilter');
         const currentVal = select.value;
         while (select.options.length > 2) select.remove(2);
-        Object.keys(userLists).forEach(listName => {
-            const opt = document.createElement('option');
-            opt.value = listName; opt.innerText = listName; select.appendChild(opt);
-        });
-        if (Object.keys(userLists).includes(currentVal) || currentVal === 'all') select.value = currentVal;
-        else select.value = 'all';
+        Object.keys(userLists).forEach(listName => { const opt = document.createElement('option'); opt.value = listName; opt.innerText = listName; select.appendChild(opt); });
+        select.value = Object.keys(userLists).includes(currentVal) || currentVal === 'all' ? currentVal : 'all';
     }
 
+    // LIST MODAL LOGIC
     function openListModal(event, symbol) {
-        event.stopPropagation();
-        currentModalSymbol = symbol;
+        event.stopPropagation(); currentModalSymbol = symbol;
         document.getElementById('modalSymbol').innerText = symbol;
-        const container = document.getElementById('modalListsContainer');
-        container.innerHTML = '';
+        const container = document.getElementById('modalListsContainer'); container.innerHTML = '';
         Object.keys(userLists).forEach(listName => {
             const isChecked = userLists[listName].includes(symbol);
-            const div = document.createElement('div');
-            div.className = 'list-option';
-            div.innerHTML = `
-                <div class="list-option-left" onclick="toggleStockInList('${listName}', '${symbol}')">
-                    <input type="checkbox" ${isChecked ? 'checked' : ''} readonly>
-                    <span>${listName}</span>
-                </div>
-                <button class="delete-list-btn" onclick="deleteList(event, '${listName}')">🗑️</button>
-            `;
+            const div = document.createElement('div'); div.className = 'list-option';
+            div.innerHTML = `<div style="display:flex;align-items:center;gap:10px;flex:1" onclick="toggleStockInList('${listName}', '${symbol}')"><input type="checkbox" ${isChecked ? 'checked' : ''} readonly><span>${listName}</span></div><span onclick="deleteList(event, '${listName}')" style="cursor:pointer;color:#d32f2f;">🗑️</span>`;
             container.appendChild(div);
         });
         document.getElementById('listsModal').classList.add('open');
     }
-
     function toggleStockInList(listName, symbol) {
         if (!userLists[listName]) return;
-        const list = userLists[listName];
-        if (list.includes(symbol)) userLists[listName] = list.filter(s => s !== symbol);
-        else userLists[listName].push(symbol);
-        saveUserLists();
-        openListModal({stopPropagation:()=>{}}, currentModalSymbol); 
+        userLists[listName] = userLists[listName].includes(symbol) ? userLists[listName].filter(s => s !== symbol) : [...userLists[listName], symbol];
+        saveUserLists(); openListModal({stopPropagation:()=>{}}, currentModalSymbol);
     }
-
-    function deleteList(event, listName) {
-        event.stopPropagation();
-        if (confirm(`למחוק את הרשימה "${listName}"?`)) {
-            delete userLists[listName];
-            const select = document.getElementById('myListsFilter');
-            if (select.value === listName) select.value = 'all';
-            saveUserLists();
-            openListModal({stopPropagation:()=>{}}, currentModalSymbol);
-        }
+    function deleteList(e, listName) {
+        e.stopPropagation(); if(confirm('למחוק?')) { delete userLists[listName]; if(document.getElementById('myListsFilter').value===listName) document.getElementById('myListsFilter').value='all'; saveUserLists(); openListModal({stopPropagation:()=>{}}, currentModalSymbol); }
     }
-
     function createNewList() {
-        const input = document.getElementById('newListName');
-        const name = input.value.trim();
-        if (name && !userLists[name]) {
-            userLists[name] = currentModalSymbol ? [currentModalSymbol] : [];
-            saveUserLists();
-            input.value = '';
-            openListModal({stopPropagation:()=>{}}, currentModalSymbol);
-        }
+        const name = document.getElementById('newListName').value.trim();
+        if(name && !userLists[name]) { userLists[name] = currentModalSymbol ? [currentModalSymbol] : []; saveUserLists(); document.getElementById('newListName').value=''; openListModal({stopPropagation:()=>{}}, currentModalSymbol); }
     }
-
-    function closeModal(event) { if (event.target.id === 'listsModal') closeModalForce(); }
+    function closeModal(e) { if(e.target.id === 'listsModal') closeModalForce(); }
     function closeModalForce() { document.getElementById('listsModal').classList.remove('open'); }
+
+    // DAY MODAL LOGIC
     function openDayModal(dateStr, stocks) {
         const d = new Date(dateStr);
-        document.getElementById('dayModalTitle').innerText = `דיווחים: ${dateStr} (${stocks.length})`;
+        document.getElementById('dayModalTitle').innerText = `דיווחים: ${dateStr}`;
         const grid = document.getElementById('dayModalGrid'); grid.innerHTML = '';
         stocks.forEach(s => { grid.appendChild(createCard(s, 'full')); });
         document.getElementById('dayDetailsModal').classList.add('open');
     }
-    function closeDayModal(event) { if (event.target.id === 'dayDetailsModal') closeDayModalForce(); }
+    function closeDayModal(e) { if(e.target.id === 'dayDetailsModal') closeDayModalForce(); }
     function closeDayModalForce() { document.getElementById('dayDetailsModal').classList.remove('open'); }
-    function isStockStarred(symbol) { for (const list in userLists) { if (userLists[list].includes(symbol)) return true; } return false; }
 
-    function toggleTheme() {
-        const html = document.documentElement;
-        html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-    }
-    function formatMoney(n) {
-        if (!n) return "-";
-        if (n >= 1e12) return +(n / 1e12).toFixed(2) + "T";
-        if (n >= 1e9) return +(n / 1e9).toFixed(1) + "B";
-        if (n >= 1e6) return +(n / 1e6).toFixed(1) + "M";
-        return n;
-    }
+    function isStockStarred(symbol) { for (const list in userLists) { if (userLists[list].includes(symbol)) return true; } return false; }
+    
+    // MAIN LOGIC
+    function toggleTheme() { document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }
+    function formatMoney(n) { if (!n) return "-"; if (n >= 1e12) return +(n / 1e12).toFixed(2) + "T"; if (n >= 1e9) return +(n / 1e9).toFixed(1) + "B"; return +(n / 1e6).toFixed(1) + "M"; }
     function getSectorMeta(sector) {
-        if (!sector) return ['sec-other', 'bg-other'];
-        const s = sector.toLowerCase();
-        if (s.includes('tech')) return ['sec-tech', 'bg-tech'];
-        if (s.includes('financial') || s.includes('bank')) return ['sec-fin', 'bg-fin'];
-        if (s.includes('health')) return ['sec-health', 'bg-health'];
-        if (s.includes('cons')) return ['sec-cons', 'bg-cons'];
+        if (!sector) return ['sec-other', 'bg-other']; const s = sector.toLowerCase();
+        if (s.includes('tech')) return ['sec-tech', 'bg-tech']; if (s.includes('fin')) return ['sec-fin', 'bg-fin'];
+        if (s.includes('health')) return ['sec-health', 'bg-health']; if (s.includes('cons')) return ['sec-cons', 'bg-cons'];
         return ['sec-other', 'bg-other'];
     }
 
-    fetch('data.json')
-        .then(res => res.json())
-        .then(data => {
-            allData = data.filter(d => d.earningsDate !== '?' && d.earningsDate !== 'TBD');
-            populateSectors();
-            renderListsDropdown();
-            updateDateDisplay();
-            applyFilters();
-        })
-        .catch(err => {
-            document.getElementById('main-container').innerHTML = `<div style='text-align:center;margin-top:50px;'>שגיאה בטעינת נתונים.<br>ודא שהשרת רץ</div>`;
-        });
+    fetch('data.json').then(res => res.json()).then(data => {
+        allData = data.filter(d => d.earningsDate !== '?' && d.earningsDate !== 'TBD');
+        populateSectors(); renderListsDropdown(); updateDateDisplay(); applyFilters();
+    }).catch(err => document.getElementById('main-container').innerHTML = `שגיאה בטעינה`);
 
     function populateSectors() {
-        const sectors = [...new Set(allData.map(d => d.sector))].sort();
-        const select = document.getElementById('sectorFilter');
-        sectors.forEach(s => { const opt = document.createElement('option'); opt.value = s; opt.innerText = s; select.appendChild(opt); });
+        const s = [...new Set(allData.map(d => d.sector))].sort(); const el = document.getElementById('sectorFilter');
+        s.forEach(sec => { const opt = document.createElement('option'); opt.value = sec; opt.innerText = sec; el.appendChild(opt); });
     }
 
     function changeDate(delta) {
@@ -435,36 +369,30 @@
 
     function updateDateDisplay() {
         const opts = { month: 'numeric', day: 'numeric' };
-        if (currentView === 'month') {
-            document.getElementById('dateDisplay').innerText = navigationDate.toLocaleDateString('he-IL', { year: 'numeric', month: 'long' });
-        } else {
-            const d = new Date(navigationDate);
-            const day = d.getDay(); d.setDate(d.getDate() - day + (day === 0 ? -6 : 0));
-            const start = new Date(d);
-            const end = new Date(d); end.setDate(end.getDate() + 6);
+        if (currentView === 'month') document.getElementById('dateDisplay').innerText = navigationDate.toLocaleDateString('he-IL', { year: 'numeric', month: 'long' });
+        else {
+            const d = new Date(navigationDate); const day = d.getDay(); d.setDate(d.getDate() - day + (day===0?-6:0));
+            const start = new Date(d); const end = new Date(d); end.setDate(end.getDate() + 6);
             document.getElementById('dateDisplay').innerText = `${start.toLocaleDateString('he-IL', opts)} - ${end.toLocaleDateString('he-IL', opts)}`;
         }
     }
 
     function applyFilters() {
-        const query = document.getElementById('searchInput').value.toLowerCase().trim();
-        const sector = document.getElementById('sectorFilter').value;
-        const indexFilter = document.getElementById('indexFilter').value;
-        const listFilter = document.getElementById('myListsFilter').value;
-        const minCap = parseFloat(document.getElementById('capFilter').value);
+        const q = document.getElementById('searchInput').value.toLowerCase().trim();
+        const sec = document.getElementById('sectorFilter').value;
+        const idx = document.getElementById('indexFilter').value;
+        const lst = document.getElementById('myListsFilter').value;
+        const cap = parseFloat(document.getElementById('capFilter').value);
 
         let filtered = allData.filter(item => {
-            const matchesSector = sector === 'all' || item.sector === sector;
-            const matchesCap = item.marketCap >= minCap;
-            let matchesIndex = true;
-            if (indexFilter === 'sp500') matchesIndex = item.inSp500;
-            if (indexFilter === 'nasdaq100') matchesIndex = item.inNasdaq100;
-            let matchesList = true;
-            if (listFilter !== 'all') matchesList = (userLists[listFilter] || []).includes(item.symbol);
-            return matchesSector && matchesCap && matchesIndex && matchesList;
+            const mSec = sec === 'all' || item.sector === sec;
+            const mCap = item.marketCap >= cap;
+            let mIdx = true; if(idx==='sp500') mIdx=item.inSp500; if(idx==='nasdaq100') mIdx=item.inNasdaq100;
+            let mLst = lst==='all' ? true : (userLists[lst]||[]).includes(item.symbol);
+            return mSec && mCap && mIdx && mLst;
         });
 
-        if (query) filtered = filtered.filter(item => item.symbol.toLowerCase().includes(query) || (item.name && item.name.toLowerCase().includes(query)));
+        if (q) filtered = filtered.filter(i => i.symbol.toLowerCase().includes(q) || i.name.toLowerCase().includes(q));
         else filtered.sort((a, b) => new Date(a.earningsDate) - new Date(b.earningsDate));
 
         let displayData = [];
@@ -472,10 +400,9 @@
             const y = navigationDate.getFullYear(); const m = navigationDate.getMonth();
             displayData = filtered.filter(d => { const dt = new Date(d.earningsDate); return dt.getFullYear() === y && dt.getMonth() === m; });
         } else {
-            const d = new Date(navigationDate);
-            const day = d.getDay(); d.setDate(d.getDate() - day + (day === 0 ? -6 : 0)); d.setHours(0,0,0,0);
+            const d = new Date(navigationDate); const day = d.getDay(); d.setDate(d.getDate() - day + (day===0?-6:0)); d.setHours(0,0,0,0);
             const end = new Date(d); end.setDate(end.getDate() + 7);
-            displayData = filtered.filter(item => { const dt = new Date(item.earningsDate); return dt >= d && dt < end; });
+            displayData = filtered.filter(i => { const dt = new Date(i.earningsDate); return dt >= d && dt < end; });
         }
 
         document.getElementById('stats-counter').innerText = `נמצאו ${displayData.length}`;
@@ -483,30 +410,23 @@
         else renderCalendarGrid(displayData, currentView);
     }
 
-    ['searchInput', 'sectorFilter', 'indexFilter', 'capFilter', 'myListsFilter'].forEach(id => {
-        document.getElementById(id).addEventListener(id === 'searchInput' ? 'keyup' : 'change', applyFilters);
-    });
+    ['searchInput', 'sectorFilter', 'indexFilter', 'capFilter', 'myListsFilter'].forEach(id => document.getElementById(id).addEventListener(id==='searchInput'?'keyup':'change', applyFilters));
 
     function switchView(v) {
-        currentView = v;
-        document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(`btn-${v}`).classList.add('active');
-        updateDateDisplay(); applyFilters();
+        currentView = v; document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`btn-${v}`).classList.add('active'); updateDateDisplay(); applyFilters();
     }
 
     function renderListView(data) {
         const container = document.getElementById('main-container'); container.innerHTML = '';
         if (data.length === 0) { container.innerHTML = '<div style="text-align:center;color:#888;">אין תוצאות</div>'; return; }
-        
-        const grouped = {};
-        data.forEach(s => { if (!grouped[s.earningsDate]) grouped[s.earningsDate] = []; grouped[s.earningsDate].push(s); });
+        const grouped = {}; data.forEach(s => { if(!grouped[s.earningsDate]) grouped[s.earningsDate]=[]; grouped[s.earningsDate].push(s); });
         
         Object.keys(grouped).sort().forEach(date => {
             const section = document.createElement('div'); section.className = 'date-section';
-            const d = new Date(date);
-            section.innerHTML = `<div class="date-header">${date} - ${d.toLocaleDateString('he-IL', {weekday:'long'})}</div>`;
+            const d = new Date(date); section.innerHTML = `<div class="date-header">${date} - ${d.toLocaleDateString('he-IL', {weekday:'long'})}</div>`;
             const grid = document.createElement('div'); grid.className = 'cards-grid';
-            grouped[date].sort((a,b) => b.marketCap - a.marketCap).forEach(s => grid.appendChild(createCard(s, 'full')));
+            grouped[date].sort((a,b)=>b.marketCap-a.marketCap).forEach(s => grid.appendChild(createCard(s, 'full')));
             section.appendChild(grid); container.appendChild(section);
         });
     }
@@ -514,66 +434,69 @@
     function renderCalendarGrid(data, type) {
         const container = document.getElementById('main-container'); container.innerHTML = '';
         const grid = document.createElement('div'); 
-        grid.className = `calendar-grid ${type === 'week' ? 'week-view' : ''}`;
+        grid.className = `calendar-grid ${type==='week'?'week-view':''}`;
         
         const isMobile = window.innerWidth <= 768;
-
         if (!isMobile || type === 'month') {
-            ['א','ב','ג','ד','ה','ו','ש'].forEach(d => {
-                const h = document.createElement('div'); h.className = 'calendar-day-header'; h.innerText = d; grid.appendChild(h);
-            });
+            ['א','ב','ג','ד','ה','ו','ש'].forEach(d => { const h = document.createElement('div'); h.className = 'calendar-day-header'; h.innerText = d; grid.appendChild(h); });
         }
 
-        let startD, endD, daysCount;
+        let startD, daysCount;
         if (type === 'month') {
             startD = new Date(navigationDate.getFullYear(), navigationDate.getMonth(), 1);
             daysCount = new Date(navigationDate.getFullYear(), navigationDate.getMonth()+1, 0).getDate();
-            if (!isMobile) {
-                for(let i=0; i<startD.getDay(); i++) grid.appendChild(document.createElement('div'));
-            }
+            if(!isMobile) for(let i=0; i<startD.getDay(); i++) grid.appendChild(document.createElement('div'));
         } else {
-            const d = new Date(navigationDate); const day = d.getDay();
-            d.setDate(d.getDate() - day + (day === 0 ? -6 : 0));
+            const d = new Date(navigationDate); const day = d.getDay(); d.setDate(d.getDate() - day + (day===0?-6:0));
             startD = new Date(d); daysCount = 7;
         }
 
         for (let i=0; i<daysCount; i++) {
             const current = new Date(startD); 
-            if (type === 'month') current.setDate(i+1);
-            else current.setDate(startD.getDate() + i);
-            
+            if (type === 'month') current.setDate(i+1); else current.setDate(startD.getDate() + i);
             const dateStr = current.toISOString().split('T')[0];
+            
             const cell = document.createElement('div'); cell.className = 'calendar-day';
-            const today = new Date().toISOString().split('T')[0];
-            if (dateStr === today) cell.classList.add('today');
+            if(dateStr === new Date().toISOString().split('T')[0]) cell.classList.add('today');
             
-            // For mobile week view, put the day title inside the cell
-            const dayName = current.toLocaleDateString('he-IL', {weekday:'long'});
-            const dateDisplay = current.getDate();
-            cell.innerHTML = `
-                <div class="mobile-day-title">${dayName} ${dateDisplay}</div>
-                <div class="day-number">${current.getDate()}</div>
-            `;
-            
-            const dailyStocks = data.filter(s => s.earningsDate === dateStr).sort((a,b) => b.marketCap - a.marketCap);
-            
-            if (dailyStocks.length === 0 && type === 'week' && isMobile) {
-                cell.innerHTML += `<div class="day-empty-msg">אין דיווחים</div>`;
+            if(type === 'week' && isMobile) {
+                cell.innerHTML = `<div class="mobile-day-title">${current.toLocaleDateString('he-IL', {weekday:'long'})} ${current.getDate()}</div><div class="day-number">${current.getDate()}</div>`;
+            } else {
+                cell.innerHTML = `<div class="day-number">${current.getDate()}</div>`;
             }
 
-            if (type === 'month' && dailyStocks.length > 4) {
-                const visibleStocks = dailyStocks.slice(0, 3);
-                visibleStocks.forEach(s => cell.appendChild(createCard(s, 'mini')));
-                const diff = dailyStocks.length - 3;
-                const moreBtn = document.createElement('div');
-                moreBtn.className = 'show-more-btn';
-                moreBtn.innerText = `+${diff} נוספים...`;
-                moreBtn.onclick = (e) => { e.stopPropagation(); openDayModal(dateStr, dailyStocks); };
-                cell.appendChild(moreBtn);
-            } else {
-                // In Mobile Week View, we use 'full' cards but they are styled to be horizontal
-                const cardType = (type === 'week' && isMobile) ? 'full' : (type === 'week' ? 'full' : 'mini');
-                dailyStocks.forEach(s => cell.appendChild(createCard(s, cardType)));
+            const dailyStocks = data.filter(s => s.earningsDate === dateStr).sort((a,b)=>b.marketCap-a.marketCap);
+            
+            // MOBILE MONTH VIEW: DOTS LOGIC
+            if (isMobile && type === 'month') {
+                if (dailyStocks.length > 0) {
+                    const dotContainer = document.createElement('div'); dotContainer.className = 'month-dot-container';
+                    // Show up to 4 tiny icons
+                    dailyStocks.slice(0, 4).forEach(s => {
+                        const img = document.createElement('img'); img.className = 'month-dot';
+                        img.src = `https://assets.parqet.com/logos/symbol/${s.symbol}?format=png`;
+                        dotContainer.appendChild(img);
+                    });
+                    cell.appendChild(dotContainer);
+                    if (dailyStocks.length > 4) {
+                        const count = document.createElement('div'); count.className = 'month-count-text'; count.innerText = `+${dailyStocks.length - 4}`;
+                        cell.appendChild(count);
+                    }
+                    cell.onclick = () => openDayModal(dateStr, dailyStocks);
+                }
+            } 
+            // DESKTOP MONTH or WEEK VIEW
+            else {
+                if(type === 'month' && dailyStocks.length > 4) {
+                    dailyStocks.slice(0,3).forEach(s => cell.appendChild(createCard(s, 'mini')));
+                    const moreBtn = document.createElement('div'); moreBtn.className = 'show-more-btn';
+                    moreBtn.innerText = `+${dailyStocks.length-3} עוד...`;
+                    moreBtn.onclick = (e) => { e.stopPropagation(); openDayModal(dateStr, dailyStocks); };
+                    cell.appendChild(moreBtn);
+                } else {
+                    const cardType = (type === 'week' && isMobile) ? 'full' : (type==='week'?'full':'mini');
+                    dailyStocks.forEach(s => cell.appendChild(createCard(s, cardType)));
+                }
             }
             grid.appendChild(cell);
         }
@@ -582,8 +505,7 @@
 
     function createCard(stock, type) {
         const isStarred = isStockStarred(stock.symbol);
-        const starClass = isStarred ? 'active' : '';
-        const starIcon = isStarred ? '★' : '☆';
+        const starClass = isStarred ? 'active' : ''; const starIcon = isStarred ? '★' : '☆';
         const [secClass, bgClass] = getSectorMeta(stock.sector);
         const timeIcon = stock.time === 'Before Market' ? '☀️' : (stock.time === 'After Market' ? '🌙' : '');
         const tvUrl = `https://www.tradingview.com/chart/?symbol=${stock.symbol}`;
@@ -592,7 +514,6 @@
         const yahooIcon = "https://www.google.com/s2/favicons?domain=finance.yahoo.com";
 
         const el = document.createElement('div');
-
         if (type === 'full') {
             el.className = 'stock-card';
             el.innerHTML = `
@@ -600,10 +521,7 @@
                 <button class="star-btn ${starClass}" onclick="openListModal(event, '${stock.symbol}')">${starIcon}</button>
                 <div class="card-top">
                     <img src="https://assets.parqet.com/logos/symbol/${stock.symbol}?format=png" class="stock-logo" onerror="this.style.opacity=0">
-                    <div class="text-info">
-                        <span class="symbol">${stock.symbol}</span>
-                        <span class="market-cap">$${formatMoney(stock.marketCap)}</span>
-                    </div>
+                    <div class="text-info"><span class="symbol">${stock.symbol}</span><span class="market-cap">$${formatMoney(stock.marketCap)}</span></div>
                 </div>
                 <div class="company-name">${stock.name}</div>
                 <div style="display:flex; justify-content:space-between; align-items:flex-end;">
@@ -611,8 +529,8 @@
                     ${stock.time ? `<span class="time-badge">${timeIcon} ${stock.time === 'Before Market' ? 'לפני' : (stock.time === 'After Market' ? 'אחרי' : '')}</span>` : ''}
                 </div>
                 <div class="card-actions">
-                    <a href="${tvUrl}" target="_blank" class="action-btn" title="TradingView Graph"><img src="${tvIcon}" class="action-icon"></a>
-                    <a href="${yahooUrl}" target="_blank" class="action-btn" title="Yahoo Finance"><img src="${yahooIcon}" class="action-icon"></a>
+                    <a href="${tvUrl}" target="_blank" class="action-btn"><img src="${tvIcon}" class="action-icon"></a>
+                    <a href="${yahooUrl}" target="_blank" class="action-btn"><img src="${yahooIcon}" class="action-icon"></a>
                 </div>
             `;
         } else {
@@ -621,10 +539,7 @@
                 <div class="mini-strip ${secClass}"></div>
                 <button class="star-btn ${starClass}" onclick="openListModal(event, '${stock.symbol}')">${starIcon}</button>
                 <img src="https://assets.parqet.com/logos/symbol/${stock.symbol}?format=png" class="mini-logo" onerror="this.style.opacity=0">
-                <div class="mini-info">
-                    <div class="mini-top"><span class="mini-sym">${stock.symbol}</span></div>
-                    <span class="mini-cap">$${formatMoney(stock.marketCap)}</span>
-                </div>
+                <div class="mini-info"><div class="mini-top"><span class="mini-sym">${stock.symbol}</span></div><span class="mini-cap">$${formatMoney(stock.marketCap)}</span></div>
                 <div class="mini-actions">
                     <a href="${tvUrl}" target="_blank" class="mini-action-btn"><img src="${tvIcon}"></a>
                     <a href="${yahooUrl}" target="_blank" class="mini-action-btn"><img src="${yahooIcon}"></a>
