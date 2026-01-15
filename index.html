@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Earnings Pro - Fixed Dates</title>
+    <title>Earnings Pro - Multi Filter</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -28,7 +28,7 @@
         }
         body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Rubik', sans-serif; margin: 0; padding: 0; overflow-y: scroll; -webkit-tap-highlight-color: transparent; }
         
-        /* HEADER (Fixed Desktop) */
+        /* HEADER */
         header { 
             background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); 
             padding: 0 20px; height: 70px; display: flex; flex-direction: column; justify-content: center;
@@ -43,8 +43,7 @@
             padding: 5px 15px; border-radius: 8px; border: 1px solid var(--border-color); z-index: 1; 
         }
         .right-actions { display: flex; gap: 10px; align-items: center; z-index: 2; }
-        .controls-row { display: flex; gap: 10px; align-items: center; margin-top: 10px; padding-bottom: 5px; overflow-x: auto; }
-        .controls-row::-webkit-scrollbar { display: none; }
+        .controls-row { display: flex; gap: 10px; align-items: center; margin-top: 10px; padding-bottom: 5px; overflow-x: visible; } /* Visible overflow for dropdowns */
         .nav-btn { background: none; border: none; color: var(--text-main); font-size: 18px; cursor: pointer; padding: 0 10px; }
         .current-date-display { font-weight: 500; min-width: 140px; text-align: center; direction: ltr; }
         .theme-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px; border-radius: 6px; cursor: pointer; }
@@ -53,79 +52,95 @@
         .view-btn.active { background: var(--accent-blue); color: white; }
         input, select { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0 12px; border-radius: 6px; font-size: 13px; outline: none; height: 32px; white-space: nowrap; }
         
-        /* MOBILE HEADER FIXES */
+        /* --- MULTI SELECT DROPDOWN STYLES --- */
+        .multi-select { position: relative; display: inline-block; }
+        .ms-btn {
+            background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main);
+            padding: 0 30px 0 12px; border-radius: 6px; font-size: 13px; height: 32px; cursor: pointer;
+            white-space: nowrap; text-align: right; position: relative; min-width: 120px;
+            font-family: 'Rubik', sans-serif; display: flex; align-items: center;
+        }
+        .ms-btn:after {
+            content: '▼'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+            font-size: 10px; color: var(--text-muted);
+        }
+        .ms-btn.active { border-color: var(--accent-blue); }
+        
+        .ms-content {
+            display: none; position: absolute; top: 35px; right: 0; 
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 220px; max-height: 300px; overflow-y: auto; z-index: 2000;
+            padding: 5px;
+        }
+        .ms-content.show { display: block; }
+        
+        .ms-option {
+            display: flex; align-items: center; gap: 10px; padding: 8px;
+            cursor: pointer; border-radius: 4px; transition: 0.2s;
+        }
+        .ms-option:hover { background: var(--mini-card-hover); }
+        .ms-option input { width: 16px; height: 16px; margin: 0; cursor: pointer; }
+        .ms-option span { font-size: 13px; user-select: none; flex: 1; }
+        .ms-badge {
+            background: var(--accent-blue); color: white; font-size: 10px;
+            padding: 1px 5px; border-radius: 4px; margin-right: 5px;
+        }
+
+        /* MOBILE HEADER */
         @media (max-width: 768px) {
             header { height: auto; padding: 10px; }
             .top-row { flex-wrap: wrap; height: auto; position: static; gap: 10px; margin-bottom: 10px; }
             .logo { order: 1; font-size: 18px; }
             .right-actions { order: 2; margin-right: auto; }
             .date-nav { position: static; transform: none; order: 3; width: 100%; justify-content: space-between; margin-top: 5px; }
-            .controls-row { flex-wrap: nowrap; margin-top: 5px; }
-            #searchInput { min-width: 120px; }
+            
+            .controls-row { 
+                flex-wrap: nowrap; margin-top: 5px; overflow-x: auto; 
+                padding-bottom: 5px; /* מקום לגלילה אם צריך */
+                justify-content: flex-start;
+            }
+            #searchInput { min-width: 120px; flex-shrink: 0; }
+            
+            /* התאמת דרופדאונים למובייל */
+            .multi-select { flex-shrink: 0; }
+            .ms-content { position: fixed; top: auto; bottom: 0; left: 0; right: 0; width: 100%; max-height: 50vh; border-radius: 15px 15px 0 0; border: none; border-top: 1px solid var(--border-color); animation: slideUp 0.2s ease-out; }
         }
+        
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
         .container { max-width: 1800px; margin: 0 auto; padding: 20px; }
 
-        /* --- CALENDAR --- */
+        /* CALENDAR */
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
         .calendar-day-header { text-align: center; color: var(--text-muted); padding: 8px; background: var(--day-header-bg); border-radius: 4px; font-size: 13px; }
-        .calendar-day { 
-            background: var(--card-bg); border: 1px solid var(--border-color); 
-            min-height: 120px; border-radius: 6px; padding: 6px; 
-            display: flex; flex-direction: column; gap: 4px; overflow: hidden; position: relative; 
-        }
+        .calendar-day { background: var(--card-bg); border: 1px solid var(--border-color); min-height: 120px; border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 4px; overflow: hidden; position: relative; }
         .calendar-day.today { border: 1px solid var(--accent-blue); }
         .day-number { font-size: 13px; color: var(--text-muted); margin-bottom: 2px; font-weight: bold; border-bottom: 1px solid var(--border-color); }
 
-        /* --- MOBILE WEEK VIEW (VERTICAL LIST) --- */
+        /* MOBILE VIEWS */
         @media (max-width: 768px) {
-            /* תצוגת חודש במובייל - גריד קטן וצפוף */
             .calendar-grid { gap: 4px; }
             .calendar-day { min-height: 60px; padding: 2px; }
             
-            /* תצוגת שבוע במובייל - רשימה אנכית */
-            .calendar-grid.week-view {
-                display: flex; flex-direction: column; gap: 12px;
-            }
+            .calendar-grid.week-view { display: flex; flex-direction: column; gap: 12px; }
             .calendar-grid.week-view .calendar-day-header { display: none; }
-            
             .calendar-grid.week-view .calendar-day {
-                min-height: auto; /* גובה אוטומטי לפי התוכן */
-                height: auto;
-                padding: 0;
-                border: 1px solid var(--border-color);
-                background: transparent;
+                min-height: auto; height: auto; padding: 0; border: 1px solid var(--border-color); background: transparent;
+                flex-direction: row; align-items: center; justify-content: space-between; padding: 0 12px;
+                border-left: none; border-right: 4px solid var(--accent-blue);
             }
-            
-            /* כותרת יום בתצוגה שבועית במובייל */
             .mobile-week-day-header {
-                background: var(--panel-bg);
-                padding: 8px 12px;
-                border-bottom: 1px solid var(--border-color);
-                font-weight: bold;
-                font-size: 14px;
-                color: var(--accent-blue);
-                display: flex; justify-content: space-between;
+                display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 0;
             }
-            
-            .mobile-week-content {
-                padding: 10px;
-                display: grid; 
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); /* כרטיסים קטנים */
-                gap: 8px;
-                background: var(--card-bg);
-            }
-            
-            .day-number { display: none; } /* נסתיר את המספר הרגיל בתוך התא */
+            .mobile-week-content { display: none; } /* handled inside cell now */
+            .day-number { display: none; }
         }
-        .mobile-week-day-header, .mobile-week-content { display: none; } /* נסתיר במחשב */
 
-        /* Dots for Month View */
         .month-dot-container { display: flex; flex-wrap: wrap; gap: 2px; justify-content: center; }
         .month-dot { width: 14px; height: 14px; border-radius: 50%; background: #fff; border: 1px solid var(--border-color); object-fit: contain; }
         .month-count-text { font-size: 9px; color: var(--accent-blue); font-weight: 500; }
 
-        /* CARDS */
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         @media (max-width: 768px) { .cards-grid { grid-template-columns: 1fr 1fr; gap: 8px; } }
 
@@ -159,7 +174,6 @@
         .date-header { font-size: 14px; color: var(--accent-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-weight: 500; }
         .show-more-btn { background: var(--panel-bg); color: var(--accent-blue); font-size: 10px; padding: 4px; text-align: center; border-radius: 4px; cursor: pointer; margin-top: auto; border: 1px dashed var(--border-color); }
 
-        /* MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(2px); }
         .modal-overlay.open { display: flex; }
         .modal-content { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; width: 320px; max-height: 80vh; display: flex; flex-direction: column; }
@@ -200,12 +214,32 @@
     </div>
 
     <div class="controls-row">
-        <input type="text" id="searchInput" placeholder="חפש מניה...">
-        <select id="myListsFilter"><option value="all">כל השוק</option><option disabled>── רשימות שלי ──</option></select>
-        <select id="indexFilter"><option value="all">כל המדדים</option><option value="sp500">S&P 500</option><option value="nasdaq100">Nasdaq 100</option></select>
-        <select id="sectorFilter"><option value="all">כל הסקטורים</option></select>
-        <select id="capFilter"><option value="0">שווי: הכל</option><option value="10000000000">> 10B</option><option value="50000000000">> 50B</option></select>
-        <div id="stats-counter" style="color:var(--text-muted); font-size:11px; white-space:nowrap;"></div>
+        <input type="text" id="searchInput" placeholder="חפש מניה..." style="min-width:120px;">
+        
+        <div class="multi-select" id="listsMS">
+            <button class="ms-btn" onclick="toggleDropdown('listsMS')">רשימות שלי</button>
+            <div class="ms-content" id="listsOptions"></div>
+        </div>
+
+        <div class="multi-select" id="sectorMS">
+            <button class="ms-btn" onclick="toggleDropdown('sectorMS')">סקטורים</button>
+            <div class="ms-content" id="sectorOptions"></div>
+        </div>
+
+        <div class="multi-select" id="indexMS">
+            <button class="ms-btn" onclick="toggleDropdown('indexMS')">מדדים</button>
+            <div class="ms-content">
+                <div class="ms-option" onclick="toggleFilter('indices','sp500')"><input type="checkbox" value="sp500"><span>S&P 500</span></div>
+                <div class="ms-option" onclick="toggleFilter('indices','nasdaq100')"><input type="checkbox" value="nasdaq100"><span>Nasdaq 100</span></div>
+            </div>
+        </div>
+
+        <select id="capFilter" style="flex-shrink:0;">
+            <option value="0">שווי: הכל</option>
+            <option value="10000000000">> 10B</option>
+            <option value="50000000000">> 50B</option>
+        </select>
+        <div id="stats-counter" style="color:var(--text-muted); font-size:11px; white-space:nowrap; margin-right:auto; padding-left:10px;"></div>
     </div>
 </header>
 
@@ -233,6 +267,9 @@
     let currentView = 'list';
     let navigationDate = new Date();
     let userLists = {};
+    
+    // Active filters state
+    let activeFilters = { sectors: [], indices: [], lists: [] };
 
     try {
         const stored = localStorage.getItem('userLists');
@@ -241,15 +278,83 @@
     
     let currentModalSymbol = '';
 
-    function saveUserLists() { localStorage.setItem('userLists', JSON.stringify(userLists)); renderListsDropdown(); applyFilters(); }
-    function renderListsDropdown() {
-        const select = document.getElementById('myListsFilter');
-        const currentVal = select.value;
-        while (select.options.length > 2) select.remove(2);
-        Object.keys(userLists).forEach(listName => { const opt = document.createElement('option'); opt.value = listName; opt.innerText = listName; select.appendChild(opt); });
-        select.value = Object.keys(userLists).includes(currentVal) || currentVal === 'all' ? currentVal : 'all';
+    // --- MULTI SELECT LOGIC ---
+    function toggleDropdown(id) {
+        document.querySelectorAll('.ms-content').forEach(el => {
+            if(el.parentElement.id !== id) el.classList.remove('show');
+        });
+        document.querySelector(`#${id} .ms-content`).classList.toggle('show');
     }
 
+    // Close dropdowns when clicking outside
+    window.onclick = function(event) {
+        if (!event.target.closest('.multi-select')) {
+            document.querySelectorAll('.ms-content').forEach(el => el.classList.remove('show'));
+        }
+    }
+
+    function toggleFilter(category, value) {
+        const idx = activeFilters[category].indexOf(value);
+        if (idx > -1) activeFilters[category].splice(idx, 1);
+        else activeFilters[category].push(value);
+        
+        updateFilterUI();
+        applyFilters();
+    }
+
+    function updateFilterUI() {
+        // Update Buttons Text
+        updateBtnText('sectorMS', 'סקטורים', activeFilters.sectors);
+        updateBtnText('listsMS', 'רשימות', activeFilters.lists);
+        updateBtnText('indexMS', 'מדדים', activeFilters.indices);
+
+        // Update Checkboxes
+        document.querySelectorAll('.ms-option input').forEach(inp => {
+            const cat = inp.closest('.multi-select').id === 'sectorMS' ? 'sectors' : 
+                        (inp.closest('.multi-select').id === 'indexMS' ? 'indices' : 'lists');
+            inp.checked = activeFilters[cat].includes(inp.value);
+        });
+    }
+
+    function updateBtnText(id, defaultText, arr) {
+        const btn = document.querySelector(`#${id} .ms-btn`);
+        if (arr.length > 0) {
+            btn.innerHTML = `<span class="ms-badge">${arr.length}</span> ${defaultText}`;
+            btn.classList.add('active');
+        } else {
+            btn.innerText = defaultText;
+            btn.classList.remove('active');
+        }
+    }
+
+    function initMultiSelects() {
+        // Sectors
+        const sectors = [...new Set(allData.map(d => d.sector))].sort();
+        const secDiv = document.getElementById('sectorOptions');
+        secDiv.innerHTML = '';
+        sectors.forEach(s => {
+            secDiv.innerHTML += `<div class="ms-option" onclick="toggleFilter('sectors','${s}')"><input type="checkbox" value="${s}"><span>${s}</span></div>`;
+        });
+
+        // User Lists
+        initListFilter();
+    }
+
+    function initListFilter() {
+        const listDiv = document.getElementById('listsOptions');
+        listDiv.innerHTML = '';
+        Object.keys(userLists).forEach(l => {
+            listDiv.innerHTML += `<div class="ms-option" onclick="toggleFilter('lists','${l}')"><input type="checkbox" value="${l}"><span>${l}</span></div>`;
+        });
+    }
+
+    function saveUserLists() { 
+        localStorage.setItem('userLists', JSON.stringify(userLists)); 
+        initListFilter(); // Re-render filter options
+        applyFilters(); 
+    }
+
+    // --- STANDARD MODAL LOGIC ---
     function openListModal(event, symbol) {
         event.stopPropagation(); currentModalSymbol = symbol;
         document.getElementById('modalSymbol').innerText = symbol;
@@ -268,7 +373,12 @@
         saveUserLists(); openListModal({stopPropagation:()=>{}}, currentModalSymbol);
     }
     function deleteList(e, listName) {
-        e.stopPropagation(); if(confirm('למחוק?')) { delete userLists[listName]; if(document.getElementById('myListsFilter').value===listName) document.getElementById('myListsFilter').value='all'; saveUserLists(); openListModal({stopPropagation:()=>{}}, currentModalSymbol); }
+        e.stopPropagation(); if(confirm('למחוק?')) { delete userLists[listName]; 
+        // Remove from active filters if deleted
+        const idx = activeFilters.lists.indexOf(listName);
+        if(idx > -1) activeFilters.lists.splice(idx, 1);
+        updateFilterUI();
+        saveUserLists(); openListModal({stopPropagation:()=>{}}, currentModalSymbol); }
     }
     function createNewList() {
         const name = document.getElementById('newListName').value.trim();
@@ -300,13 +410,9 @@
 
     fetch('data.json').then(res => res.json()).then(data => {
         allData = data.filter(d => d.earningsDate !== '?' && d.earningsDate !== 'TBD');
-        populateSectors(); renderListsDropdown(); updateDateDisplay(); applyFilters();
+        initMultiSelects();
+        updateDateDisplay(); applyFilters();
     }).catch(err => document.getElementById('main-container').innerHTML = `שגיאה בטעינה`);
-
-    function populateSectors() {
-        const s = [...new Set(allData.map(d => d.sector))].sort(); const el = document.getElementById('sectorFilter');
-        s.forEach(sec => { const opt = document.createElement('option'); opt.value = sec; opt.innerText = sec; el.appendChild(opt); });
-    }
 
     function changeDate(delta) {
         if (currentView === 'month') navigationDate.setMonth(navigationDate.getMonth() + delta);
@@ -318,10 +424,9 @@
         const opts = { month: 'numeric', day: 'numeric' };
         if (currentView === 'month') document.getElementById('dateDisplay').innerText = navigationDate.toLocaleDateString('he-IL', { year: 'numeric', month: 'long' });
         else {
-            // FIX DATE LOGIC: START WEEK ON SUNDAY
             const d = new Date(navigationDate);
-            const day = d.getDay(); // 0 is Sunday
-            d.setDate(d.getDate() - day); // Go to previous Sunday
+            const day = d.getDay(); 
+            d.setDate(d.getDate() - day); // Sunday start
             
             const start = new Date(d);
             const end = new Date(d); 
@@ -332,16 +437,31 @@
 
     function applyFilters() {
         const q = document.getElementById('searchInput').value.toLowerCase().trim();
-        const sec = document.getElementById('sectorFilter').value;
-        const idx = document.getElementById('indexFilter').value;
-        const lst = document.getElementById('myListsFilter').value;
         const cap = parseFloat(document.getElementById('capFilter').value);
 
         let filtered = allData.filter(item => {
-            const mSec = sec === 'all' || item.sector === sec;
             const mCap = item.marketCap >= cap;
-            let mIdx = true; if(idx==='sp500') mIdx=item.inSp500; if(idx==='nasdaq100') mIdx=item.inNasdaq100;
-            let mLst = lst==='all' ? true : (userLists[lst]||[]).includes(item.symbol);
+            
+            // Multi Select Logic (OR within category)
+            const mSec = activeFilters.sectors.length === 0 || activeFilters.sectors.includes(item.sector);
+            
+            let mIdx = true;
+            if (activeFilters.indices.length > 0) {
+                mIdx = false;
+                if (activeFilters.indices.includes('sp500') && item.inSp500) mIdx = true;
+                if (activeFilters.indices.includes('nasdaq100') && item.inNasdaq100) mIdx = true;
+            }
+
+            let mLst = true;
+            if (activeFilters.lists.length > 0) {
+                mLst = false;
+                for (let listName of activeFilters.lists) {
+                    if (userLists[listName] && userLists[listName].includes(item.symbol)) {
+                        mLst = true; break;
+                    }
+                }
+            }
+
             return mSec && mCap && mIdx && mLst;
         });
 
@@ -353,14 +473,12 @@
             const y = navigationDate.getFullYear(); const m = navigationDate.getMonth();
             displayData = filtered.filter(d => { const dt = new Date(d.earningsDate); return dt.getFullYear() === y && dt.getMonth() === m; });
         } else {
-            // WEEK LOGIC
+            // Week Logic
             const d = new Date(navigationDate);
             const day = d.getDay(); 
-            d.setDate(d.getDate() - day); // Sunday
+            d.setDate(d.getDate() - day);
             d.setHours(0,0,0,0);
-            
-            const end = new Date(d); 
-            end.setDate(end.getDate() + 7);
+            const end = new Date(d); end.setDate(end.getDate() + 7);
             
             displayData = filtered.filter(i => { const dt = new Date(i.earningsDate); return dt >= d && dt < end; });
         }
@@ -370,7 +488,8 @@
         else renderCalendarGrid(displayData, currentView);
     }
 
-    ['searchInput', 'sectorFilter', 'indexFilter', 'capFilter', 'myListsFilter'].forEach(id => document.getElementById(id).addEventListener(id==='searchInput'?'keyup':'change', applyFilters));
+    document.getElementById('searchInput').addEventListener('keyup', applyFilters);
+    document.getElementById('capFilter').addEventListener('change', applyFilters);
 
     function switchView(v) {
         currentView = v; document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
@@ -398,7 +517,6 @@
         
         const isMobile = window.innerWidth <= 768;
         
-        // Show headers on Desktop OR on Mobile Month View (not week)
         if (!isMobile || type === 'month') {
             ['א','ב','ג','ד','ה','ו','ש'].forEach(d => { const h = document.createElement('div'); h.className = 'calendar-day-header'; h.innerText = d; grid.appendChild(h); });
         }
@@ -409,12 +527,9 @@
             daysCount = new Date(navigationDate.getFullYear(), navigationDate.getMonth()+1, 0).getDate();
             if(!isMobile) for(let i=0; i<startD.getDay(); i++) grid.appendChild(document.createElement('div'));
         } else {
-            // FIX DATE LOGIC: WEEK STARTS SUNDAY
-            const d = new Date(navigationDate); 
-            const day = d.getDay(); 
-            d.setDate(d.getDate() - day);
-            startD = new Date(d); 
-            daysCount = 7;
+            const d = new Date(navigationDate); const day = d.getDay(); 
+            d.setDate(d.getDate() - day); // Sunday Start
+            startD = new Date(d); daysCount = 7;
         }
 
         for (let i=0; i<daysCount; i++) {
@@ -427,57 +542,71 @@
             
             const dailyStocks = data.filter(s => s.earningsDate === dateStr).sort((a,b)=>b.marketCap-a.marketCap);
 
-            // --- MOBILE WEEK VIEW (VERTICAL) ---
+            // --- MOBILE WEEK VIEW (VERTICAL LIST) ---
             if (isMobile && type === 'week') {
                 const dayName = current.toLocaleDateString('he-IL', {weekday:'long'});
-                // Header inside the cell
                 cell.innerHTML = `
                     <div class="mobile-week-day-header">
-                        <span>${dayName} ${current.getDate()}</span>
-                        <span style="font-weight:normal; font-size:12px; color:var(--text-muted)">(${dailyStocks.length})</span>
+                        <span style="font-weight:bold">${dayName} ${current.getDate()}</span>
+                        <span style="font-size:12px;color:var(--text-muted)">(${dailyStocks.length})</span>
                     </div>
-                    <div class="mobile-week-content" style="display: ${dailyStocks.length ? 'grid' : 'none'}"></div>
                 `;
                 
+                // Show DOTS instead of cards for compact view
                 if (dailyStocks.length > 0) {
-                    const contentDiv = cell.querySelector('.mobile-week-content');
-                    // Show actual cards (minis) in the week view
-                    dailyStocks.forEach(s => contentDiv.appendChild(createCard(s, 'mini')));
-                } else {
-                    cell.innerHTML += `<div style="padding:10px;text-align:center;color:var(--text-muted);font-size:12px;">אין דוחות</div>`;
-                }
-            }
-            // --- MOBILE MONTH VIEW (DOTS) ---
-            else if (isMobile && type === 'month') {
-                cell.innerHTML = `<div class="day-number">${current.getDate()}</div>`;
-                if (dailyStocks.length > 0) {
-                    const dotContainer = document.createElement('div'); dotContainer.className = 'month-dot-container';
-                    dailyStocks.slice(0, 4).forEach(s => {
+                    const dotContainer = document.createElement('div'); 
+                    dotContainer.className = 'month-dot-container';
+                    dotContainer.style.justifyContent = 'flex-end'; // Align right
+                    
+                    dailyStocks.slice(0, 6).forEach(s => {
                         const img = document.createElement('img'); img.className = 'month-dot';
                         img.src = `https://assets.parqet.com/logos/symbol/${s.symbol}?format=png`;
                         dotContainer.appendChild(img);
                     });
-                    if (dailyStocks.length > 4) {
+                    
+                    if (dailyStocks.length > 6) {
                         const count = document.createElement('div'); count.className = 'month-count-text'; 
-                        count.innerText = `+${dailyStocks.length - 4}`;
+                        count.innerText = `+${dailyStocks.length - 6}`;
                         dotContainer.appendChild(count);
                     }
                     cell.appendChild(dotContainer);
                     cell.onclick = () => openDayModal(dateStr, dailyStocks);
+                } else {
+                    cell.innerHTML += `<span style="font-size:11px; color:var(--text-muted);">אין דוחות</span>`;
                 }
             }
-            // --- DESKTOP VIEW ---
+            // --- DESKTOP OR MONTH VIEW ---
             else {
                 cell.innerHTML = `<div class="day-number">${current.getDate()}</div>`;
-                if(type === 'month' && dailyStocks.length > 4) {
-                    dailyStocks.slice(0,3).forEach(s => cell.appendChild(createCard(s, 'mini')));
-                    const moreBtn = document.createElement('div'); moreBtn.className = 'show-more-btn';
-                    moreBtn.innerText = `+${dailyStocks.length-3} עוד...`;
-                    moreBtn.onclick = (e) => { e.stopPropagation(); openDayModal(dateStr, dailyStocks); };
-                    cell.appendChild(moreBtn);
-                } else {
-                    const cardType = (type==='week'?'full':'mini');
-                    dailyStocks.forEach(s => cell.appendChild(createCard(s, cardType)));
+                
+                // Mobile Month (Dots)
+                if (isMobile && type === 'month') {
+                    if (dailyStocks.length > 0) {
+                        const dotContainer = document.createElement('div'); dotContainer.className = 'month-dot-container';
+                        dailyStocks.slice(0, 4).forEach(s => {
+                            const img = document.createElement('img'); img.className = 'month-dot';
+                            img.src = `https://assets.parqet.com/logos/symbol/${s.symbol}?format=png`;
+                            dotContainer.appendChild(img);
+                        });
+                        if (dailyStocks.length > 4) {
+                            const count = document.createElement('div'); count.className = 'month-count-text'; count.innerText = `+`; dotContainer.appendChild(count);
+                        }
+                        cell.appendChild(dotContainer);
+                        cell.onclick = () => openDayModal(dateStr, dailyStocks);
+                    }
+                } 
+                // Desktop
+                else {
+                    if(type === 'month' && dailyStocks.length > 4) {
+                        dailyStocks.slice(0,3).forEach(s => cell.appendChild(createCard(s, 'mini')));
+                        const moreBtn = document.createElement('div'); moreBtn.className = 'show-more-btn';
+                        moreBtn.innerText = `+${dailyStocks.length-3} עוד...`;
+                        moreBtn.onclick = (e) => { e.stopPropagation(); openDayModal(dateStr, dailyStocks); };
+                        cell.appendChild(moreBtn);
+                    } else {
+                        const cardType = (type==='week'?'full':'mini');
+                        dailyStocks.forEach(s => cell.appendChild(createCard(s, cardType)));
+                    }
                 }
             }
             grid.appendChild(cell);
