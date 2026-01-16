@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Earnings Pro - Full Analysis</title>
+    <title>Earnings Pro - Full Features</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     
@@ -168,7 +168,7 @@
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         @media (max-width: 768px) { .cards-grid { grid-template-columns: 1fr 1fr; gap: 8px; } }
 
-        .stock-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; position: relative; overflow: hidden; box-shadow: var(--shadow); height: 130px; cursor: pointer; }
+        .stock-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; position: relative; overflow: hidden; box-shadow: var(--shadow); height: 160px; cursor: pointer; }
         .stock-card:hover { border-color: var(--accent-blue); }
         .card-top { display: flex; justify-content: space-between; align-items: center; padding-left: 25px; }
         .stock-logo { width: 28px; height: 28px; border-radius: 50%; background: #fff; object-fit: contain; padding: 1px; border: 1px solid #eee; flex-shrink: 0; }
@@ -180,8 +180,11 @@
         .time-badge { font-size: 10px; display: inline-flex; align-items: center; gap: 3px; background: var(--time-badge-bg); padding: 2px 5px; border-radius: 4px; color: var(--time-badge-color); direction: rtl; }
         .star-btn { position: absolute; top: 5px; left: 5px; background: none; border: none; cursor: pointer; padding: 2px; font-size: 18px; color: #444; z-index: 10; }
         .star-btn.active { color: var(--accent-gold); }
-        .card-actions { display: flex; gap: 6px; margin-top: auto; justify-content: flex-end; direction: ltr; }
-        .action-btn { display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 6px; background: var(--panel-bg); border: 1px solid var(--border-color); cursor: pointer; text-decoration: none; }
+        
+        /* RESTORED LINKS CSS */
+        .card-actions { display: flex; gap: 8px; margin-top: auto; justify-content: flex-end; direction: ltr; padding-top: 5px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .action-btn { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; background: var(--panel-bg); border: 1px solid var(--border-color); cursor: pointer; text-decoration: none; transition: 0.2s; }
+        .action-btn:hover { background: var(--accent-blue); border-color: var(--accent-blue); }
         .action-icon { width: 14px; height: 14px; object-fit: contain; }
 
         .mini-card { background: var(--mini-card-bg); border: 1px solid var(--border-color); border-radius: 4px; padding: 4px; display: flex; align-items: center; gap: 6px; position: relative; padding-left: 15px; overflow: hidden; height: 36px; flex-shrink: 0; cursor: pointer; }
@@ -277,10 +280,20 @@
                 <div class="ms-content" id="sectorOptions"></div>
             </div>
             <div class="multi-select" id="indexMS">
-                <button class="ms-btn" onclick="toggleDropdown('indexMS')">מדדים</button>
+                <button class="ms-btn" onclick="toggleDropdown('indexMS')">מדדים (חכם)</button>
                 <div class="ms-content">
                     <div class="ms-option" onclick="toggleFilter('indices','sp500')"><input type="checkbox" value="sp500"><span>S&P 500</span></div>
                     <div class="ms-option" onclick="toggleFilter('indices','nasdaq100')"><input type="checkbox" value="nasdaq100"><span>Nasdaq 100</span></div>
+                    <div class="ms-option" onclick="toggleFilter('indices','dia')"><input type="checkbox" value="dia"><span>Dow Jones (DIA)</span></div>
+                    <hr style="border-color:var(--border-color); opacity:0.5;">
+                    <div class="ms-option" onclick="toggleFilter('indices','vti')"><input type="checkbox" value="vti"><span>Total Market (VTI)</span></div>
+                    <div class="ms-option" onclick="toggleFilter('indices','vt')"><input type="checkbox" value="vt"><span>Global (VT/VXUS)</span></div>
+                    <hr style="border-color:var(--border-color); opacity:0.5;">
+                    <div class="ms-option" onclick="toggleFilter('indices','schd')"><input type="checkbox" value="schd"><span>Dividends (SCHD/VIG)</span></div>
+                    <div class="ms-option" onclick="toggleFilter('indices','vug')"><input type="checkbox" value="vug"><span>Growth (VUG)</span></div>
+                    <div class="ms-option" onclick="toggleFilter('indices','vtv')"><input type="checkbox" value="vtv"><span>Value (VTV)</span></div>
+                    <div class="ms-option" onclick="toggleFilter('indices','ijh')"><input type="checkbox" value="ijh"><span>Mid Cap (IJH)</span></div>
+                    <div class="ms-option" onclick="toggleFilter('indices','avuv')"><input type="checkbox" value="avuv"><span>Small Cap (AVUV)</span></div>
                 </div>
             </div>
         </div>
@@ -401,9 +414,8 @@
     }
     function getColorClass(n) { return n > 0 ? 'val-green' : (n < 0 ? 'val-red' : ''); }
 
-    // --- FINANCIAL MODAL LOGIC (The New Feature) ---
+    // --- FINANCIAL MODAL LOGIC ---
     function openFinancialModal(stock) {
-        // Basic Info
         document.getElementById('mSymbol').innerText = stock.symbol;
         document.getElementById('mName').innerText = stock.name || "";
         document.getElementById('mSector').innerText = stock.sector;
@@ -441,24 +453,18 @@
         fcfEl.className = fcf > 0 ? 'val-green' : '';
         document.getElementById('mDiv').innerText = formatPct(stock.dividendYield);
 
-        // Guidance Analysis (Automated Insights)
+        // Guidance Analysis
         let analysisHtml = "";
-        
-        // P/E Forward vs Trailing
         if (stock.forwardPE && stock.trailingPE) {
             if (stock.forwardPE < stock.trailingPE) {
                 analysisHtml += `<div><span class="badge bg-pass">חיובי</span> צפי לגידול ברווחים (Forward P/E נמוך מהנוכחי).</div>`;
             } else {
-                analysisHtml += `<div><span class="badge bg-warn">זהירות</span> צפי להאטה ברווחים (Forward P/E גבוה).</div>`;
+                analysisHtml += `<div><span class="badge bg-warn">זהירות</span> צפי להאטה ברווחים.</div>`;
             }
         }
-        
-        // FCF Check
         if (stock.freeCashflow > 0 && stock.netIncome > 0) {
              analysisHtml += `<div style="margin-top:5px;"><span class="badge bg-pass">חזק</span> החברה מייצרת תזרים מזומנים חופשי חיובי.</div>`;
         }
-
-        // Links
         analysisHtml += `<div style="margin-top:15px; font-size:12px; color:#888;">
             <a href="https://finance.yahoo.com/quote/${stock.symbol}/analysis" target="_blank" style="color:var(--accent-blue); text-decoration:none;">🔗 תחזיות אנליסטים (Yahoo)</a> | 
             <a href="https://www.tradingview.com/chart/?symbol=${stock.symbol}" target="_blank" style="color:var(--accent-blue); text-decoration:none;">📈 גרף (TradingView)</a>
@@ -559,14 +565,6 @@
     function closeModal(e) { if(e.target.id === 'listsModal' || e.target.id === 'finModal' || e.target.id === 'dayDetailsModal') closeModalForce(e.target.id); }
     function closeModalForce(id) { document.getElementById(id).classList.remove('open'); }
     
-    function openDayModal(dateStr, stocks) {
-        const d = new Date(dateStr);
-        document.getElementById('dayModalTitle').innerText = `דיווחים: ${dateStr}`;
-        const grid = document.getElementById('dayModalGrid'); grid.innerHTML = '';
-        stocks.forEach(s => { grid.appendChild(createCard(s, 'full')); });
-        document.getElementById('dayDetailsModal').classList.add('open');
-    }
-    
     function isStockStarred(symbol) { for (const list in userLists) { if (userLists[list].includes(symbol)) return true; } return false; }
     function toggleTheme() { document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }
     function getSectorMeta(sector) {
@@ -615,8 +613,18 @@
             let mIdx = true;
             if (activeFilters.indices.length > 0) {
                 mIdx = false;
+                // Specific Logic for the ETFs/Indices
                 if (activeFilters.indices.includes('sp500') && item.inSp500) mIdx = true;
                 if (activeFilters.indices.includes('nasdaq100') && item.inNasdaq100) mIdx = true;
+                if (activeFilters.indices.includes('dia') && item.inDow) mIdx = true; // Placeholder for Dow data
+                
+                // Smart Logic for ETFs
+                if (activeFilters.indices.includes('vti') || activeFilters.indices.includes('vt')) mIdx = true; // All
+                if (activeFilters.indices.includes('ijh') && item.marketCap >= 2000000000 && item.marketCap <= 10000000000) mIdx = true;
+                if (activeFilters.indices.includes('avuv') && item.marketCap < 2000000000) mIdx = true;
+                if (activeFilters.indices.includes('schd') && item.dividendYield > 0.015) mIdx = true; // Div > 1.5%
+                if (activeFilters.indices.includes('vug') && item.revenueGrowth > 0.10) mIdx = true; // Rev Growth > 10%
+                if (activeFilters.indices.includes('vtv') && item.trailingPE > 0 && item.trailingPE < 15) mIdx = true; // P/E < 15
             }
             let mLst = true;
             if (activeFilters.lists.length > 0) {
@@ -751,7 +759,11 @@
         const starClass = isStarred ? 'active' : ''; const starIcon = isStarred ? '★' : '☆';
         const [secClass, bgClass] = getSectorMeta(stock.sector);
         const timeIcon = stock.time === 'Before Market' ? '☀️' : (stock.time === 'After Market' ? '🌙' : '');
-        
+        const tvUrl = `https://www.tradingview.com/chart/?symbol=${stock.symbol}`;
+        const yahooUrl = `https://finance.yahoo.com/quote/${stock.symbol}`;
+        const tvIcon = "https://www.google.com/s2/favicons?domain=tradingview.com";
+        const yahooIcon = "https://www.google.com/s2/favicons?domain=finance.yahoo.com";
+
         const el = document.createElement('div');
         // CLICK TO OPEN NEW FINANCIAL MODAL
         el.onclick = () => openFinancialModal(stock);
@@ -770,7 +782,11 @@
                     <span class="tag-text ${bgClass}">${stock.sector}</span>
                     ${stock.time ? `<span class="time-badge">${timeIcon} ${stock.time === 'Before Market' ? 'לפני' : (stock.time === 'After Market' ? 'אחרי' : '')}</span>` : ''}
                 </div>
-                `;
+                <div class="card-actions" onclick="event.stopPropagation()">
+                    <a href="${tvUrl}" target="_blank" class="action-btn"><img src="${tvIcon}" class="action-icon"></a>
+                    <a href="${yahooUrl}" target="_blank" class="action-btn"><img src="${yahooIcon}" class="action-icon"></a>
+                </div>
+            `;
         } else {
             el.className = 'mini-card';
             el.innerHTML = `
