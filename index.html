@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Earnings Pro - Stable</title>
+    <title>Earnings Pro - Master</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     
@@ -16,7 +16,11 @@
             --accent-blue: #2962ff; --accent-gold: #f5c518; --accent-red: #d32f2f;
             --accent-green: #00c853;
             --border-color: #2a2e39; --shadow: 0 4px 12px rgba(0,0,0,0.3);
+            --mini-card-hover: rgba(255,255,255,0.08); --mini-card-bg: rgba(255,255,255,0.03);
+            --time-badge-bg: rgba(255, 255, 255, 0.1); --time-badge-color: #aaa;
             --modal-bg: rgba(0, 0, 0, 0.9);
+            --btn-hover-bg: rgba(255, 255, 255, 0.1);
+            --slider-track: #333;
         }
         [data-theme="light"] {
             --bg-color: #f0f2f5; --card-bg: #ffffff; --panel-bg: #ffffff;
@@ -24,7 +28,11 @@
             --accent-blue: #007bff; --accent-gold: #f59e0b; --accent-red: #dc3545;
             --accent-green: #2e7d32;
             --border-color: #dadde1; --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --mini-card-hover: rgba(0,0,0,0.05); --mini-card-bg: #f7f8fa;
+            --time-badge-bg: #e4e6eb; --time-badge-color: #555;
             --modal-bg: rgba(0, 0, 0, 0.5);
+            --btn-hover-bg: rgba(0, 0, 0, 0.05);
+            --slider-track: #ddd;
         }
         body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Rubik', sans-serif; margin: 0; padding: 0; overflow-y: scroll; -webkit-tap-highlight-color: transparent; }
         
@@ -50,9 +58,12 @@
         .view-toggle { display: flex; gap: 2px; background: var(--panel-bg); padding: 3px; border-radius: 8px; border: 1px solid var(--border-color); }
         .view-btn { border: none; background: transparent; color: var(--text-muted); padding: 6px 12px; font-size: 13px; font-weight: 500; border-radius: 6px; cursor: pointer; transition: 0.2s; }
         .view-btn.active { background: var(--accent-blue); color: white; }
+        
         .controls-row { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
         input[type="text"], select { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0 12px; border-radius: 6px; font-size: 13px; outline: none; height: 36px; white-space: nowrap; }
         .filter-toggle-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0 15px; height: 36px; border-radius: 6px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+        .filter-toggle-btn:hover { border-color: var(--accent-blue); }
+        
         .advanced-filters { display: none; width: 100%; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-top: 10px; animation: slideDown 0.2s ease-out; }
         .advanced-filters.show { display: block; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -331,26 +342,20 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 
 <script>
-    // Safe Text Setter
+    // --- SAFE DOM HELPERS (Fixes "Cannot set property of null") ---
     function setText(id, value) {
         const el = document.getElementById(id);
-        if(el) {
-            el.innerText = value !== undefined && value !== null ? value : "-";
-        }
+        if(el) { el.innerText = (value !== undefined && value !== null) ? value : "-"; }
     }
     
     function setHtml(id, value) {
         const el = document.getElementById(id);
-        if(el) {
-            el.innerHTML = value !== undefined && value !== null ? value : "";
-        }
+        if(el) { el.innerHTML = (value !== undefined && value !== null) ? value : ""; }
     }
     
     function setClass(id, className) {
         const el = document.getElementById(id);
-        if(el) {
-            el.className = className;
-        }
+        if(el) { el.className = className; }
     }
 
     // Globals
