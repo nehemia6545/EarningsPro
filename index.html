@@ -330,13 +330,13 @@
         const slider = document.getElementById('marketCapSlider');
         
         // Logarithmic Scale Config
-        // We map 0-100% to 100M - 5T
+        // We map 0-100% to 1B - 5T
         
         noUiSlider.create(slider, {
             start: [100000000, 4000000000000], // Start values
             connect: true,
             range: {
-                'min': [100000000, 100000000], // Start at 100M, step 100M initially
+                'min': [100000000, 100000000], // Start at 1B, step 1B initially
                 '30%': [10000000000, 1000000000], // At 30%, value is 10B, step 1B
                 '70%': [200000000000, 10000000000], // At 70%, value is 200B, step 10B
                 'max': [4000000000000] // End at 5T
