@@ -1,406 +1,108 @@
-<!DOCTYPE html>
-<html lang="he" dir="rtl" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Earnings Pro - Deep Analysis</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
-
-    <style>
-        :root {
-            --bg-color: #0f1115; --card-bg: #1e222d; --panel-bg: #131722;
-            --text-main: #e0e0e0; --text-muted: #8b949e;
-            --accent-blue: #2962ff; --accent-gold: #f5c518; --accent-red: #d32f2f;
-            --accent-green: #00c853;
-            --border-color: #2a2e39; --shadow: 0 4px 12px rgba(0,0,0,0.3);
-            --mini-card-hover: rgba(255,255,255,0.08); --mini-card-bg: rgba(255,255,255,0.03);
-            --time-badge-bg: rgba(255, 255, 255, 0.1); --time-badge-color: #aaa;
-            --modal-bg: rgba(0, 0, 0, 0.9);
-            --btn-hover-bg: rgba(255, 255, 255, 0.1);
-            --slider-track: #333;
-        }
-        [data-theme="light"] {
-            --bg-color: #f0f2f5; --card-bg: #ffffff; --panel-bg: #ffffff;
-            --text-main: #1c1e21; --text-muted: #606770;
-            --accent-blue: #007bff; --accent-gold: #f59e0b; --accent-red: #dc3545;
-            --accent-green: #2e7d32;
-            --border-color: #dadde1; --shadow: 0 2px 8px rgba(0,0,0,0.1);
-            --mini-card-hover: rgba(0,0,0,0.05); --mini-card-bg: #f7f8fa;
-            --time-badge-bg: #e4e6eb; --time-badge-color: #555;
-            --modal-bg: rgba(0, 0, 0, 0.5);
-            --btn-hover-bg: rgba(0, 0, 0, 0.05);
-            --slider-track: #ddd;
-        }
-        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Rubik', sans-serif; margin: 0; padding: 0; overflow-y: scroll; -webkit-tap-highlight-color: transparent; }
-        
-        /* HEADER & LAYOUT (Same as before) */
-        header { 
-            background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); 
-            padding: 0 20px; display: flex; flex-direction: column; justify-content: center;
-            position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow); 
-            padding-bottom: 10px;
-        }
-        .top-row { display: flex; justify-content: space-between; align-items: center; position: relative; height: 50px; width: 100%; margin-top: 5px; }
-        .logo { font-size: 22px; font-weight: 700; color: var(--text-main); z-index: 2; }
-        .logo span { color: var(--accent-blue); }
-        .date-nav { 
-            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); 
-            display: flex; align-items: center; gap: 15px; background: var(--panel-bg); 
-            padding: 5px 15px; border-radius: 8px; border: 1px solid var(--border-color); z-index: 1; 
-        }
-        .right-actions { display: flex; gap: 10px; align-items: center; z-index: 2; }
-        .nav-btn { background: none; border: none; color: var(--text-main); font-size: 18px; cursor: pointer; padding: 0 10px; }
-        .current-date-display { font-weight: 500; min-width: 140px; text-align: center; direction: ltr; }
-        .theme-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px; border-radius: 6px; cursor: pointer; }
-        .view-toggle { display: flex; gap: 2px; background: var(--panel-bg); padding: 3px; border-radius: 8px; border: 1px solid var(--border-color); }
-        .view-btn { border: none; background: transparent; color: var(--text-muted); padding: 6px 12px; font-size: 13px; font-weight: 500; border-radius: 6px; cursor: pointer; transition: 0.2s; }
-        .view-btn.active { background: var(--accent-blue); color: white; }
-        .controls-row { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
-        input[type="text"], select { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0 12px; border-radius: 6px; font-size: 13px; outline: none; height: 36px; white-space: nowrap; }
-        .filter-toggle-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0 15px; height: 36px; border-radius: 6px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px; }
-        .filter-toggle-btn:hover { border-color: var(--accent-blue); }
-        .advanced-filters { display: none; width: 100%; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; margin-top: 10px; animation: slideDown 0.2s ease-out; }
-        .advanced-filters.show { display: block; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* SLIDER & MULTI SELECT (Existing) */
-        .slider-section { margin-top: 15px; padding: 0 10px; }
-        .slider-header { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 10px; }
-        .slider-values { color: var(--accent-blue); font-weight: bold; font-family: monospace; direction: ltr; }
-        .noUi-target { background: #333; border: none; border-radius: 4px; box-shadow: none; height: 6px; }
-        [data-theme="light"] .noUi-target { background: #ddd; }
-        .noUi-connect { background: var(--accent-blue); }
-        .noUi-horizontal .noUi-handle { width: 20px; height: 20px; right: -10px; top: -7px; border-radius: 50%; border: 2px solid var(--accent-blue); background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.3); cursor: pointer; }
-        .noUi-handle:before, .noUi-handle:after { display: none; }
-        .slider-presets { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
-        .preset-chip { font-size: 11px; background: var(--card-bg); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 20px; cursor: pointer; color: var(--text-muted); transition: 0.2s; }
-        .preset-chip:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
-        
-        .multi-select { position: relative; display: inline-block; }
-        .ms-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 0 30px 0 12px; border-radius: 6px; font-size: 13px; height: 36px; cursor: pointer; text-align: right; position: relative; min-width: 120px; display: flex; align-items: center; }
-        .ms-btn:after { content: '▼'; position: absolute; left: 10px; font-size: 10px; color: var(--text-muted); }
-        .ms-content { display: none; position: absolute; top: 40px; right: 0; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 240px; max-height: 250px; overflow-y: auto; z-index: 2000; padding: 5px; }
-        .ms-content.show { display: block; }
-        .ms-option { display: flex; align-items: center; gap: 10px; padding: 8px; cursor: pointer; border-radius: 4px; }
-        .ms-option:hover { background: var(--mini-card-hover); }
-        .ms-option input { width: 16px; height: 16px; margin: 0; }
-        .ms-badge { background: var(--accent-blue); color: white; font-size: 10px; padding: 1px 5px; border-radius: 4px; margin-right: 5px; }
-
-        @media (max-width: 768px) {
-            header { height: auto; padding: 10px; padding-bottom: 15px; }
-            .top-row { flex-wrap: wrap; height: auto; position: static; gap: 10px; margin-bottom: 10px; }
-            .logo { order: 1; font-size: 18px; }
-            .right-actions { order: 2; margin-right: auto; }
-            .date-nav { position: static; transform: none; order: 3; width: 100%; justify-content: space-between; margin-top: 5px; }
-            .controls-row { flex-wrap: wrap; margin-top: 10px; }
-            #searchInput { flex: 1; }
-            .filter-toggle-btn { width: 100%; justify-content: center; margin-top: 5px; }
-            .ms-content { position: fixed; top: auto; bottom: 0; left: 0; right: 0; width: 100%; max-height: 50vh; border-radius: 15px 15px 0 0; }
-        }
-
-        .container { max-width: 1800px; margin: 0 auto; padding: 20px; }
-
-        /* CALENDAR & CARDS */
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
-        .calendar-day-header { text-align: center; color: var(--text-muted); padding: 8px; background: var(--day-header-bg); border-radius: 4px; font-size: 13px; }
-        .calendar-day { background: var(--card-bg); border: 1px solid var(--border-color); min-height: 120px; border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 4px; overflow: hidden; position: relative; }
-        .calendar-day.today { border: 1px solid var(--accent-blue); }
-        .day-number { font-size: 13px; color: var(--text-muted); margin-bottom: 2px; font-weight: bold; border-bottom: 1px solid var(--border-color); }
-        @media (max-width: 768px) {
-            .calendar-grid { gap: 4px; }
-            .calendar-day { min-height: 70px !important; padding: 2px !important; }
-            .calendar-grid.week-view { display: flex !important; overflow-x: auto; gap: 10px; padding-bottom: 10px; scroll-snap-type: x mandatory; }
-            .calendar-grid.week-view .calendar-day-header { display: none; }
-            .calendar-grid.week-view .calendar-day { min-width: 110px; width: 110px; min-height: 140px !important; scroll-snap-align: start; flex-shrink: 0; border: 1px solid var(--border-color); border-top: 3px solid var(--accent-blue); padding: 8px !important; justify-content: flex-start; }
-            .mobile-week-date { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; color: var(--text-main); display: block; }
-            .mobile-week-date span { display: block; font-size: 11px; color: var(--text-muted); font-weight: normal; }
-            .day-number { display: none; }
-        }
-        .mobile-week-date { display: none; }
-        .month-dot-container { display: flex; flex-wrap: wrap; gap: 2px; justify-content: center; align-content: flex-start; height: 100%; }
-        .month-dot { width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 1px solid var(--border-color); object-fit: contain; }
-        .month-count-text { font-size: 11px; color: var(--accent-blue); font-weight: 500; align-self: center; margin-top: 2px; }
-        @media (max-width: 768px) { .calendar-grid:not(.week-view) .month-dot { width: 14px; height: 14px; } }
-        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        @media (max-width: 768px) { .cards-grid { grid-template-columns: 1fr 1fr; gap: 8px; } }
-        .stock-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; position: relative; overflow: hidden; box-shadow: var(--shadow); height: 165px; cursor: pointer; transition: 0.2s; }
-        .stock-card:hover { border-color: var(--accent-blue); transform: translateY(-3px); }
-        .card-top { display: flex; justify-content: space-between; align-items: center; padding-left: 25px; }
-        .stock-logo { width: 28px; height: 28px; border-radius: 50%; background: #fff; object-fit: contain; padding: 1px; border: 1px solid #eee; flex-shrink: 0; }
-        .text-info { text-align: left; direction: ltr; }
-        .symbol { font-size: 14px; font-weight: 700; color: var(--text-main); display: block; }
-        .market-cap { font-size: 10px; color: var(--text-muted); background: var(--mini-card-bg); padding: 1px 4px; border-radius: 3px; border: 1px solid var(--border-color); display: inline-block; }
-        .company-name { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; direction: ltr; text-align: left; width: 100%; }
-        .card-strip { position: absolute; top: 0; left: 0; width: 100%; height: 3px; }
-        .time-badge { font-size: 10px; display: inline-flex; align-items: center; gap: 3px; background: var(--time-badge-bg); padding: 2px 5px; border-radius: 4px; color: var(--time-badge-color); direction: rtl; }
-        .star-btn { position: absolute; top: 5px; left: 5px; background: none; border: none; cursor: pointer; padding: 2px; font-size: 18px; color: #444; z-index: 10; }
-        .star-btn.active { color: var(--accent-gold); }
-        .card-actions { display: flex; gap: 8px; margin-top: auto; justify-content: flex-end; direction: ltr; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.05); pointer-events: auto; }
-        .action-btn { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; background: var(--panel-bg); border: 1px solid var(--border-color); cursor: pointer; text-decoration: none; transition: 0.2s; }
-        .action-btn:hover { background: var(--accent-blue); border-color: var(--accent-blue); transform: translateY(-2px); }
-        .action-icon { width: 14px; height: 14px; object-fit: contain; }
-        .mini-card { background: var(--mini-card-bg); border: 1px solid var(--border-color); border-radius: 4px; padding: 4px; display: flex; align-items: center; gap: 6px; position: relative; padding-left: 15px; overflow: hidden; height: 36px; flex-shrink: 0; cursor: pointer; }
-        .mini-logo { width: 16px; height: 16px; border-radius: 50%; background: white; object-fit: contain; flex-shrink: 0; }
-        .mini-info { display: flex; flex-direction: column; width: 100%; overflow: hidden; direction: ltr; text-align: left; }
-        .mini-top { display: flex; justify-content: space-between; align-items: center; }
-        .mini-sym { font-weight: 700; font-size: 10px; }
-        .mini-strip { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
-        .mini-actions { display: flex; gap: 4px; margin-right: auto; margin-left: 5px; pointer-events: auto; }
-        .mini-action-btn { width: 16px; height: 16px; border-radius: 3px; display: flex; align-items: center; justify-content: center; background: var(--panel-bg); border: 1px solid var(--border-color); cursor: pointer; }
-        .mini-action-btn img { width: 10px; height: 10px; }
-        .date-section { margin-bottom: 20px; }
-        .date-header { font-size: 14px; color: var(--accent-blue); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-bottom: 10px; font-weight: 500; }
-
-        /* MODALS */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(2px); }
-        .modal-overlay.open { display: flex; }
-        .fin-modal { background: var(--card-bg); width: 95%; max-width: 900px; height: 90vh; border-radius: 16px; border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .fin-header { padding: 15px 20px; border-bottom: 1px solid var(--border-color); background: var(--panel-bg); display: flex; justify-content: space-between; align-items: center; }
-        .fin-title h2 { margin: 0; font-size: 22px; display: flex; align-items: center; gap: 10px; }
-        .fin-title span { font-size: 12px; color: var(--text-muted); font-weight: normal; background: var(--border-color); padding: 2px 8px; border-radius: 4px; }
-        .fin-body { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
-        .kpi-card { background: var(--panel-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); text-align: center; }
-        .kpi-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
-        .kpi-value { font-size: 16px; font-weight: bold; direction: ltr; }
-        .val-green { color: var(--accent-green); } .val-red { color: var(--accent-red); }
-        .section-title { font-size: 15px; color: var(--accent-blue); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-top: 10px; font-weight: 500; }
-        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; }
-        .data-box { background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); }
-        .data-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px; border-bottom: 1px dashed var(--border-color); padding-bottom: 3px; }
-        .data-row:last-child { border: none; }
-        .data-row span:last-child { font-weight: 500; direction: ltr; }
-        .analysis-box { background: rgba(41, 98, 255, 0.05); border: 1px solid var(--accent-blue); padding: 12px; border-radius: 8px; font-size: 13px; line-height: 1.5; color: var(--text-main); }
-        .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-left: 5px; }
-        .bg-pass { background: rgba(0, 200, 83, 0.2); color: #00e676; } .bg-warn { background: rgba(255, 171, 0, 0.2); color: #ffab00; }
-        
-        /* TABLE FOR HISTORY */
-        .history-table { width: 100%; border-collapse: collapse; font-size: 12px; direction: ltr; text-align: right; }
-        .history-table th { color: var(--text-muted); padding: 8px; border-bottom: 1px solid var(--border-color); text-align: right; }
-        .history-table td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .history-table tr:last-child td { border: none; }
-        .scroll-table { overflow-x: auto; }
-
-        .std-modal-content { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; width: 320px; display: flex; flex-direction: column; }
-        .list-options { max-height: 200px; overflow-y: auto; }
-        .list-option { display: flex; align-items: center; justify-content: space-between; padding: 8px; border-radius: 6px; background: var(--panel-bg); margin-bottom: 5px; cursor: pointer; }
-        .new-list-row { display: flex; gap: 5px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-color); }
-        .add-list-btn { background: var(--accent-blue); color: white; border: none; border-radius: 4px; width: 30px; font-size: 18px; cursor: pointer; }
-    </style>
-</head>
-<body>
-
-<header>
-    <div class="top-row">
-        <div class="logo">Earnings<span>Pro</span></div>
-        <div class="date-nav">
-            <button class="nav-btn" onclick="changeDate(-1)">&#10094;</button>
-            <div class="current-date-display" id="dateDisplay"></div>
-            <button class="nav-btn" onclick="changeDate(1)">&#10095;</button>
-        </div>
-        <div class="right-actions">
-            <button class="theme-btn" onclick="toggleTheme()">🌗</button>
-            <div class="view-toggle">
-                <button class="view-btn active" onclick="switchView('list')" id="btn-list">רשימה</button>
-                <button class="view-btn" onclick="switchView('month')" id="btn-month">חודשי</button>
-                <button class="view-btn" onclick="switchView('week')" id="btn-week">שבועי</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="controls-row">
-        <input type="text" id="searchInput" placeholder="חפש מניה..." style="flex:1; min-width:150px;">
-        <button class="filter-toggle-btn" onclick="document.querySelector('.advanced-filters').classList.toggle('show')">
-            <span>סינון מתקדם</span> ▼
-        </button>
-    </div>
-
-    <div class="advanced-filters">
-        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px;">
-            <div class="multi-select" id="listsMS">
-                <button class="ms-btn" onclick="toggleDropdown('listsMS')">רשימות שלי</button>
-                <div class="ms-content" id="listsOptions"></div>
-            </div>
-            <div class="multi-select" id="sectorMS">
-                <button class="ms-btn" onclick="toggleDropdown('sectorMS')">סקטורים</button>
-                <div class="ms-content" id="sectorOptions"></div>
-            </div>
-            <div class="multi-select" id="indexMS">
-                <button class="ms-btn" onclick="toggleDropdown('indexMS')">מדדים ו-ETFs</button>
-                <div class="ms-content">
-                    <div class="ms-option" onclick="toggleFilter('indices','sp500')"><input type="checkbox" value="sp500"><span>S&P 500</span></div>
-                    <div class="ms-option" onclick="toggleFilter('indices','nasdaq100')"><input type="checkbox" value="nasdaq100"><span>Nasdaq 100</span></div>
-                    <hr style="border-color:var(--border-color); opacity:0.5; margin:5px 0;">
-                    <div class="ms-option" onclick="toggleFilter('indices','dia')"><input type="checkbox" value="dia"><span>DIA (Dow)</span></div>
-                    <div class="ms-option" onclick="toggleFilter('indices','vti')"><input type="checkbox" value="vti"><span>VTI (Total)</span></div>
-                    <div class="ms-option" onclick="toggleFilter('indices','vt')"><input type="checkbox" value="vt"><span>VT (World)</span></div>
-                    <div class="ms-option" onclick="toggleFilter('indices','vxus')"><input type="checkbox" value="vxus"><span>VXUS (Ex-US)</span></div>
-                    <hr style="border-color:var(--border-color); opacity:0.5; margin:5px 0;">
-                    <div class="ms-option" onclick="toggleFilter('indices','schd')"><input type="checkbox" value="schd"><span>SCHD (Div)</span></div>
-                    <div class="ms-option" onclick="toggleFilter('indices','vig')"><input type="checkbox" value="vig"><span>VIG (Div+)</span></div>
-                    <div class="ms-option" onclick="toggleFilter('indices','vug')"><input type="checkbox" value="vug"><span>VUG (Growth)</span></div>
-                    <div class="ms-option" onclick="toggleFilter('indices','vtv')"><input type="checkbox" value="vtv"><span>VTV (Value)</span></div>
-                    <div class="ms-option" onclick="toggleFilter('indices','ijh')"><input type="checkbox" value="ijh"><span>IJH (Mid)</span></div>
-                    <div class="ms-option" onclick="toggleFilter('indices','avuv')"><input type="checkbox" value="avuv"><span>AVUV (Small)</span></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="slider-section">
-            <div class="slider-header">
-                <span>גודל חברה</span>
-                <span id="sliderValues" class="slider-values">Loading...</span>
-            </div>
-            <div id="marketCapSlider"></div>
-            <div class="slider-presets">
-                <div class="preset-chip" onclick="setSliderRange(1000000000, 20000000000)">קטנות (1B-20B)</div>
-                <div class="preset-chip" onclick="setSliderRange(20000000000, 200000000000)">בינוניות (20B-200B)</div>
-                <div class="preset-chip" onclick="setSliderRange(200000000000, 5000000000000)">ענקיות (>200B)</div>
-                <div class="preset-chip" onclick="setSliderRange(1000000000, 5000000000000)">הכל</div>
-            </div>
-        </div>
-        <div id="stats-counter" style="text-align:left; color:var(--text-muted); font-size:12px; margin-top:15px;"></div>
-    </div>
-</header>
-
-<div class="container" id="main-container">
-    <div id="loader" style="text-align: center; padding: 50px; color: #888;">טוען נתונים...</div>
-</div>
-
-<div class="modal-overlay" id="listsModal" onclick="closeModal(event)">
-    <div class="std-modal-content" onclick="event.stopPropagation()">
-        <div class="modal-header"><span>שמור: <span id="modalSymbol" style="color:var(--accent-blue)"></span></span><span class="close-modal" onclick="closeModalForce('listsModal')">✕</span></div>
-        <div class="list-options" id="modalListsContainer"></div>
-        <div class="new-list-row"><input type="text" id="newListName" placeholder="רשימה חדשה..."><button class="add-list-btn" onclick="createNewList()">+</button></div>
-    </div>
-</div>
-
-<div class="modal-overlay" id="dayDetailsModal" onclick="closeDayModal(event)">
-    <div class="fin-modal" onclick="event.stopPropagation()">
-        <div class="fin-header"><span id="dayModalTitle" style="font-weight:bold; font-size:18px;">דיווחים</span><span class="close-modal" onclick="closeModalForce('dayDetailsModal')">✕</span></div>
-        <div class="modal-body-scroll"><div class="cards-grid" id="dayModalGrid"></div></div>
-    </div>
-</div>
-
-<div class="modal-overlay" id="finModal" onclick="closeModal(event)">
-    <div class="fin-modal" onclick="event.stopPropagation()">
-        <div class="fin-header">
-            <div class="fin-title">
-                <h2 id="mSymbol">AAPL <span id="mSector">Tech</span></h2>
-                <div style="font-size:13px; color:#888;" id="mName">Apple Inc.</div>
-            </div>
-            <span class="close-modal" onclick="closeModalForce('finModal')">✕</span>
-        </div>
-        <div class="fin-body">
-            <div class="kpi-grid">
-                <div class="kpi-card"><div class="kpi-label">שווי שוק</div><div class="kpi-value" id="mCap">-</div></div>
-                <div class="kpi-card"><div class="kpi-label">מכפיל (P/E)</div><div class="kpi-value" id="mPE">-</div></div>
-                <div class="kpi-card"><div class="kpi-label">רווח למניה (EPS)</div><div class="kpi-value" id="mEPS">-</div></div>
-                <div class="kpi-card"><div class="kpi-label">תשואה להון (ROE)</div><div class="kpi-value" id="mROE">-</div></div>
-            </div>
-            <div class="data-grid">
-                <div class="data-box">
-                    <div class="section-title">📊 רווח והפסד</div>
-                    <div class="data-row"><span>הכנסות</span> <span id="mRev">-</span></div>
-                    <div class="data-row"><span>צמיחה (YoY)</span> <span id="mRevGrowth">-</span></div>
-                    <div class="data-row"><span>רווח נקי</span> <span id="mNetInc">-</span></div>
-                    <div class="data-row"><span>שולי רווח גולמי</span> <span id="mGrossMarg">-</span></div>
-                </div>
-                <div class="data-box">
-                    <div class="section-title">⚖️ מאזן</div>
-                    <div class="data-row"><span>מזומנים</span> <span id="mCash">-</span></div>
-                    <div class="data-row"><span>חובות</span> <span id="mDebt">-</span></div>
-                    <div class="data-row"><span>יחס שוטף</span> <span id="mCurrRatio">-</span></div>
-                </div>
-                <div class="data-box">
-                    <div class="section-title">💰 תזרים מזומנים</div>
-                    <div class="data-row"><span>תזרים מפעילות</span> <span id="mOCF">-</span></div>
-                    <div class="data-row"><span>תזרים חופשי</span> <span id="mFCF">-</span></div>
-                    <div class="data-row"><span>תשואת דיבידנד</span> <span id="mDiv">-</span></div>
-                </div>
-            </div>
-            <div class="section-title">🔮 ניתוח ותחזית</div>
-            <div class="analysis-box" id="mGuidanceText"></div>
-            
-            <div class="section-title">📅 היסטוריה רבעונית (שנתיים אחרונות)</div>
-            <div class="data-box" style="padding:0; overflow:hidden;">
-                <div class="scroll-table">
-                    <table class="history-table" id="mHistoryTable">
-                        <thead><tr><th>תאריך</th><th>הכנסות</th><th>רווח נקי</th><th>שולי רווח</th><th>תזרים חופשי</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 
 <script>
+    // --- משתנים גלובליים ---
     let allData = [];
-    let historyData = {}; // Store deep data
-    let currentView = 'list';
-    let navigationDate = new Date();
+    let historyData = {}; 
     let userLists = {};
     let activeFilters = { sectors: [], indices: [], lists: [] };
     let sliderInstance = null;
     let currentMinCap = 1000000000;
     let currentMaxCap = 5000000000000;
 
+    // --- טעינת רשימות משתמש ---
     try {
         const stored = localStorage.getItem('userLists');
         userLists = stored ? JSON.parse(stored) : { "מועדפים": [] };
-    } catch (e) { userLists = { "מועדפים": [] }; localStorage.setItem('userLists', JSON.stringify(userLists)); }
-    
-    let currentModalSymbol = '';
+    } catch (e) { 
+        userLists = { "מועדפים": [] }; 
+    }
 
+    // --- פונקציות עזר ---
     function formatMoney(n) { 
-        if (!n || n === 0) return "-"; 
+        if (n === undefined || n === null || n === 0) return "-"; 
         if (n >= 1e12) return "$" + (n / 1e12).toFixed(2) + "T"; 
         if (n >= 1e9) return "$" + (n / 1e9).toFixed(1) + "B"; 
         if (n >= 1e6) return "$" + (n / 1e6).toFixed(1) + "M"; 
         return n.toLocaleString(); 
     }
     function formatPct(n) { 
-        if (!n) return "-"; 
+        if (n === undefined || n === null) return "-"; 
         return (n * 100).toFixed(1) + "%"; 
     }
     function getColorClass(n) { return n > 0 ? 'val-green' : (n < 0 ? 'val-red' : ''); }
 
-    // --- MAIN FETCH ---
-    Promise.all([
-        fetch('data.json').then(res => res.json()),
-        fetch('history_data.json').then(res => res.json()).catch(e => ({})) // Optional loading
-    ]).then(([liveData, histData]) => {
-        allData = liveData.filter(d => d.earningsDate !== '?' && d.earningsDate !== 'TBD');
-        historyData = histData || {};
+    // --- טעינת נתונים (החלק המתוקן) ---
+    async function loadData() {
+        const loader = document.getElementById('main-container');
+        loader.innerHTML = '<div style="text-align:center;padding:50px;color:#888;">טוען נתונים עדכניים...</div>';
         
-        const secDiv = document.getElementById('sectorOptions'); secDiv.innerHTML = '';
-        [...new Set(allData.map(d => d.sector))].sort().forEach(s => secDiv.innerHTML += `<div class="ms-option" onclick="toggleFilter('sectors','${s}')"><input type="checkbox" value="${s}"><span>${s}</span></div>`);
-        initListFilter();
-        initExternalSlider();
-        updateDateDisplay(); applyFilters();
-    }).catch(err => document.getElementById('main-container').innerHTML = `טוען...`);
+        // Cache Buster: מוסיף מספר רנדומלי לכתובת כדי לעקוף זיכרון מטמון
+        const cacheBuster = new Date().getTime();
 
-    // --- FINANCIAL MODAL ---
+        try {
+            // 1. טעינת הנתונים הראשיים (חובה)
+            const response = await fetch(`./data.json?v=${cacheBuster}`);
+            if (!response.ok) throw new Error('Data file not found');
+            const data = await response.json();
+            
+            allData = data.filter(d => d.earningsDate !== '?' && d.earningsDate !== 'TBD');
+            
+            // אתחול ראשוני של האתר
+            const secDiv = document.getElementById('sectorOptions'); 
+            secDiv.innerHTML = '';
+            [...new Set(allData.map(d => d.sector))].sort().forEach(s => {
+                secDiv.innerHTML += `<div class="ms-option" onclick="toggleFilter('sectors','${s}')"><input type="checkbox" value="${s}"><span>${s}</span></div>`;
+            });
+            
+            initListFilter();
+            initExternalSlider();
+            updateDateDisplay(); 
+            applyFilters(); // הצגת הנתונים
+
+            // 2. טעינת היסטוריה (אופציונלי - לא תוקע את האתר אם נכשל)
+            try {
+                const histRes = await fetch(`./history_data.json?v=${cacheBuster}`);
+                if (histRes.ok) {
+                    historyData = await histRes.json();
+                    console.log("History data loaded successfully");
+                }
+            } catch (err) {
+                console.warn("History data not found, skipping.");
+            }
+
+        } catch (error) {
+            console.error(error);
+            loader.innerHTML = `<div style="text-align:center;padding:50px;color:red;">
+                <h3>שגיאה בטעינת הנתונים</h3>
+                <p>ודא שהקובץ data.json קיים בתיקייה ושהועלה ל-GitHub.</p>
+                <p>שגיאה טכנית: ${error.message}</p>
+            </div>`;
+        }
+    }
+
+    // הפעלת הטעינה
+    loadData();
+
+
+    // --- FINANCIAL MODAL LOGIC (חלון הפרטים) ---
     function openFinancialModal(stock) {
-        document.getElementById('mSymbol').innerText = stock.symbol;
-        document.getElementById('mName').innerText = stock.name || "";
-        document.getElementById('mSector').innerText = stock.sector;
+        // מילוי כותרות
+        document.getElementById('mSymbol').innerText = stock.symbol || "-";
+        document.getElementById('mName').innerText = stock.name || "-";
+        document.getElementById('mSector').innerText = stock.sector || "-";
 
-        // Basic KPIs
+        // KPI
         document.getElementById('mCap').innerText = formatMoney(stock.marketCap);
         document.getElementById('mPE').innerText = stock.trailingPE ? stock.trailingPE.toFixed(1) : "-";
         document.getElementById('mEPS').innerText = stock.eps ? "$" + stock.eps.toFixed(2) : "-";
+        
         const roe = stock.returnOnEquity;
         const roeEl = document.getElementById('mROE');
         roeEl.innerText = formatPct(roe);
         roeEl.className = "kpi-value " + (roe > 0.15 ? 'val-green' : '');
 
+        // דוח רווח והפסד
         document.getElementById('mRev').innerText = formatMoney(stock.revenue);
         const revG = document.getElementById('mRevGrowth');
         revG.innerText = formatPct(stock.revenueGrowth);
@@ -408,6 +110,7 @@
         document.getElementById('mNetInc').innerText = formatMoney(stock.netIncome);
         document.getElementById('mGrossMarg').innerText = formatPct(stock.grossMargins);
 
+        // מאזן
         document.getElementById('mCash').innerText = formatMoney(stock.totalCash);
         document.getElementById('mDebt').innerText = formatMoney(stock.totalDebt);
         const cr = stock.currentRatio;
@@ -415,6 +118,7 @@
         crEl.innerText = cr ? cr.toFixed(2) : "-";
         crEl.className = cr >= 1.5 ? 'val-green' : (cr < 1 ? 'val-red' : '');
 
+        // תזרים
         document.getElementById('mOCF').innerText = formatMoney(stock.operatingCashflow);
         const fcf = stock.freeCashflow;
         const fcfEl = document.getElementById('mFCF');
@@ -422,56 +126,70 @@
         fcfEl.className = fcf > 0 ? 'val-green' : '';
         document.getElementById('mDiv').innerText = formatPct(stock.dividendYield);
 
-        // Guidance & Analysis
+        // --- GUIDANCE & ANALYSIS ---
         let analysisHtml = "";
-        // Check History Data for advanced guidance
+        
+        // 1. נתונים היסטוריים (אם יש)
         const hist = historyData[stock.symbol];
         
-        if (stock.forwardPE && stock.trailingPE) {
-            if (stock.forwardPE < stock.trailingPE) {
-                analysisHtml += `<div><span class="badge bg-pass">חיובי</span> צפי לגידול ברווחים (Forward P/E נמוך).</div>`;
-            } else {
-                analysisHtml += `<div><span class="badge bg-warn">זהירות</span> צפי להאטה ברווחים.</div>`;
+        if (hist) {
+            // אם יש מידע על צמיחה היסטורית מהקובץ החדש
+            if(hist.yoyRevenueGrowth) {
+                const growthColor = hist.yoyRevenueGrowth > 0 ? 'bg-pass' : 'bg-warn';
+                analysisHtml += `<div style="margin-bottom:8px;"><span class="badge ${growthColor}">צמיחה שנתית</span> הכנסות צמחו ב-${hist.yoyRevenueGrowth}% לעומת שנה שעברה.</div>`;
             }
         }
-        if (stock.freeCashflow > 0 && stock.netIncome > 0) {
-             analysisHtml += `<div style="margin-top:5px;"><span class="badge bg-pass">חזק</span> תזרים מזומנים חופשי חיובי.</div>`;
+
+        // 2. נתונים שוטפים
+        if (stock.forwardPE && stock.trailingPE) {
+            if (stock.forwardPE < stock.trailingPE) {
+                analysisHtml += `<div><span class="badge bg-pass">חיובי</span> צפי לגידול ברווחים (Forward P/E נמוך מהנוכחי).</div>`;
+            } else {
+                analysisHtml += `<div><span class="badge bg-warn">זהירות</span> צפי להאטה ברווחים או ירידה.</div>`;
+            }
         }
         
-        // External Links
+        // קישורים חיצוניים
         const tvUrl = `https://www.tradingview.com/chart/?symbol=${stock.symbol}`;
         const yahooUrl = `https://finance.yahoo.com/quote/${stock.symbol}`;
+        
         analysisHtml += `<div style="margin-top:15px; font-size:12px; color:#888;">
             <a href="${yahooUrl}" target="_blank" style="color:var(--accent-blue); text-decoration:none;">🔗 Yahoo Finance</a> | 
             <a href="${tvUrl}" target="_blank" style="color:var(--accent-blue); text-decoration:none;">📈 TradingView</a>
         </div>`;
+
         document.getElementById('mGuidanceText').innerHTML = analysisHtml;
 
-        // --- HISTORY TABLE ---
+        // --- HISTORY TABLE POPULATION ---
         const tbody = document.querySelector('#mHistoryTable tbody');
-        tbody.innerHTML = '';
+        tbody.innerHTML = ''; // ניקוי
+        
         if (hist && hist.quarterlyHistory && hist.quarterlyHistory.length > 0) {
+            // מילוי הטבלה מתוך קובץ ההיסטוריה
             hist.quarterlyHistory.forEach(q => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${q.date}</td>
                     <td>${formatMoney(q.revenue)}</td>
-                    <td class="${q.netIncome>0?'val-green':'val-red'}">${formatMoney(q.netIncome)}</td>
+                    <td class="${q.netIncome > 0 ? 'val-green' : 'val-red'}">${formatMoney(q.netIncome)}</td>
                     <td>${q.grossMargin}%</td>
-                    <td class="${q.freeCashFlow>0?'val-green':'val-red'}">${formatMoney(q.freeCashFlow)}</td>
+                    <td class="${q.freeCashFlow > 0 ? 'val-green' : 'val-red'}">${formatMoney(q.freeCashFlow)}</td>
                 `;
                 tbody.appendChild(tr);
             });
         } else {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:15px;">אין נתונים היסטוריים זמינים</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:15px; color:#666;">אין נתונים היסטוריים זמינים (הרץ את get_history.py)</td></tr>';
         }
 
         document.getElementById('finModal').classList.add('open');
     }
 
-    // --- SLIDER ---
+    // --- שאר הפונקציות (פילטרים, סליידרים) ---
+    
     function initExternalSlider() {
         const slider = document.getElementById('marketCapSlider');
+        if(slider.noUiSlider) slider.noUiSlider.destroy(); // מניעת כפילות
+        
         noUiSlider.create(slider, {
             start: [1000000000, 5000000000000], connect: true,
             range: { 'min': [1000000000, 1000000000], '30%': [50000000000, 5000000000], '70%': [500000000000, 50000000000], 'max': [5000000000000] }
@@ -485,9 +203,9 @@
     }
     function setSliderRange(min, max) { if(sliderInstance) sliderInstance.set([min, max]); }
 
-    // --- FILTERS ---
     function toggleDropdown(id) { document.querySelectorAll('.ms-content').forEach(el => { if(el.parentElement.id !== id) el.classList.remove('show'); }); document.querySelector(`#${id} .ms-content`).classList.toggle('show'); }
     window.onclick = function(e) { if (!e.target.closest('.multi-select')) document.querySelectorAll('.ms-content').forEach(el => el.classList.remove('show')); }
+    
     function toggleFilter(cat, val) { const idx = activeFilters[cat].indexOf(val); if (idx > -1) activeFilters[cat].splice(idx, 1); else activeFilters[cat].push(val); updateFilterUI(); applyFilters(); }
     function updateFilterUI() {
         updateBtnText('sectorMS', 'סקטורים', activeFilters.sectors);
@@ -500,7 +218,6 @@
     }
     function updateBtnText(id, txt, arr) { const btn = document.querySelector(`#${id} .ms-btn`); btn.innerHTML = arr.length > 0 ? `<span class="ms-badge">${arr.length}</span> ${txt}` : txt; arr.length > 0 ? btn.classList.add('active') : btn.classList.remove('active'); }
 
-    // --- APP LOGIC ---
     function saveUserLists() { localStorage.setItem('userLists', JSON.stringify(userLists)); initListFilter(); applyFilters(); }
     function initListFilter() { const div = document.getElementById('listsOptions'); div.innerHTML = ''; Object.keys(userLists).forEach(l => div.innerHTML += `<div class="ms-option" onclick="toggleFilter('lists','${l}')"><input type="checkbox" value="${l}"><span>${l}</span></div>`); }
     function openListModal(event, symbol) {
@@ -520,6 +237,7 @@
     function createNewList() { const name = document.getElementById('newListName').value.trim(); if(name && !userLists[name]) { userLists[name] = currentModalSymbol ? [currentModalSymbol] : []; saveUserLists(); document.getElementById('newListName').value=''; openListModal({stopPropagation:()=>{}}, currentModalSymbol); } }
     function closeModal(e) { if(e.target.id === 'listsModal' || e.target.id === 'finModal' || e.target.id === 'dayDetailsModal') closeModalForce(e.target.id); }
     function closeModalForce(id) { document.getElementById(id).classList.remove('open'); }
+    
     function openDayModal(dateStr, stocks) {
         const d = new Date(dateStr);
         document.getElementById('dayModalTitle').innerText = `דיווחים: ${dateStr}`;
@@ -527,6 +245,7 @@
         stocks.forEach(s => { grid.appendChild(createCard(s, 'full')); });
         document.getElementById('dayDetailsModal').classList.add('open');
     }
+    
     function isStockStarred(symbol) { for (const list in userLists) { if (userLists[list].includes(symbol)) return true; } return false; }
     function toggleTheme() { document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }
     function getSectorMeta(sector) {
@@ -550,9 +269,12 @@
             document.getElementById('dateDisplay').innerText = `${start.toLocaleDateString('he-IL', opts)} - ${end.toLocaleDateString('he-IL', opts)}`;
         }
     }
+    
+    // --- MAIN RENDER LOGIC ---
     function applyFilters() {
         const q = document.getElementById('searchInput').value.toLowerCase().trim();
         const minCap = currentMinCap; const maxCap = currentMaxCap;
+        
         let filtered = allData.filter(item => {
             const mCap = item.marketCap >= minCap && item.marketCap <= maxCap;
             const mSec = activeFilters.sectors.length === 0 || activeFilters.sectors.includes(item.sector);
@@ -562,7 +284,7 @@
                 if (activeFilters.indices.includes('sp500') && item.inSp500) mIdx = true;
                 if (activeFilters.indices.includes('nasdaq100') && item.inNasdaq100) mIdx = true;
                 if (activeFilters.indices.includes('dia') && item.inDow) mIdx = true;
-                // ETFs
+                // ETFs Check
                 if (activeFilters.indices.includes('vti') && item.symbol === 'VTI') mIdx = true;
                 if (activeFilters.indices.includes('vt') && item.symbol === 'VT') mIdx = true;
                 if (activeFilters.indices.includes('vxus') && item.symbol === 'VXUS') mIdx = true;
@@ -579,6 +301,7 @@
             }
             return mSec && mCap && mIdx && mLst;
         });
+
         if (q) filtered = filtered.filter(i => i.symbol.toLowerCase().includes(q) || i.name.toLowerCase().includes(q));
         else filtered.sort((a, b) => new Date(a.earningsDate) - new Date(b.earningsDate));
         
@@ -594,8 +317,7 @@
         document.getElementById('stats-counter').innerText = `נמצאו ${displayData.length}`;
         if (currentView === 'list') renderListView(displayData); else renderCalendarGrid(displayData, currentView);
     }
-    document.getElementById('searchInput').addEventListener('keyup', applyFilters);
-    function switchView(v) { currentView = v; document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active')); document.getElementById(`btn-${v}`).classList.add('active'); updateDateDisplay(); applyFilters(); }
+
     function renderListView(data) {
         const container = document.getElementById('main-container'); container.innerHTML = '';
         if (data.length === 0) { container.innerHTML = '<div style="text-align:center;color:#888;">אין תוצאות</div>'; return; }
@@ -608,6 +330,7 @@
             section.appendChild(grid); container.appendChild(section);
         });
     }
+
     function renderCalendarGrid(data, type) {
         const container = document.getElementById('main-container'); container.innerHTML = '';
         const grid = document.createElement('div'); grid.className = `calendar-grid ${type==='week'?'week-view':''}`;
@@ -662,6 +385,7 @@
         }
         container.appendChild(grid);
     }
+
     function createCard(stock, type) {
         const isStarred = isStockStarred(stock.symbol);
         const starClass = isStarred ? 'active' : ''; const starIcon = isStarred ? '★' : '☆';
