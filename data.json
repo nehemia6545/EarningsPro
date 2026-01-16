@@ -1480,6 +1480,16 @@
         "inNasdaq100": false
     },
     {
+        "symbol": "UPS",
+        "name": "United Parcel Service Inc. Common Stock",
+        "sector": "Industrials",
+        "marketCap": 92151643763.0,
+        "earningsDate": "2026-01-27",
+        "time": "Before Market",
+        "inSp500": true,
+        "inNasdaq100": false
+    },
+    {
         "symbol": "RCL",
         "name": "Royal Caribbean Cruises Ltd. Common Stock",
         "sector": "Consumer Discretionary",
@@ -1498,6 +1508,16 @@
         "time": "Before Market",
         "inSp500": true,
         "inNasdaq100": false
+    },
+    {
+        "symbol": "STX",
+        "name": "Seagate Technology Holdings PLC Ordinary Shares (Ireland)",
+        "sector": "Technology",
+        "marketCap": 68406934756.0,
+        "earningsDate": "2026-01-27",
+        "time": "After Market",
+        "inSp500": true,
+        "inNasdaq100": true
     },
     {
         "symbol": "PCAR",
@@ -1537,16 +1557,6 @@
         "earningsDate": "2026-01-27",
         "time": "Before Market",
         "inSp500": true,
-        "inNasdaq100": false
-    },
-    {
-        "symbol": "AMRZ",
-        "name": "Amrize Ltd Ordinary Shares",
-        "sector": "Industrials",
-        "marketCap": 30154034402.0,
-        "earningsDate": "2026-01-27",
-        "time": "TBD",
-        "inSp500": false,
         "inNasdaq100": false
     },
     {
@@ -1600,20 +1610,20 @@
         "inNasdaq100": false
     },
     {
-        "symbol": "NXT",
-        "name": "Nextpower Inc. Class A Common Stock",
-        "sector": "Industrials",
-        "marketCap": 14638355847.0,
+        "symbol": "LOGI",
+        "name": "Logitech International S.A. Ordinary Shares",
+        "sector": "Technology",
+        "marketCap": 14186450246.0,
         "earningsDate": "2026-01-27",
         "time": "After Market",
         "inSp500": false,
         "inNasdaq100": false
     },
     {
-        "symbol": "LOGI",
-        "name": "Logitech International S.A. Ordinary Shares",
-        "sector": "Technology",
-        "marketCap": 14186450246.0,
+        "symbol": "NXT",
+        "name": "Nextpower Inc. Class A Common Stock",
+        "sector": "Industrials",
+        "marketCap": 14638355847.0,
         "earningsDate": "2026-01-27",
         "time": "After Market",
         "inSp500": false,
@@ -1640,16 +1650,6 @@
         "inNasdaq100": false
     },
     {
-        "symbol": "AIT",
-        "name": "Applied Industrial Technologies Inc. Common Stock",
-        "sector": "Consumer Discretionary",
-        "marketCap": 10654178038.0,
-        "earningsDate": "2026-01-27",
-        "time": "Before Market",
-        "inSp500": false,
-        "inNasdaq100": false
-    },
-    {
         "symbol": "BXP",
         "name": "BXP Inc. Common Stock",
         "sector": "Real Estate",
@@ -1657,6 +1657,16 @@
         "earningsDate": "2026-01-27",
         "time": "After Market",
         "inSp500": true,
+        "inNasdaq100": false
+    },
+    {
+        "symbol": "AIT",
+        "name": "Applied Industrial Technologies Inc. Common Stock",
+        "sector": "Consumer Discretionary",
+        "marketCap": 10654178038.0,
+        "earningsDate": "2026-01-27",
+        "time": "Before Market",
+        "inSp500": false,
         "inNasdaq100": false
     },
     {
@@ -1710,16 +1720,6 @@
         "inNasdaq100": false
     },
     {
-        "symbol": "LFUS",
-        "name": "Littelfuse Inc. Common Stock",
-        "sector": "Energy",
-        "marketCap": 7316115641.0,
-        "earningsDate": "2026-01-27",
-        "time": "TBD",
-        "inSp500": false,
-        "inNasdaq100": false
-    },
-    {
         "symbol": "CBC",
         "name": "Central Bancompany Inc. Class A Common Stock",
         "sector": "",
@@ -1750,10 +1750,10 @@
         "inNasdaq100": false
     },
     {
-        "symbol": "GEF",
-        "name": "Greif Inc. Class A Common Stock",
-        "sector": "",
-        "marketCap": 3414653784.0,
+        "symbol": "ENVA",
+        "name": "Enova International Inc. Common Stock",
+        "sector": "Finance",
+        "marketCap": 3838030238.0,
         "earningsDate": "2026-01-27",
         "time": "After Market",
         "inSp500": false,
@@ -1764,6 +1764,16 @@
         "name": "Renasant Corporation Common Stock",
         "sector": "Finance",
         "marketCap": 3507239210.0,
+        "earningsDate": "2026-01-27",
+        "time": "After Market",
+        "inSp500": false,
+        "inNasdaq100": false
+    },
+    {
+        "symbol": "GEF",
+        "name": "Greif Inc. Class A Common Stock",
+        "sector": "",
+        "marketCap": 3414653784.0,
         "earningsDate": "2026-01-27",
         "time": "After Market",
         "inSp500": false,
@@ -1805,7 +1815,7 @@
         "sector": "Real Estate",
         "marketCap": 3060893578.0,
         "earningsDate": "2026-01-27",
-        "time": "TBD",
+        "time": "After Market",
         "inSp500": false,
         "inNasdaq100": false
     },
@@ -1845,7 +1855,7 @@
         "sector": "Finance",
         "marketCap": 2197848809.0,
         "earningsDate": "2026-01-27",
-        "time": "TBD",
+        "time": "After Market",
         "inSp500": false,
         "inNasdaq100": false
     },
@@ -1865,7 +1875,7 @@
         "sector": "Consumer Discretionary",
         "marketCap": 1811279386.0,
         "earningsDate": "2026-01-27",
-        "time": "TBD",
+        "time": "Before Market",
         "inSp500": false,
         "inNasdaq100": false
     },
@@ -1900,22 +1910,22 @@
         "inNasdaq100": false
     },
     {
-        "symbol": "NRIX",
-        "name": "Nurix Therapeutics Inc. Common stock",
-        "sector": "Health Care",
-        "marketCap": 1450021603.0,
-        "earningsDate": "2026-01-27",
-        "time": "TBD",
-        "inSp500": false,
-        "inNasdaq100": false
-    },
-    {
         "symbol": "HOPE",
         "name": "Hope Bancorp Inc. Common Stock",
         "sector": "Finance",
         "marketCap": 1502342662.0,
         "earningsDate": "2026-01-27",
         "time": "Before Market",
+        "inSp500": false,
+        "inNasdaq100": false
+    },
+    {
+        "symbol": "NRIX",
+        "name": "Nurix Therapeutics Inc. Common stock",
+        "sector": "Health Care",
+        "marketCap": 1450021603.0,
+        "earningsDate": "2026-01-27",
+        "time": "TBD",
         "inSp500": false,
         "inNasdaq100": false
     },
@@ -3510,16 +3520,6 @@
         "inNasdaq100": false
     },
     {
-        "symbol": "NVS",
-        "name": "Novartis AG Common Stock",
-        "sector": "Health Care",
-        "marketCap": 282734025851.0,
-        "earningsDate": "2026-01-30",
-        "time": "TBD",
-        "inSp500": false,
-        "inNasdaq100": false
-    },
-    {
         "symbol": "AXP",
         "name": "American Express Company Common Stock",
         "sector": "Finance",
@@ -3590,6 +3590,16 @@
         "inNasdaq100": false
     },
     {
+        "symbol": "APD",
+        "name": "Air Products and Chemicals Inc. Common Stock",
+        "sector": "Basic Materials",
+        "marketCap": 59204552301.0,
+        "earningsDate": "2026-01-30",
+        "time": "Before Market",
+        "inSp500": true,
+        "inNasdaq100": false
+    },
+    {
         "symbol": "IMO",
         "name": "Imperial Oil Limited Common Stock",
         "sector": "Energy",
@@ -3610,16 +3620,6 @@
         "inNasdaq100": false
     },
     {
-        "symbol": "BR",
-        "name": "Broadridge Financial Solutions Inc. Common Stock",
-        "sector": "Real Estate",
-        "marketCap": 25605357342.0,
-        "earningsDate": "2026-01-30",
-        "time": "TBD",
-        "inSp500": true,
-        "inNasdaq100": false
-    },
-    {
         "symbol": "CHTR",
         "name": "Charter Communications Inc. Class A Common Stock New",
         "sector": "Telecommunications",
@@ -3628,6 +3628,16 @@
         "time": "Before Market",
         "inSp500": true,
         "inNasdaq100": true
+    },
+    {
+        "symbol": "BR",
+        "name": "Broadridge Financial Solutions Inc. Common Stock",
+        "sector": "Real Estate",
+        "marketCap": 25605357342.0,
+        "earningsDate": "2026-01-30",
+        "time": "TBD",
+        "inSp500": true,
+        "inNasdaq100": false
     },
     {
         "symbol": "CHD",
@@ -3690,16 +3700,6 @@
         "inNasdaq100": false
     },
     {
-        "symbol": "BEPC",
-        "name": "Brookfield Renewable Corporation Brookfield Renewable Corporation Class A Subordinate Voting Shares",
-        "sector": "Utilities",
-        "marketCap": 13166622207.0,
-        "earningsDate": "2026-01-30",
-        "time": "Before Market",
-        "inSp500": false,
-        "inNasdaq100": false
-    },
-    {
         "symbol": "BEN",
         "name": "Franklin Resources Inc. Common Stock",
         "sector": "Finance",
@@ -3707,6 +3707,16 @@
         "earningsDate": "2026-01-30",
         "time": "Before Market",
         "inSp500": true,
+        "inNasdaq100": false
+    },
+    {
+        "symbol": "BEPC",
+        "name": "Brookfield Renewable Corporation Brookfield Renewable Corporation Class A Subordinate Voting Shares",
+        "sector": "Utilities",
+        "marketCap": 13166622207.0,
+        "earningsDate": "2026-01-30",
+        "time": "Before Market",
+        "inSp500": false,
         "inNasdaq100": false
     },
     {
@@ -3750,12 +3760,12 @@
         "inNasdaq100": false
     },
     {
-        "symbol": "PIPR",
-        "name": "Piper Sandler Companies Common Stock",
+        "symbol": "FLG",
+        "name": "Flagstar Bank N.A. Common Stock",
         "sector": "Finance",
-        "marketCap": 6624754077.0,
+        "marketCap": 5400668842.0,
         "earningsDate": "2026-01-30",
-        "time": "TBD",
+        "time": "Before Market",
         "inSp500": false,
         "inNasdaq100": false
     },
@@ -8350,6 +8360,16 @@
         "inNasdaq100": false
     },
     {
+        "symbol": "CRBG",
+        "name": "Corebridge Financial Inc. Common Stock",
+        "sector": "Finance",
+        "marketCap": 15849036789.0,
+        "earningsDate": "2026-02-09",
+        "time": "After Market",
+        "inSp500": false,
+        "inNasdaq100": false
+    },
+    {
         "symbol": "TSEM",
         "name": "Tower Semiconductor Ltd. Ordinary Shares",
         "sector": "Technology",
@@ -8360,20 +8380,20 @@
         "inNasdaq100": false
     },
     {
-        "symbol": "AMKR",
-        "name": "Amkor Technology Inc. Common Stock",
-        "sector": "Technology",
-        "marketCap": 12161917100.0,
+        "symbol": "CNA",
+        "name": "CNA Financial Corporation Common Stock",
+        "sector": "Finance",
+        "marketCap": 12564342829.0,
         "earningsDate": "2026-02-09",
         "time": "TBD",
         "inSp500": false,
         "inNasdaq100": false
     },
     {
-        "symbol": "CNA",
-        "name": "CNA Financial Corporation Common Stock",
-        "sector": "Finance",
-        "marketCap": 12564342829.0,
+        "symbol": "AMKR",
+        "name": "Amkor Technology Inc. Common Stock",
+        "sector": "Technology",
+        "marketCap": 12161917100.0,
         "earningsDate": "2026-02-09",
         "time": "TBD",
         "inSp500": false,
@@ -8406,6 +8426,16 @@
         "marketCap": 9002027276.0,
         "earningsDate": "2026-02-09",
         "time": "TBD",
+        "inSp500": false,
+        "inNasdaq100": false
+    },
+    {
+        "symbol": "AMTM",
+        "name": "Amentum Holdings Inc. Common Stock",
+        "sector": "Real Estate",
+        "marketCap": 8423618563.0,
+        "earningsDate": "2026-02-09",
+        "time": "After Market",
         "inSp500": false,
         "inNasdaq100": false
     },
@@ -8594,16 +8624,6 @@
         "name": "Gemini Space Station Inc. Class A Common Stock",
         "sector": "Finance",
         "marketCap": 1230657890.0,
-        "earningsDate": "2026-02-09",
-        "time": "TBD",
-        "inSp500": false,
-        "inNasdaq100": false
-    },
-    {
-        "symbol": "NGL",
-        "name": "NGL ENERGY PARTNERS LP Common Units representing Limited Partner Interests",
-        "sector": "Utilities",
-        "marketCap": 1188020387.0,
         "earningsDate": "2026-02-09",
         "time": "TBD",
         "inSp500": false,
@@ -21940,20 +21960,20 @@
         "inNasdaq100": false
     },
     {
-        "symbol": "CSAN",
-        "name": "Cosan S.A. ADS",
-        "sector": "Consumer Discretionary",
-        "marketCap": 1761066130.0,
+        "symbol": "RDW",
+        "name": "Redwire Corporation Common Stock",
+        "sector": "Industrials",
+        "marketCap": 1793537503.0,
         "earningsDate": "2026-03-09",
         "time": "TBD",
         "inSp500": false,
         "inNasdaq100": false
     },
     {
-        "symbol": "RDW",
-        "name": "Redwire Corporation Common Stock",
-        "sector": "Industrials",
-        "marketCap": 1793537503.0,
+        "symbol": "CSAN",
+        "name": "Cosan S.A. ADS",
+        "sector": "Consumer Discretionary",
+        "marketCap": 1761066130.0,
         "earningsDate": "2026-03-09",
         "time": "TBD",
         "inSp500": false,
