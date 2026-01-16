@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Earnings Pro - Fixed</title>
+    <title>Earnings Pro - Stable</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     
@@ -331,9 +331,27 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 
 <script>
-    window.onerror = function(message, source, lineno, colno, error) {
-        document.body.innerHTML = '<div style="color:red;padding:20px;"><h1>Critical Error</h1><p>' + message + '</p><p>Line: ' + lineno + '</p></div>';
-    };
+    // Safe Text Setter
+    function setText(id, value) {
+        const el = document.getElementById(id);
+        if(el) {
+            el.innerText = value !== undefined && value !== null ? value : "-";
+        }
+    }
+    
+    function setHtml(id, value) {
+        const el = document.getElementById(id);
+        if(el) {
+            el.innerHTML = value !== undefined && value !== null ? value : "";
+        }
+    }
+    
+    function setClass(id, className) {
+        const el = document.getElementById(id);
+        if(el) {
+            el.className = className;
+        }
+    }
 
     // Globals
     let allData = [];
@@ -409,40 +427,43 @@
         }
     });
 
-    // --- MODAL LOGIC ---
+    // --- MODAL LOGIC (FIXED) ---
     function openFinancialModal(stock) {
-        document.getElementById('mSymbol').innerText = stock.symbol || "-";
-        document.getElementById('mName').innerText = stock.name || "-";
-        document.getElementById('mSector').innerText = stock.sector || "-";
+        setText('mSymbol', stock.symbol);
+        setText('mName', stock.name);
+        setText('mSector', stock.sector);
 
-        document.getElementById('mCap').innerText = formatMoney(stock.marketCap);
-        document.getElementById('mPE').innerText = stock.trailingPE ? stock.trailingPE.toFixed(1) : "-";
-        document.getElementById('mEPS').innerText = stock.eps ? "$" + stock.eps.toFixed(2) : "-";
+        setText('mCap', formatMoney(stock.marketCap));
+        setText('mPE', stock.trailingPE ? stock.trailingPE.toFixed(1) : "-");
+        setText('mEPS', stock.eps ? "$" + stock.eps.toFixed(2) : "-");
+        
         const roe = stock.returnOnEquity;
-        const roeEl = document.getElementById('mROE');
-        roeEl.innerText = formatPct(roe);
-        roeEl.className = "kpi-value " + (roe > 0.15 ? 'val-green' : '');
+        setText('mROE', formatPct(roe));
+        setClass('mROE', "kpi-value " + (roe > 0.15 ? 'val-green' : ''));
 
-        document.getElementById('mRev').innerText = formatMoney(stock.revenue);
-        const revG = document.getElementById('mRevGrowth');
-        revG.innerText = formatPct(stock.revenueGrowth);
-        revG.className = getColorClass(stock.revenueGrowth);
-        document.getElementById('mNetInc').innerText = formatMoney(stock.netIncome);
-        document.getElementById('mGrossMarg').innerText = formatPct(stock.grossMargins);
+        setText('mRev', formatMoney(stock.revenue));
+        setText('mRevGrowth', formatPct(stock.revenueGrowth));
+        setClass('mRevGrowth', getColorClass(stock.revenueGrowth));
+        
+        setText('mNetInc', formatMoney(stock.netIncome));
+        setText('mGrossMarg', formatPct(stock.grossMargins));
 
-        document.getElementById('mCash').innerText = formatMoney(stock.totalCash);
-        document.getElementById('mDebt').innerText = formatMoney(stock.totalDebt);
+        setText('mCash', formatMoney(stock.totalCash));
+        setText('mDebt', formatMoney(stock.totalDebt));
+        
         const cr = stock.currentRatio;
+        setText('mCurrRatio', cr ? cr.toFixed(2) : "-");
+        // Safe style setting
         const crEl = document.getElementById('mCurrRatio');
-        crEl.innerText = cr ? cr.toFixed(2) : "-";
-        crEl.className = cr >= 1.5 ? 'val-green' : (cr < 1 ? 'val-red' : '');
+        if(crEl) crEl.style.color = cr >= 1.5 ? '#00e676' : (cr < 1 ? '#ff5252' : '#fff');
 
-        document.getElementById('mOCF').innerText = formatMoney(stock.operatingCashflow);
+        setText('mOCF', formatMoney(stock.operatingCashflow));
+        
         const fcf = stock.freeCashflow;
-        const fcfEl = document.getElementById('mFCF');
-        fcfEl.innerText = formatMoney(fcf);
-        fcfEl.className = fcf > 0 ? 'val-green' : '';
-        document.getElementById('mDiv').innerText = formatPct(stock.dividendYield);
+        setText('mFCF', formatMoney(fcf));
+        setClass('mFCF', fcf > 0 ? 'val-green' : '');
+        
+        setText('mDiv', formatPct(stock.dividendYield));
 
         let analysisHtml = "";
         const hist = historyData[stock.symbol];
@@ -467,22 +488,24 @@
             <a href="${tvUrl}" target="_blank" style="color:var(--accent-blue); text-decoration:none;">📈 TradingView</a>
         </div>`;
 
-        document.getElementById('mGuidanceText').innerHTML = analysisHtml;
+        setHtml('mGuidanceText', analysisHtml);
 
         const tbody = document.querySelector('#mHistoryTable tbody');
-        tbody.innerHTML = ''; 
-        
-        if (hist && hist.quarterlyHistory && hist.quarterlyHistory.length > 0) {
-            hist.quarterlyHistory.forEach(q => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${q.date}</td><td>${formatMoney(q.revenue)}</td><td class="${q.netIncome > 0 ? 'val-green' : 'val-red'}">${formatMoney(q.netIncome)}</td><td>${q.grossMargin}%</td><td class="${q.freeCashFlow > 0 ? 'val-green' : 'val-red'}">${formatMoney(q.freeCashFlow)}</td>`;
-                tbody.appendChild(tr);
-            });
-        } else {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:15px; color:#666;">אין נתונים היסטוריים זמינים</td></tr>';
+        if (tbody) {
+            tbody.innerHTML = ''; 
+            if (hist && hist.quarterlyHistory && hist.quarterlyHistory.length > 0) {
+                hist.quarterlyHistory.forEach(q => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${q.date}</td><td>${formatMoney(q.revenue)}</td><td class="${q.netIncome > 0 ? 'val-green' : 'val-red'}">${formatMoney(q.netIncome)}</td><td>${q.grossMargin}%</td><td class="${q.freeCashFlow > 0 ? 'val-green' : 'val-red'}">${formatMoney(q.freeCashFlow)}</td>`;
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:15px; color:#666;">אין נתונים היסטוריים זמינים</td></tr>';
+            }
         }
 
-        document.getElementById('finModal').classList.add('open');
+        const modal = document.getElementById('finModal');
+        if(modal) modal.classList.add('open');
     }
 
     // --- REST OF FUNCTIONS ---
@@ -496,7 +519,8 @@
         sliderInstance = slider.noUiSlider;
         slider.noUiSlider.on('update', function (values) {
             currentMinCap = parseFloat(values[0]); currentMaxCap = parseFloat(values[1]);
-            document.getElementById('sliderValues').innerText = `${formatMoney(currentMinCap)} - ${formatMoney(currentMaxCap)}`;
+            const valEl = document.getElementById('sliderValues');
+            if(valEl) valEl.innerText = `${formatMoney(currentMinCap)} - ${formatMoney(currentMaxCap)}`;
             applyFilters();
         });
     }
@@ -515,21 +539,25 @@
             inp.checked = activeFilters[cat].includes(inp.value);
         });
     }
-    function updateBtnText(id, txt, arr) { const btn = document.querySelector(`#${id} .ms-btn`); btn.innerHTML = arr.length > 0 ? `<span class="ms-badge">${arr.length}</span> ${txt}` : txt; arr.length > 0 ? btn.classList.add('active') : btn.classList.remove('active'); }
+    function updateBtnText(id, txt, arr) { const btn = document.querySelector(`#${id} .ms-btn`); if(btn) { btn.innerHTML = arr.length > 0 ? `<span class="ms-badge">${arr.length}</span> ${txt}` : txt; arr.length > 0 ? btn.classList.add('active') : btn.classList.remove('active'); } }
 
     function saveUserLists() { localStorage.setItem('userLists', JSON.stringify(userLists)); initListFilter(); applyFilters(); }
     function initListFilter() { const div = document.getElementById('listsOptions'); if(div) { div.innerHTML = ''; Object.keys(userLists).forEach(l => div.innerHTML += `<div class="ms-option" onclick="toggleFilter('lists','${l}')"><input type="checkbox" value="${l}"><span>${l}</span></div>`); } }
     function openListModal(event, symbol) {
         event.stopPropagation(); currentModalSymbol = symbol;
-        document.getElementById('modalSymbol').innerText = symbol;
-        const container = document.getElementById('modalListsContainer'); container.innerHTML = '';
-        Object.keys(userLists).forEach(listName => {
-            const isChecked = userLists[listName].includes(symbol);
-            const div = document.createElement('div'); div.className = 'list-option';
-            div.innerHTML = `<div style="display:flex;align-items:center;gap:10px;flex:1" onclick="toggleStockInList('${listName}', '${symbol}')"><input type="checkbox" ${isChecked ? 'checked' : ''} readonly><span>${listName}</span></div><span onclick="deleteList(event, '${listName}')" style="cursor:pointer;color:#d32f2f;">🗑️</span>`;
-            container.appendChild(div);
-        });
-        document.getElementById('listsModal').classList.add('open');
+        setText('modalSymbol', symbol);
+        const container = document.getElementById('modalListsContainer'); 
+        if(container) {
+            container.innerHTML = '';
+            Object.keys(userLists).forEach(listName => {
+                const isChecked = userLists[listName].includes(symbol);
+                const div = document.createElement('div'); div.className = 'list-option';
+                div.innerHTML = `<div style="display:flex;align-items:center;gap:10px;flex:1" onclick="toggleStockInList('${listName}', '${symbol}')"><input type="checkbox" ${isChecked ? 'checked' : ''} readonly><span>${listName}</span></div><span onclick="deleteList(event, '${listName}')" style="cursor:pointer;color:#d32f2f;">🗑️</span>`;
+                container.appendChild(div);
+            });
+        }
+        const modal = document.getElementById('listsModal');
+        if(modal) modal.classList.add('open');
     }
     function toggleStockInList(listName, symbol) { if (!userLists[listName]) return; userLists[listName] = userLists[listName].includes(symbol) ? userLists[listName].filter(s => s !== symbol) : [...userLists[listName], symbol]; saveUserLists(); openListModal({stopPropagation:()=>{}}, currentModalSymbol); }
     function deleteList(e, listName) { e.stopPropagation(); if(confirm('למחוק?')) { delete userLists[listName]; const i = activeFilters.lists.indexOf(listName); if(i>-1) activeFilters.lists.splice(i,1); updateFilterUI(); saveUserLists(); openListModal({stopPropagation:()=>{}}, currentModalSymbol); } }
@@ -539,10 +567,14 @@
     
     function openDayModal(dateStr, stocks) {
         const d = new Date(dateStr);
-        document.getElementById('dayModalTitle').innerText = `דיווחים: ${dateStr}`;
-        const grid = document.getElementById('dayModalGrid'); grid.innerHTML = '';
-        stocks.forEach(s => { grid.appendChild(createCard(s, 'full')); });
-        document.getElementById('dayDetailsModal').classList.add('open');
+        setText('dayModalTitle', `דיווחים: ${dateStr}`);
+        const grid = document.getElementById('dayModalGrid'); 
+        if(grid) {
+            grid.innerHTML = '';
+            stocks.forEach(s => { grid.appendChild(createCard(s, 'full')); });
+        }
+        const modal = document.getElementById('dayDetailsModal');
+        if(modal) modal.classList.add('open');
     }
     
     function isStockStarred(symbol) { for (const list in userLists) { if (userLists[list].includes(symbol)) return true; } return false; }
@@ -561,12 +593,15 @@
     }
     function updateDateDisplay() {
         const opts = { month: 'numeric', day: 'numeric' };
-        if (currentView === 'month') document.getElementById('dateDisplay').innerText = navigationDate.toLocaleDateString('he-IL', { year: 'numeric', month: 'long' });
-        else {
+        let text = "";
+        if (currentView === 'month') {
+            text = navigationDate.toLocaleDateString('he-IL', { year: 'numeric', month: 'long' });
+        } else {
             const d = new Date(navigationDate); const day = d.getDay(); d.setDate(d.getDate() - day);
             const start = new Date(d); const end = new Date(d); end.setDate(end.getDate() + 6);
-            document.getElementById('dateDisplay').innerText = `${start.toLocaleDateString('he-IL', opts)} - ${end.toLocaleDateString('he-IL', opts)}`;
+            text = `${start.toLocaleDateString('he-IL', opts)} - ${end.toLocaleDateString('he-IL', opts)}`;
         }
+        setText('dateDisplay', text);
     }
     
     function applyFilters() {
@@ -611,7 +646,7 @@
             const end = new Date(d); end.setDate(end.getDate() + 7);
             displayData = filtered.filter(i => { const dt = new Date(i.earningsDate); return dt >= d && dt < end; });
         }
-        document.getElementById('stats-counter').innerText = `נמצאו ${displayData.length}`;
+        setText('stats-counter', `נמצאו ${displayData.length}`);
         if (currentView === 'list') renderListView(displayData); else renderCalendarGrid(displayData, currentView);
     }
 
