@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Earnings Pro - Fixed Slider</title>
+    <title>Earnings Pro - Pro Slider</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
+
     <style>
         :root {
             --bg-color: #0f1115; --card-bg: #1e222d; --panel-bg: #131722;
@@ -15,7 +19,6 @@
             --time-badge-bg: rgba(255, 255, 255, 0.1); --time-badge-color: #aaa;
             --modal-bg: rgba(0, 0, 0, 0.85);
             --btn-hover-bg: rgba(255, 255, 255, 0.1);
-            --slider-track: #333;
         }
         [data-theme="light"] {
             --bg-color: #f0f2f5; --card-bg: #ffffff; --panel-bg: #ffffff;
@@ -26,7 +29,6 @@
             --time-badge-bg: #e4e6eb; --time-badge-color: #555;
             --modal-bg: rgba(0, 0, 0, 0.5);
             --btn-hover-bg: rgba(0, 0, 0, 0.05);
-            --slider-track: #ddd;
         }
         body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Rubik', sans-serif; margin: 0; padding: 0; overflow-y: scroll; -webkit-tap-highlight-color: transparent; }
         
@@ -75,43 +77,34 @@
         .advanced-filters.show { display: block; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- ROBUST DUAL RANGE SLIDER --- */
-        .slider-wrapper { width: 100%; margin: 15px 0 25px 0; padding: 0 10px; box-sizing: border-box; }
-        .slider-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
-        .slider-values { font-weight: bold; color: var(--accent-blue); direction: ltr; font-family: monospace; font-size: 14px; }
+        /* --- NEW SLIDER STYLING (noUiSlider Override) --- */
+        .slider-section { margin-top: 15px; padding: 0 10px; }
+        .slider-header { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 10px; }
+        .slider-values { color: var(--accent-blue); font-weight: bold; font-family: monospace; direction: ltr; }
         
-        .range-container { position: relative; height: 40px; }
-        .range-track {
-            position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0;
-            height: 6px; background: var(--slider-track); border-radius: 3px; z-index: 1;
+        /* Overriding library styles for dark theme */
+        .noUi-target {
+            background: #333; border: none; border-radius: 4px; box-shadow: none; height: 6px;
         }
-        .range-fill {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            height: 6px; background: var(--accent-blue); z-index: 2; border-radius: 3px;
-        }
+        [data-theme="light"] .noUi-target { background: #ddd; }
         
-        /* The Actual Inputs */
-        input[type="range"] {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            width: 100%; pointer-events: none; /* Allows click through */
-            -webkit-appearance: none; background: none; z-index: 3; margin: 0; left: 0;
-        }
+        .noUi-connect { background: var(--accent-blue); }
         
-        /* Thumb Styling - Must enable pointer events */
-        input[type="range"]::-webkit-slider-thumb {
-            pointer-events: auto; /* Re-enable clicks on thumb */
-            -webkit-appearance: none; 
-            width: 24px; height: 24px; border-radius: 50%; /* Larger for mobile */
-            background: #fff; border: 2px solid var(--accent-blue);
-            cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-            margin-top: -1px; /* Align center */
+        .noUi-horizontal .noUi-handle {
+            width: 20px; height: 20px; right: -10px; top: -7px;
+            border-radius: 50%; border: 2px solid var(--accent-blue); background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3); cursor: pointer;
         }
-        input[type="range"]::-moz-range-thumb {
-            pointer-events: auto;
-            width: 24px; height: 24px; border-radius: 50%;
-            background: #fff; border: 2px solid var(--accent-blue);
-            cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+        .noUi-handle:before, .noUi-handle:after { display: none; } /* Remove default lines */
+        .noUi-handle:active { transform: scale(1.1); }
+
+        /* Slider Presets Chips */
+        .slider-presets { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
+        .preset-chip {
+            font-size: 11px; background: var(--card-bg); border: 1px solid var(--border-color);
+            padding: 4px 10px; border-radius: 20px; cursor: pointer; color: var(--text-muted); transition: 0.2s;
         }
+        .preset-chip:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
 
         /* Multi Select */
         .multi-select { position: relative; display: inline-block; }
@@ -273,19 +266,22 @@
             </div>
         </div>
 
-        <div class="slider-wrapper">
-            <div class="slider-label">
-                <span>גודל חברה (Log Scale)</span>
-                <span id="rangeValues" class="slider-values">Loading...</span>
+        <div class="slider-section">
+            <div class="slider-header">
+                <span>גודל חברה</span>
+                <span id="sliderValues" class="slider-values">Loading...</span>
             </div>
-            <div class="range-container">
-                <div class="range-track"></div>
-                <div class="range-fill" id="rangeFill"></div>
-                <input type="range" id="minCapInput" min="0" max="100" value="0" step="1" oninput="updateSliders()">
-                <input type="range" id="maxCapInput" min="0" max="100" value="100" step="1" oninput="updateSliders()">
+            <div id="marketCapSlider"></div>
+            
+            <div class="slider-presets">
+                <div class="preset-chip" onclick="setSliderRange(0, 10000000000)">קטנות (<10B)</div>
+                <div class="preset-chip" onclick="setSliderRange(10000000000, 200000000000)">בינוניות (10B-200B)</div>
+                <div class="preset-chip" onclick="setSliderRange(200000000000, 4000000000000)">ענקיות (>200B)</div>
+                <div class="preset-chip" onclick="setSliderRange(0, 4000000000000)">הכל</div>
             </div>
         </div>
-        <div id="stats-counter" style="text-align:left; color:var(--text-muted); font-size:12px; margin-top:5px;"></div>
+        
+        <div id="stats-counter" style="text-align:left; color:var(--text-muted); font-size:12px; margin-top:15px;"></div>
     </div>
 </header>
 
@@ -308,6 +304,8 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+
 <script>
     let allData = [];
     let currentView = 'list';
@@ -315,11 +313,10 @@
     let userLists = {};
     let activeFilters = { sectors: [], indices: [], lists: [] };
     
-    // Log Slider Constants: 100M to 4T
-    const SLIDER_MIN_VAL = 100000000; // 100 Million
-    const SLIDER_MAX_VAL = 4000000000000; // 4 Trillion
-    let currentMinCap = SLIDER_MIN_VAL;
-    let currentMaxCap = SLIDER_MAX_VAL;
+    // Slider Globals
+    let sliderInstance = null;
+    let currentMinCap = 0;
+    let currentMaxCap = 4000000000000;
 
     try {
         const stored = localStorage.getItem('userLists');
@@ -328,57 +325,36 @@
     
     let currentModalSymbol = '';
 
-    // --- LOG SLIDER LOGIC ---
-    // Calculates value from percentage (0-100) using log scale
-    function calcLogValue(percent) {
-        if (percent === 0) return SLIDER_MIN_VAL;
-        if (percent === 100) return SLIDER_MAX_VAL;
+    // --- NEW SLIDER LOGIC (noUiSlider) ---
+    function initExternalSlider() {
+        const slider = document.getElementById('marketCapSlider');
         
-        // Logarithmic formula: value = min * (max/min)^(percent/100)
-        return SLIDER_MIN_VAL * Math.pow((SLIDER_MAX_VAL / SLIDER_MIN_VAL), percent / 100);
+        // Logarithmic Scale Config
+        // We map 0-100% to 100M - 4T
+        
+        noUiSlider.create(slider, {
+            start: [100000000, 4000000000000], // Start values
+            connect: true,
+            range: {
+                'min': [100000000, 100000000], // Start at 100M, step 100M initially
+                '30%': [10000000000, 1000000000], // At 30%, value is 10B, step 1B
+                '70%': [200000000000, 10000000000], // At 70%, value is 200B, step 10B
+                'max': [4000000000000] // End at 4T
+            }
+        });
+
+        sliderInstance = slider.noUiSlider;
+
+        slider.noUiSlider.on('update', function (values, handle) {
+            currentMinCap = parseFloat(values[0]);
+            currentMaxCap = parseFloat(values[1]);
+            document.getElementById('sliderValues').innerText = `${formatMoney(currentMinCap)} - ${formatMoney(currentMaxCap)}`;
+            applyFilters();
+        });
     }
 
-    function updateSliders() {
-        const minRange = document.getElementById('minCapInput');
-        const maxRange = document.getElementById('maxCapInput');
-        const rangeFill = document.getElementById('rangeFill');
-        const display = document.getElementById('rangeValues');
-
-        let minVal = parseInt(minRange.value);
-        let maxVal = parseInt(maxRange.value);
-
-        // Fix crossing
-        if (minVal > maxVal) {
-            const tmp = minVal;
-            minVal = maxVal;
-            maxVal = tmp;
-            // Don't flip inputs visually, just logic
-        }
-        
-        // Ensure visual order if dragging
-        if (parseInt(minRange.value) > parseInt(maxRange.value)) {
-             // Basic collision prevention
-             if(event.target === minRange) minRange.value = maxRange.value;
-             else maxRange.value = minRange.value;
-             minVal = parseInt(minRange.value);
-             maxVal = parseInt(maxRange.value);
-        }
-
-        // Z-Index Flip so you can grab the handles
-        if (minVal > 90) minRange.style.zIndex = 4; else minRange.style.zIndex = 3;
-
-        const leftPercent = minVal;
-        const rightPercent = 100 - maxVal;
-        
-        rangeFill.style.left = leftPercent + '%';
-        rangeFill.style.right = rightPercent + '%';
-
-        currentMinCap = calcLogValue(minVal);
-        currentMaxCap = calcLogValue(maxVal);
-
-        display.innerText = `${formatMoney(currentMinCap)} - ${formatMoney(currentMaxCap)}`;
-        
-        applyFilters();
+    function setSliderRange(min, max) {
+        if(sliderInstance) sliderInstance.set([min, max]);
     }
 
     // --- MULTI SELECT ---
@@ -468,7 +444,9 @@
         const secDiv = document.getElementById('sectorOptions'); secDiv.innerHTML = '';
         [...new Set(allData.map(d => d.sector))].sort().forEach(s => secDiv.innerHTML += `<div class="ms-option" onclick="toggleFilter('sectors','${s}')"><input type="checkbox" value="${s}"><span>${s}</span></div>`);
         initListFilter();
-        updateSliders(); // Init slider labels
+        
+        // Init Slider Library
+        initExternalSlider();
 
         updateDateDisplay(); applyFilters();
     }).catch(err => document.getElementById('main-container').innerHTML = `שגיאה בטעינה`);
@@ -491,7 +469,6 @@
 
     function applyFilters() {
         const q = document.getElementById('searchInput').value.toLowerCase().trim();
-        
         const minCap = currentMinCap;
         const maxCap = currentMaxCap;
 
