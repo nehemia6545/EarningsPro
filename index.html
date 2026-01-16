@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Earnings Pro - Log Slider</title>
+    <title>Earnings Pro - Fixed Slider</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,7 +15,7 @@
             --time-badge-bg: rgba(255, 255, 255, 0.1); --time-badge-color: #aaa;
             --modal-bg: rgba(0, 0, 0, 0.85);
             --btn-hover-bg: rgba(255, 255, 255, 0.1);
-            --slider-track: #444;
+            --slider-track: #333;
         }
         [data-theme="light"] {
             --bg-color: #f0f2f5; --card-bg: #ffffff; --panel-bg: #ffffff;
@@ -75,37 +75,42 @@
         .advanced-filters.show { display: block; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- DUAL RANGE SLIDER CSS --- */
-        .slider-wrapper { width: 100%; margin: 10px 0 20px 0; }
-        .slider-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
-        .slider-values { font-weight: bold; color: var(--accent-blue); direction: ltr; font-family: monospace; }
+        /* --- ROBUST DUAL RANGE SLIDER --- */
+        .slider-wrapper { width: 100%; margin: 15px 0 25px 0; padding: 0 10px; box-sizing: border-box; }
+        .slider-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+        .slider-values { font-weight: bold; color: var(--accent-blue); direction: ltr; font-family: monospace; font-size: 14px; }
         
-        .range-container { position: relative; height: 30px; }
+        .range-container { position: relative; height: 40px; }
         .range-track {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            width: 100%; height: 6px; background: var(--slider-track); border-radius: 3px;
+            position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0;
+            height: 6px; background: var(--slider-track); border-radius: 3px; z-index: 1;
         }
         .range-fill {
             position: absolute; top: 50%; transform: translateY(-50%);
-            height: 6px; background: var(--accent-blue); z-index: 1; border-radius: 3px;
+            height: 6px; background: var(--accent-blue); z-index: 2; border-radius: 3px;
         }
         
+        /* The Actual Inputs */
         input[type="range"] {
             position: absolute; top: 50%; transform: translateY(-50%);
-            width: 100%; pointer-events: none; -webkit-appearance: none; background: none; z-index: 2; margin: 0;
+            width: 100%; pointer-events: none; /* Allows click through */
+            -webkit-appearance: none; background: none; z-index: 3; margin: 0; left: 0;
         }
         
+        /* Thumb Styling - Must enable pointer events */
         input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none; pointer-events: auto;
-            width: 20px; height: 20px; border-radius: 50%;
+            pointer-events: auto; /* Re-enable clicks on thumb */
+            -webkit-appearance: none; 
+            width: 24px; height: 24px; border-radius: 50%; /* Larger for mobile */
             background: #fff; border: 2px solid var(--accent-blue);
-            cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.4);
-            margin-top: -1px;
+            cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+            margin-top: -1px; /* Align center */
         }
         input[type="range"]::-moz-range-thumb {
-            pointer-events: auto; width: 20px; height: 20px; border-radius: 50%;
+            pointer-events: auto;
+            width: 24px; height: 24px; border-radius: 50%;
             background: #fff; border: 2px solid var(--accent-blue);
-            cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+            cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.4);
         }
 
         /* Multi Select */
@@ -310,11 +315,11 @@
     let userLists = {};
     let activeFilters = { sectors: [], indices: [], lists: [] };
     
-    // Log Slider Constants
-    let minCapReal = 0; // Will be set from data
-    let maxCapReal = 0; 
-    let currentMinCap = 0;
-    let currentMaxCap = 0;
+    // Log Slider Constants: 100M to 4T
+    const SLIDER_MIN_VAL = 100000000; // 100 Million
+    const SLIDER_MAX_VAL = 4000000000000; // 4 Trillion
+    let currentMinCap = SLIDER_MIN_VAL;
+    let currentMaxCap = SLIDER_MAX_VAL;
 
     try {
         const stored = localStorage.getItem('userLists');
@@ -324,21 +329,13 @@
     let currentModalSymbol = '';
 
     // --- LOG SLIDER LOGIC ---
-    function initSliders() {
-        const caps = allData.map(d => d.marketCap).filter(c => c > 0);
-        minCapReal = Math.min(...caps);
-        maxCapReal = Math.max(...caps);
+    // Calculates value from percentage (0-100) using log scale
+    function calcLogValue(percent) {
+        if (percent === 0) return SLIDER_MIN_VAL;
+        if (percent === 100) return SLIDER_MAX_VAL;
         
-        // Initial Update
-        updateSliders();
-    }
-
-    function toLog(value) {
-        return Math.log(value);
-    }
-
-    function fromLog(value) {
-        return Math.exp(value);
+        // Logarithmic formula: value = min * (max/min)^(percent/100)
+        return SLIDER_MIN_VAL * Math.pow((SLIDER_MAX_VAL / SLIDER_MIN_VAL), percent / 100);
     }
 
     function updateSliders() {
@@ -350,31 +347,37 @@
         let minVal = parseInt(minRange.value);
         let maxVal = parseInt(maxRange.value);
 
+        // Fix crossing
         if (minVal > maxVal) {
-            if (event.target === minRange) minRange.value = maxVal;
-            else maxRange.value = minVal;
-            minVal = parseInt(minRange.value);
-            maxVal = parseInt(maxRange.value);
+            const tmp = minVal;
+            minVal = maxVal;
+            maxVal = tmp;
+            // Don't flip inputs visually, just logic
+        }
+        
+        // Ensure visual order if dragging
+        if (parseInt(minRange.value) > parseInt(maxRange.value)) {
+             // Basic collision prevention
+             if(event.target === minRange) minRange.value = maxRange.value;
+             else maxRange.value = minRange.value;
+             minVal = parseInt(minRange.value);
+             maxVal = parseInt(maxRange.value);
         }
 
-        const range = 100;
-        const leftPercent = (minVal / range) * 100;
-        const rightPercent = 100 - (maxVal / range) * 100;
+        // Z-Index Flip so you can grab the handles
+        if (minVal > 90) minRange.style.zIndex = 4; else minRange.style.zIndex = 3;
+
+        const leftPercent = minVal;
+        const rightPercent = 100 - maxVal;
         
         rangeFill.style.left = leftPercent + '%';
         rangeFill.style.right = rightPercent + '%';
 
-        // Calculate Logarithmic Values
-        // formula: min * (max/min)^(percent)
-        const logMin = minVal === 0 ? minCapReal : minCapReal * Math.pow((maxCapReal / minCapReal), minVal / 100);
-        const logMax = maxVal === 100 ? maxCapReal : minCapReal * Math.pow((maxCapReal / minCapReal), maxVal / 100);
+        currentMinCap = calcLogValue(minVal);
+        currentMaxCap = calcLogValue(maxVal);
 
-        currentMinCap = logMin;
-        currentMaxCap = logMax;
-
-        display.innerText = `${formatMoney(logMin)} - ${formatMoney(logMax)}`;
+        display.innerText = `${formatMoney(currentMinCap)} - ${formatMoney(currentMaxCap)}`;
         
-        // Debounce filter app slightly to improve perf
         applyFilters();
     }
 
@@ -465,7 +468,7 @@
         const secDiv = document.getElementById('sectorOptions'); secDiv.innerHTML = '';
         [...new Set(allData.map(d => d.sector))].sort().forEach(s => secDiv.innerHTML += `<div class="ms-option" onclick="toggleFilter('sectors','${s}')"><input type="checkbox" value="${s}"><span>${s}</span></div>`);
         initListFilter();
-        initSliders();
+        updateSliders(); // Init slider labels
 
         updateDateDisplay(); applyFilters();
     }).catch(err => document.getElementById('main-container').innerHTML = `שגיאה בטעינה`);
@@ -489,14 +492,11 @@
     function applyFilters() {
         const q = document.getElementById('searchInput').value.toLowerCase().trim();
         
-        // Use Global Vars from Slider
         const minCap = currentMinCap;
         const maxCap = currentMaxCap;
 
         let filtered = allData.filter(item => {
-            // Slider Logic
             const mCap = item.marketCap >= minCap && item.marketCap <= maxCap;
-            
             const mSec = activeFilters.sectors.length === 0 || activeFilters.sectors.includes(item.sector);
             let mIdx = true;
             if (activeFilters.indices.length > 0) {
@@ -583,7 +583,6 @@
             
             const dailyStocks = data.filter(s => s.earningsDate === dateStr).sort((a,b)=>b.marketCap-a.marketCap);
 
-            // MOBILE WEEK (Horizontal)
             if (isMobile && type === 'week') {
                 const dayName = current.toLocaleDateString('he-IL', {weekday:'long'});
                 let innerHTML = `
@@ -594,12 +593,10 @@
                     dailyStocks.slice(0, 6).forEach(s => innerHTML += `<img src="https://assets.parqet.com/logos/symbol/${s.symbol}?format=png" class="month-dot">`);
                     if (dailyStocks.length > 6) innerHTML += `<div class="month-count-text">+${dailyStocks.length - 6}</div>`;
                 } else innerHTML += `<span style="font-size:10px; color:var(--text-muted); width:100%; text-align:center; margin-top:10px;">אין</span>`;
-                
                 innerHTML += `</div>`;
                 cell.innerHTML = innerHTML;
                 if (dailyStocks.length > 0) cell.onclick = () => openDayModal(dateStr, dailyStocks);
             }
-            // DESKTOP / MONTH
             else {
                 if (isMobile && type === 'month') {
                     cell.innerHTML = `<div class="day-number">${current.getDate()}</div>`;
