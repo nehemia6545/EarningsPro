@@ -3,29 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Earnings Pro - Visuals</title>
+    <title>Earnings Pro - Ultimate</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
         :root {
-            --bg-color: #0f1115; --card-bg: #1e222d; --panel-bg: #131722;
-            --text-main: #e0e0e0; --text-muted: #94a3b8;
-            --accent-blue: #3b82f6; --accent-gold: #f59e0b; 
-            --accent-green: #10b981; --accent-red: #ef4444;
-            --border-color: #334155; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+            --bg-color: #0b0e11; --card-bg: #151a21; --panel-bg: #1e2329;
+            --text-main: #eaecef; --text-muted: #848e9c;
+            --accent-blue: #2962ff; --accent-gold: #f0b90b; 
+            --accent-green: #0ecb81; --accent-red: #f6465d;
+            --border-color: #2b3139; --shadow: 0 4px 24px rgba(0,0,0,0.4);
             --modal-bg: rgba(0, 0, 0, 0.85);
-            --chart-grid: #334155;
-        }
-        [data-theme="light"] {
-            --bg-color: #f1f5f9; --card-bg: #ffffff; --panel-bg: #f8fafc;
-            --text-main: #0f172a; --text-muted: #64748b;
-            --accent-blue: #2563eb; --accent-gold: #d97706; 
-            --accent-green: #059669; --accent-red: #dc2626;
-            --border-color: #e2e8f0; --shadow: 0 4px 15px rgba(0,0,0,0.1);
-            --modal-bg: rgba(0, 0, 0, 0.6);
-            --chart-grid: #e2e8f0;
         }
         
         * { box-sizing: border-box; }
@@ -36,131 +29,120 @@
             background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); 
             padding: 15px 20px; position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow); 
         }
-        .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .logo { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
-        .logo span { color: var(--accent-blue); }
+        .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .logo { font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+        .logo span { color: var(--accent-gold); }
         
         .date-nav { 
             display: flex; align-items: center; gap: 15px; background: var(--panel-bg); 
-            padding: 6px 15px; border-radius: 50px; border: 1px solid var(--border-color); 
+            padding: 5px 15px; border-radius: 8px; border: 1px solid var(--border-color); 
         }
-        .nav-btn { background: none; border: none; color: var(--text-main); font-size: 18px; cursor: pointer; transition: 0.2s; }
-        .nav-btn:hover { color: var(--accent-blue); }
+        .nav-btn { background: none; border: none; color: var(--text-main); font-size: 18px; cursor: pointer; }
         
-        .view-toggle { display: flex; gap: 4px; background: var(--panel-bg); padding: 4px; border-radius: 8px; border: 1px solid var(--border-color); }
-        .view-btn { border: none; background: transparent; color: var(--text-muted); padding: 6px 12px; font-size: 13px; font-weight: 500; border-radius: 6px; cursor: pointer; transition: 0.2s; }
-        .view-btn.active { background: var(--accent-blue); color: white; shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .view-toggle { display: flex; gap: 2px; background: var(--panel-bg); padding: 3px; border-radius: 6px; border: 1px solid var(--border-color); }
+        .view-btn { border: none; background: transparent; color: var(--text-muted); padding: 6px 15px; font-size: 13px; font-weight: 500; border-radius: 4px; cursor: pointer; transition: 0.2s; }
+        .view-btn.active { background: var(--border-color); color: var(--text-main); }
 
         .controls-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         input[type="text"] { 
             background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); 
-            padding: 0 15px; border-radius: 8px; font-size: 14px; height: 40px; outline: none; flex: 1; min-width: 150px;
-            transition: 0.2s;
+            padding: 0 15px; border-radius: 6px; font-size: 14px; height: 40px; outline: none; flex: 1; min-width: 200px;
         }
-        input[type="text"]:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); }
+        input[type="text"]:focus { border-color: var(--accent-gold); }
 
-        .filter-toggle-btn {
+        .filter-btn {
             background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main);
-            padding: 0 15px; height: 40px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500;
-            display: flex; align-items: center; gap: 8px;
+            padding: 0 20px; height: 40px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500;
         }
         
-        /* CARDS GRID */
+        /* CALENDAR GRID */
         .container { max-width: 1800px; margin: 0 auto; padding: 20px; }
-        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
         
-        .stock-card { 
-            background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; 
-            padding: 15px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; 
-            position: relative; overflow: hidden; box-shadow: var(--shadow); height: 170px; cursor: pointer; 
-            transition: transform 0.2s, border-color 0.2s;
+        .calendar-grid { display: grid; gap: 10px; }
+        .calendar-grid.month { grid-template-columns: repeat(7, 1fr); }
+        .calendar-grid.week { grid-template-columns: repeat(5, 1fr); } /* 5 Business Days */
+        
+        .cal-header { text-align: center; color: var(--text-muted); padding: 10px; font-size: 14px; border-bottom: 2px solid var(--border-color); margin-bottom: 10px; }
+        
+        .cal-day { 
+            background: var(--card-bg); border: 1px solid var(--border-color); min-height: 150px; border-radius: 8px; padding: 10px; 
+            display: flex; flex-direction: column; gap: 8px; transition: 0.2s;
         }
-        .stock-card:hover { border-color: var(--accent-blue); transform: translateY(-4px); }
-        .card-strip { position: absolute; top: 0; left: 0; width: 100%; height: 4px; }
+        .cal-day.today { border: 1px solid var(--accent-gold); box-shadow: 0 0 10px rgba(240, 185, 11, 0.1); }
+        .day-num { font-size: 14px; color: var(--text-muted); font-weight: bold; margin-bottom: 5px; }
+
+        .stock-item {
+            display: flex; align-items: center; gap: 8px; padding: 6px; background: var(--panel-bg); 
+            border-radius: 6px; cursor: pointer; transition: 0.2s; border: 1px solid transparent;
+        }
+        .stock-item:hover { border-color: var(--accent-blue); transform: translateX(-2px); }
+        .stock-img { width: 20px; height: 20px; border-radius: 50%; background: #fff; }
+        .stock-sym { font-weight: 700; font-size: 12px; flex: 1; }
+        .stock-time { font-size: 10px; color: var(--text-muted); }
+
+        /* LIST VIEW */
+        .list-group { margin-bottom: 25px; }
+        .list-date { font-size: 16px; color: var(--accent-gold); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; font-weight: 500; }
+        .cards-flex { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         
-        .card-top { display: flex; align-items: center; gap: 12px; }
-        .stock-logo { width: 32px; height: 32px; border-radius: 50%; background: #fff; padding: 2px; object-fit: contain; }
-        .symbol { font-size: 16px; font-weight: 700; display: block; }
-        .market-cap { font-size: 11px; color: var(--text-muted); background: var(--panel-bg); padding: 2px 6px; border-radius: 4px; }
-        .company-name { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; direction: ltr; text-align: left; }
+        .card-full {
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px;
+            display: flex; flex-direction: column; justify-content: space-between; height: 160px; cursor: pointer; position: relative; overflow: hidden;
+        }
+        .card-full:hover { border-color: var(--accent-gold); }
+        .card-strip { position: absolute; top: 0; left: 0; width: 100%; height: 3px; }
         
-        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; }
-        .tag-text { font-size: 10px; padding: 3px 8px; border-radius: 12px; font-weight: 500; }
-        
-        /* MODAL (Redesigned) */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        /* MODAL - PROFESSIONAL DASHBOARD */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
         .modal-overlay.open { display: flex; animation: fadeIn 0.2s; }
         
         .fin-modal { 
-            background: var(--card-bg); width: 95%; max-width: 1000px; height: 92vh; border-radius: 16px; 
+            background: var(--bg-color); width: 95%; max-width: 1100px; height: 90vh; border-radius: 12px; 
             border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.8); 
         }
         .fin-header { 
-            padding: 15px 25px; border-bottom: 1px solid var(--border-color); background: var(--panel-bg); 
+            padding: 20px 30px; border-bottom: 1px solid var(--border-color); background: var(--card-bg); 
             display: flex; justify-content: space-between; align-items: center; 
         }
-        .fin-body { flex: 1; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 25px; }
+        .fin-body { flex: 1; overflow-y: auto; padding: 30px; }
         
-        /* Modal Sections */
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
-        .kpi-box { 
-            background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 15px; text-align: center; 
-            display: flex; flex-direction: column; justify-content: center;
+        /* KPI Cards */
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .kpi-card { 
+            background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; 
+            display: flex; flex-direction: column; justify-content: center; text-align: center;
         }
-        .kpi-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
-        .kpi-val { font-size: 18px; font-weight: 700; color: var(--text-main); direction: ltr; }
+        .kpi-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; }
+        .kpi-value { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; direction: ltr; }
         
-        /* Charts Area */
-        .charts-wrapper { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        @media (max-width: 768px) { .charts-wrapper { grid-template-columns: 1fr; } }
-        
-        .chart-box { 
-            background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; 
-            height: 300px; position: relative;
+        /* Chart Section */
+        .chart-container { 
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; 
+            margin-bottom: 30px; height: 350px; position: relative;
         }
-        .chart-title { font-size: 14px; font-weight: 500; margin-bottom: 10px; color: var(--text-muted); display: flex; justify-content: space-between; }
-
-        /* Data Table */
-        .table-wrap { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 12px; }
-        .hist-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: right; direction: ltr; }
-        .hist-table th { background: var(--panel-bg); color: var(--text-muted); padding: 12px; font-weight: 500; border-bottom: 1px solid var(--border-color); text-align: right; }
+        
+        /* Table */
+        .hist-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; direction: ltr; }
+        .hist-table th { color: var(--text-muted); padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 500; }
         .hist-table td { padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
-        .hist-table tr:last-child td { border: none; }
-        .hist-table tr:hover { background: rgba(255,255,255,0.02); }
-
+        .hist-table tr:hover { background: var(--panel-bg); }
+        
         /* Helpers */
         .val-green { color: var(--accent-green); } .val-red { color: var(--accent-red); }
-        .badge { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
-        .bg-pass { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3); }
-        .bg-warn { background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); border: 1px solid rgba(245, 158, 11, 0.3); }
-        
-        .sec-tech { background: #3b82f6; } .bg-tech { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
-        .sec-fin { background: #10b981; } .bg-fin { background: rgba(16, 185, 129, 0.15); color: #10b981; }
-        .sec-health { background: #ef4444; } .bg-health { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
-        .sec-other { background: #64748b; } .bg-other { background: rgba(100, 116, 139, 0.15); color: #94a3b8; }
+        .badge { font-size: 10px; padding: 3px 8px; border-radius: 4px; background: var(--panel-bg); border: 1px solid var(--border-color); }
+        .bg-tech { background: #2962ff; } .bg-fin { background: #0ecb81; } .bg-health { background: #f6465d; } .bg-other { background: #848e9c; }
 
-        /* Animation */
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         
-        /* Advanced Filters & Slider CSS (Hidden by default) */
-        .advanced-filters { display: none; margin-top: 10px; background: var(--panel-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); }
-        .advanced-filters.show { display: block; animation: slideD 0.3s; }
-        @keyframes slideD { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Filters */
+        .advanced-filters { display: none; margin-top: 15px; background: var(--panel-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .advanced-filters.show { display: block; }
         
         .slider-section { margin-top: 20px; padding: 0 10px; }
-        .noUi-target { background: var(--border-color); border: none; height: 6px; }
-        .noUi-connect { background: var(--accent-blue); }
-        .slider-presets { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
-        .preset-chip { font-size: 11px; background: var(--card-bg); border: 1px solid var(--border-color); padding: 5px 12px; border-radius: 20px; cursor: pointer; transition: 0.2s; }
-        .preset-chip:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
-        
-        .multi-select { position: relative; display: inline-block; margin-right: 10px; }
-        .ms-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 30px 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; }
-        .ms-content { display: none; position: absolute; top: 40px; right: 0; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; width: 220px; max-height: 250px; overflow-y: auto; z-index: 2000; padding: 5px; box-shadow: var(--shadow); }
-        .ms-content.show { display: block; }
-        .ms-option { display: flex; align-items: center; gap: 10px; padding: 8px; cursor: pointer; border-radius: 6px; }
-        .ms-option:hover { background: rgba(255,255,255,0.05); }
+        .noUi-target { background: var(--border-color); border: none; height: 4px; }
+        .noUi-connect { background: var(--accent-gold); }
+        .slider-values { color: var(--accent-gold); font-family: monospace; font-size: 14px; margin-left: 10px; }
     </style>
 </head>
 <body>
@@ -170,120 +152,103 @@
         <div class="logo">Earnings<span>Pro</span></div>
         <div class="date-nav">
             <button class="nav-btn" onclick="changeDate(-1)">&#10094;</button>
-            <div id="dateDisplay" style="font-weight:500; min-width:140px; text-align:center; direction:ltr;">-</div>
+            <div id="dateDisplay" style="font-weight:500; min-width:160px; text-align:center; direction:ltr;">-</div>
             <button class="nav-btn" onclick="changeDate(1)">&#10095;</button>
         </div>
         <div class="right-actions">
-            <button class="theme-btn" onclick="toggleTheme()">🌗</button>
             <div class="view-toggle">
                 <button class="view-btn active" onclick="switchView('list')" id="btn-list">רשימה</button>
+                <button class="view-btn" onclick="switchView('week')" id="btn-week">שבועי</button>
                 <button class="view-btn" onclick="switchView('month')" id="btn-month">חודשי</button>
             </div>
         </div>
     </div>
 
     <div class="controls-row">
-        <input type="text" id="searchInput" placeholder="חפש מניה או ETF...">
-        <button class="filter-toggle-btn" onclick="document.querySelector('.advanced-filters').classList.toggle('show')">
-            <span>סינון מתקדם</span> ▼
-        </button>
+        <input type="text" id="searchInput" placeholder="חפש סימול או שם חברה...">
+        <button class="filter-btn" onclick="document.querySelector('.advanced-filters').classList.toggle('show')">סינון מתקדם ▼</button>
     </div>
 
     <div class="advanced-filters">
-        <div style="display:flex; flex-wrap:wrap; margin-bottom:15px;">
-            <div class="multi-select" id="sectorMS"><button class="ms-btn" onclick="toggleDropdown('sectorMS')">סקטורים</button><div class="ms-content" id="sectorOptions"></div></div>
-            <div class="multi-select" id="indexMS"><button class="ms-btn" onclick="toggleDropdown('indexMS')">מדדים ו-ETFs</button>
-                <div class="ms-content">
-                    <div class="ms-option" onclick="toggleFilter('indices','sp500')"><input type="checkbox" value="sp500"><span>S&P 500</span></div>
-                    <div class="ms-option" onclick="toggleFilter('indices','nasdaq100')"><input type="checkbox" value="nasdaq100"><span>Nasdaq 100</span></div>
-                    <hr style="border-color:var(--border-color); opacity:0.5; margin:5px 0;">
-                    <div class="ms-option" onclick="toggleFilter('indices','vti')"><input type="checkbox" value="vti"><span>VTI (Total Market)</span></div>
-                    <div class="ms-option" onclick="toggleFilter('indices','schd')"><input type="checkbox" value="schd"><span>SCHD (Dividend)</span></div>
-                    <div class="ms-option" onclick="toggleFilter('indices','vug')"><input type="checkbox" value="vug"><span>VUG (Growth)</span></div>
-                </div>
-            </div>
-        </div>
+        <div style="color:var(--text-muted); margin-bottom:10px;">סנן לפי שווי שוק: <span id="sliderValues" class="slider-values">Loading...</span></div>
         <div class="slider-section">
-            <div class="slider-header"><span>שווי שוק</span><span id="sliderValues" class="slider-values">Loading...</span></div>
             <div id="marketCapSlider"></div>
-            <div class="slider-presets">
-                <div class="preset-chip" onclick="setSliderRange(1000000000, 5000000000000)">הכל</div>
-                <div class="preset-chip" onclick="setSliderRange(1000000000, 20000000000)">Small Cap</div>
-                <div class="preset-chip" onclick="setSliderRange(20000000000, 200000000000)">Mid Cap</div>
-                <div class="preset-chip" onclick="setSliderRange(200000000000, 5000000000000)">Giants</div>
-            </div>
         </div>
-        <div id="stats-counter" style="margin-top:10px; font-size:12px; color:var(--text-muted);"></div>
+        <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
+            <button class="view-btn" onclick="setSliderRange(1e9, 5e12)">הכל</button>
+            <button class="view-btn" onclick="setSliderRange(200e9, 5e12)">ענקיות (>200B)</button>
+            <button class="view-btn" onclick="setSliderRange(10e9, 200e9)">בינוניות</button>
+        </div>
+        <div id="stats-counter" style="margin-top:15px; font-size:12px; color:var(--text-muted);"></div>
     </div>
 </header>
 
 <div class="container" id="main-container">
-    <div id="loader" style="text-align: center; padding: 50px; color: var(--text-muted);">טוען נתונים...</div>
+    <div style="text-align:center; padding:50px; color:var(--text-muted);">טוען נתונים...</div>
 </div>
 
 <div class="modal-overlay" id="finModal" onclick="closeModal()">
     <div class="fin-modal" onclick="event.stopPropagation()">
         <div class="fin-header">
-            <div>
-                <h2 style="margin:0; display:flex; align-items:center; gap:10px;">
-                    <span id="mSymbol">AAPL</span> 
-                    <span id="mSector" class="badge bg-other">Tech</span>
-                </h2>
-                <span id="mName" style="color:var(--text-muted); font-size:13px;">Apple Inc.</span>
+            <div style="display:flex; align-items:center; gap:15px;">
+                <img id="mLogo" src="" style="width:36px; height:36px; border-radius:50%; background:#fff; padding:2px;">
+                <div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <h2 id="mSymbol" style="margin:0; font-size:24px;">AAPL</h2>
+                        <span id="mSector" class="badge">Tech</span>
+                    </div>
+                    <div id="mName" style="font-size:13px; color:var(--text-muted);">Apple Inc.</div>
+                </div>
             </div>
-            <span style="font-size:24px; cursor:pointer;" onclick="closeModal()">✕</span>
+            <div style="text-align:left;">
+                <span style="font-size:28px; cursor:pointer; color:var(--text-muted);" onclick="closeModal()">✕</span>
+            </div>
         </div>
         
         <div class="fin-body">
-            <div class="dashboard-grid">
-                <div class="kpi-box"><span class="kpi-title">שווי שוק</span><span class="kpi-val" id="mCap">-</span></div>
-                <div class="kpi-box"><span class="kpi-title">מכפיל (P/E)</span><span class="kpi-val" id="mPE">-</span></div>
-                <div class="kpi-box"><span class="kpi-title">הכנסות (שנתי)</span><span class="kpi-val" id="mRev">-</span></div>
-                <div class="kpi-box"><span class="kpi-title">דיבידנד</span><span class="kpi-val" id="mDiv">-</span></div>
-                <div class="kpi-box"><span class="kpi-title">תשואה להון (ROE)</span><span class="kpi-val" id="mROE">-</span></div>
+            
+            <div class="kpi-grid">
+                <div class="kpi-card"><span class="kpi-label">Market Cap</span><span class="kpi-value" id="mCap">-</span></div>
+                <div class="kpi-card"><span class="kpi-label">P/E Ratio</span><span class="kpi-value" id="mPE">-</span></div>
+                <div class="kpi-card"><span class="kpi-label">Revenue (TTM)</span><span class="kpi-value" id="mRev">-</span></div>
+                <div class="kpi-card"><span class="kpi-label">Dividend</span><span class="kpi-value" id="mDiv">-</span></div>
+                <div class="kpi-card"><span class="kpi-label">ROE</span><span class="kpi-value" id="mROE">-</span></div>
             </div>
 
-            <div class="charts-wrapper">
-                <div class="chart-box">
-                    <div class="chart-title"><span>מגמת הכנסות ורווח (רבעוני)</span> <span style="font-size:11px;">שנתיים אחרונות</span></div>
-                    <canvas id="revChart"></canvas>
-                </div>
-                <div class="chart-box">
-                    <div class="chart-title"><span>שולי רווח (%)</span></div>
-                    <canvas id="marginChart"></canvas>
-                </div>
+            <div class="chart-container">
+                <canvas id="mainChart"></canvas>
             </div>
 
-            <div id="mGuidanceText" style="line-height:1.6; font-size:14px;"></div>
+            <div id="mGuidance" style="margin-bottom:20px; padding:15px; background:var(--panel-bg); border-radius:8px; border:1px solid var(--border-color);"></div>
 
-            <div class="chart-title" style="margin-top:10px;">טבלת נתונים</div>
-            <div class="table-wrap">
-                <table class="hist-table" id="mHistoryTable">
-                    <thead><tr><th>תאריך</th><th>הכנסות ($)</th><th>רווח נקי ($)</th><th>שולי רווח</th><th>תזרים חופשי (FCF)</th></tr></thead>
+            <h3 style="margin-bottom:15px; font-size:16px; color:var(--text-main);">היסטוריה רבעונית</h3>
+            <div style="overflow-x:auto;">
+                <table class="hist-table" id="mTable">
+                    <thead><tr><th>Date</th><th>Revenue</th><th>Net Income</th><th>Margin</th><th>Free Cash Flow</th></tr></thead>
                     <tbody></tbody>
                 </table>
             </div>
             
-            <div style="font-size:11px; color:var(--text-muted); text-align:center;">
-                * נתונים כספיים במיליונים/מיליארדים. FCF = תזרים תפעולי פחות השקעות (Capex).
+            <div style="margin-top:20px; display:flex; gap:15px; justify-content:center;">
+                <a id="linkYahoo" href="#" target="_blank" class="view-btn active" style="text-decoration:none;">Yahoo Finance</a>
+                <a id="linkTrading" href="#" target="_blank" class="view-btn active" style="text-decoration:none;">TradingView</a>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // --- SAFE DOM HELPERS ---
-    function setText(id, val) { const el=document.getElementById(id); if(el) el.innerText = (val!==undefined&&val!==null)?val:"-"; }
-    function setHtml(id, val) { const el=document.getElementById(id); if(el) el.innerHTML = val||""; }
-    function setClass(id, cls) { const el=document.getElementById(id); if(el) el.className = cls; }
-
+    // --- SAFE DOM UPDATES ---
+    function setText(id, val) { const el = document.getElementById(id); if(el) el.innerText = (val!==undefined && val!==null) ? val : "-"; }
+    function setHtml(id, val) { const el = document.getElementById(id); if(el) el.innerHTML = val || ""; }
+    
     // --- GLOBALS ---
     let allData = [], historyData = {};
-    let currentView = 'list';
+    let currentView = 'list'; // 'list', 'week', 'month'
     let navigationDate = new Date();
-    let activeFilters = { sectors: [], indices: [], lists: [] };
-    let sliderInstance = null, minCap = 1e9, maxCap = 5e12;
-    let revChartInstance = null, marginChartInstance = null;
+    let minCap = 1e9, maxCap = 5e12;
+    let sliderInstance = null;
+    let chartInstance = null;
 
     // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', async () => {
@@ -293,319 +258,348 @@
         try {
             // 1. Fetch Main Data
             const res = await fetch(`./data.json?v=${buster}`);
-            if(!res.ok) throw new Error("Missing data.json");
+            if (!res.ok) throw new Error("Missing data.json");
             const data = await res.json();
             allData = data.filter(d => d.earningsDate !== '?' && d.earningsDate !== 'TBD');
             
             // 2. Fetch History (Optional)
-            fetch(`./history_data.json?v=${buster}`).then(r=>r.json()).then(h=>{ historyData=h; }).catch(e=>console.log("No history"));
+            fetch(`./history_data.json?v=${buster}`)
+                .then(r => r.json())
+                .then(h => { historyData = h; })
+                .catch(() => console.log("History not available"));
 
-            // 3. UI Init
-            const secDiv = document.getElementById('sectorOptions');
-            if(secDiv) {
-                secDiv.innerHTML = '';
-                [...new Set(allData.map(d => d.sector))].sort().forEach(s => {
-                    secDiv.innerHTML += `<div class="ms-option" onclick="toggleFilter('sectors','${s}')"><input type="checkbox" value="${s}"><span>${s}</span></div>`;
-                });
-            }
-            
+            // 3. Init UI
             initSlider();
             updateDateDisplay();
-            applyFilters();
+            applyFilters(); // First Render
 
         } catch (err) {
-            loader.innerHTML = `<div style="color:#ef4444;">שגיאה: ${err.message}<br>הרץ את get_data.py</div>`;
+            loader.innerHTML = `<div style="color:#f6465d;">שגיאה: ${err.message}<br>נא להריץ את get_data.py</div>`;
         }
     });
 
-    // --- CHART.JS LOGIC ---
-    function renderCharts(symbol, history) {
-        if (!history || history.length === 0) return;
+    // --- RENDER LOGIC (THE HEART) ---
+    function applyFilters() {
+        const q = document.getElementById('searchInput').value.toLowerCase().trim();
+        
+        // Filter Logic
+        let filtered = allData.filter(d => {
+            const matchCap = d.marketCap >= minCap && d.marketCap <= maxCap;
+            const matchSearch = q === '' || d.symbol.toLowerCase().includes(q) || d.name.toLowerCase().includes(q);
+            return matchCap && matchSearch;
+        });
+        
+        // Sort by Date
+        filtered.sort((a, b) => new Date(a.earningsDate) - new Date(b.earningsDate));
+        
+        setText('stats-counter', `נמצאו ${filtered.length} תוצאות`);
+        const container = document.getElementById('main-container');
+        container.innerHTML = '';
 
-        // Prepare Data (Reverse to show oldest -> newest)
-        const labels = history.map(h => h.date).reverse();
-        const revData = history.map(h => h.revenue).reverse();
-        const netData = history.map(h => h.netIncome).reverse();
-        const marginData = history.map(h => h.margin).reverse();
+        if (currentView === 'list') {
+            renderListView(container, filtered);
+        } else if (currentView === 'week') {
+            renderWeekView(container, filtered);
+        } else {
+            renderMonthView(container, filtered);
+        }
+    }
 
-        // 1. Revenue & Net Income Chart
-        const ctxRev = document.getElementById('revChart').getContext('2d');
-        if (revChartInstance) revChartInstance.destroy(); // Clear old chart
-
-        revChartInstance = new Chart(ctxRev, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    { label: 'הכנסות', data: revData, backgroundColor: '#3b82f6', borderRadius: 4 },
-                    { label: 'רווח נקי', data: netData, backgroundColor: '#10b981', borderRadius: 4 }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } },
-                scales: {
-                    x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
-                    y: { ticks: { color: '#94a3b8', callback: (val) => '$' + formatCompact(val) }, grid: { color: '#334155' } }
-                }
-            }
+    // --- VIEW 1: LIST ---
+    function renderListView(container, data) {
+        // Filter by current viewed range isn't strictly necessary for list, but let's filter next 7 days from nav date
+        const start = new Date(navigationDate); start.setHours(0,0,0,0);
+        const end = new Date(start); end.setDate(end.getDate() + 7);
+        
+        const subset = data.filter(d => {
+            const dt = new Date(d.earningsDate);
+            return dt >= start && dt < end;
         });
 
-        // 2. Margin Chart
-        const ctxMar = document.getElementById('marginChart').getContext('2d');
-        if (marginChartInstance) marginChartInstance.destroy();
+        if(subset.length === 0) { container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted)">אין דוחות בתאריכים אלו</div>'; return; }
 
-        marginChartInstance = new Chart(ctxMar, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{ 
-                    label: 'שולי רווח (%)', data: marginData, 
-                    borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.1)', 
-                    tension: 0.4, fill: true, pointRadius: 3 
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { display: false },
-                    y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
-                }
-            }
+        const grouped = {};
+        subset.forEach(s => { if(!grouped[s.earningsDate]) grouped[s.earningsDate]=[]; grouped[s.earningsDate].push(s); });
+        
+        Object.keys(grouped).sort().forEach(date => {
+            const dObj = new Date(date);
+            const dateHeader = document.createElement('div');
+            dateHeader.className = 'list-date';
+            dateHeader.innerText = `${date} - ${dObj.toLocaleDateString('he-IL', {weekday:'long'})}`;
+            container.appendChild(dateHeader);
+            
+            const grid = document.createElement('div');
+            grid.className = 'cards-flex';
+            grouped[date].sort((a,b)=>b.marketCap-a.marketCap).forEach(s => grid.appendChild(createStockCard(s)));
+            container.appendChild(grid);
         });
     }
 
-    // --- MODAL POPULATION ---
-    function openFinancialModal(stock) {
-        setText('mSymbol', stock.symbol);
-        setText('mName', stock.name);
+    // --- VIEW 2: WEEK CALENDAR (RESTORED!) ---
+    function renderWeekView(container, data) {
+        // Calculate start of week (Sunday)
+        const current = new Date(navigationDate);
+        const day = current.getDay(); 
+        const startOfWeek = new Date(current); 
+        startOfWeek.setDate(current.getDate() - day);
         
-        // Colors for sector badge
-        const secEl = document.getElementById('mSector');
-        if(secEl) {
-            secEl.innerText = stock.sector;
-            let cls = 'bg-other';
-            if(stock.sector.includes('Tech')) cls = 'bg-tech';
-            if(stock.sector.includes('Fin')) cls = 'bg-fin';
-            if(stock.sector.includes('Health')) cls = 'bg-health';
-            secEl.className = `badge ${cls}`;
+        const grid = document.createElement('div');
+        grid.className = 'calendar-grid week';
+        
+        // Loop 0 (Sun) to 4 (Thu) or 6 (Sat)
+        for(let i=0; i<5; i++) { 
+            const d = new Date(startOfWeek);
+            d.setDate(startOfWeek.getDate() + i);
+            const dateStr = d.toISOString().split('T')[0];
+            
+            const col = document.createElement('div');
+            col.className = 'cal-day';
+            const today = new Date().toISOString().split('T')[0];
+            if(dateStr === today) col.classList.add('today');
+            
+            col.innerHTML = `<div class="day-num">${d.toLocaleDateString('he-IL',{weekday:'long'})} ${d.getDate()}/${d.getMonth()+1}</div>`;
+            
+            // Find stocks for this day
+            const daily = data.filter(s => s.earningsDate === dateStr).sort((a,b)=>b.marketCap-a.marketCap);
+            
+            daily.forEach(s => {
+                const item = document.createElement('div');
+                item.className = 'stock-item';
+                item.innerHTML = `
+                    <img src="https://assets.parqet.com/logos/symbol/${s.symbol}?format=png" class="stock-img" onerror="this.style.opacity=0">
+                    <span class="stock-sym">${s.symbol}</span>
+                    <span class="stock-time">${s.time.includes('After')?'🌙':'☀️'}</span>
+                `;
+                item.onclick = () => openModal(s);
+                col.appendChild(item);
+            });
+            
+            grid.appendChild(col);
         }
+        container.appendChild(grid);
+    }
 
-        // KPIs
-        setText('mCap', formatMoney(stock.marketCap));
-        setText('mPE', stock.trailingPE ? stock.trailingPE.toFixed(1) : "-");
-        setText('mRev', formatMoney(stock.revenue));
+    // --- VIEW 3: MONTH CALENDAR ---
+    function renderMonthView(container, data) {
+        const year = navigationDate.getFullYear();
+        const month = navigationDate.getMonth();
         
-        const divY = stock.dividendYield;
-        setText('mDiv', divY ? (divY * 100).toFixed(2) + "%" : "-");
+        const grid = document.createElement('div');
+        grid.className = 'calendar-grid month';
         
-        const roe = stock.returnOnEquity;
-        setText('mROE', roe ? (roe * 100).toFixed(1) + "%" : "-");
-        const roeEl = document.getElementById('mROE');
-        if(roeEl) roeEl.style.color = roe > 0.15 ? '#10b981' : '#e0e0e0';
-
-        // History Data Processing
-        const histData = historyData[stock.symbol];
-        let analysisHtml = "";
+        // Days in month
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
         
-        if (histData) {
-            // Render Charts
-            renderCharts(stock.symbol, histData.quarterlyHistory);
+        for(let i=1; i<=daysInMonth; i++) {
+            const d = new Date(year, month, i);
+            const dateStr = d.toISOString().split('T')[0];
             
-            // Growth Badge
-            if(histData.yoyRevenueGrowth) {
-                const g = histData.yoyRevenueGrowth;
-                const col = g > 0 ? 'bg-pass' : 'bg-warn';
-                const txt = g > 0 ? 'צמיחה' : 'ירידה';
-                analysisHtml += `<div style="margin-bottom:10px;"><span class="badge ${col}">${txt} שנתית</span> הכנסות השתנו ב-${g}% לעומת שנה שעברה.</div>`;
-            }
+            const cell = document.createElement('div');
+            cell.className = 'cal-day';
+            cell.style.minHeight = '100px';
             
-            // Populate Table
-            const tbody = document.querySelector('#mHistoryTable tbody');
-            if(tbody) {
-                tbody.innerHTML = '';
-                if (histData.quarterlyHistory && histData.quarterlyHistory.length > 0) {
-                    histData.quarterlyHistory.forEach(q => {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${q.date}</td>
-                            <td>${formatCompact(q.revenue)}</td>
-                            <td class="${q.netIncome > 0 ? 'val-green' : 'val-red'}">${formatCompact(q.netIncome)}</td>
-                            <td>${q.margin}%</td>
-                            <td class="${q.freeCashFlow > 0 ? 'val-green' : 'val-red'}">${formatCompact(q.freeCashFlow)}</td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
+            cell.innerHTML = `<div class="day-num">${i}</div>`;
+            
+            const daily = data.filter(s => s.earningsDate === dateStr);
+            if(daily.length > 0) {
+                // Show only dots/small icons for month view to save space
+                const dots = document.createElement('div');
+                dots.style.display = 'flex'; dots.style.flexWrap = 'wrap'; dots.style.gap = '2px';
+                
+                daily.sort((a,b)=>b.marketCap-a.marketCap).slice(0, 6).forEach(s => {
+                    const img = document.createElement('img');
+                    img.src = `https://assets.parqet.com/logos/symbol/${s.symbol}?format=png`;
+                    img.style.width = '20px'; img.style.height = '20px'; img.style.borderRadius = '50%';
+                    img.style.cursor = 'pointer';
+                    img.onclick = (e) => { e.stopPropagation(); openModal(s); };
+                    dots.appendChild(img);
+                });
+                if(daily.length > 6) {
+                    const more = document.createElement('span');
+                    more.innerText = `+${daily.length-6}`;
+                    more.style.fontSize = '10px'; more.style.color = 'var(--text-muted)';
+                    dots.appendChild(more);
                 }
+                cell.appendChild(dots);
             }
-        } else {
-            // אם אין היסטוריה - הסתרת גרפים והצגת הודעה
-            const tbody = document.querySelector('#mHistoryTable tbody');
-            if(tbody) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">אין נתונים היסטוריים</td></tr>';
-            // (אפשר גם להסתיר את הקנבס כאן)
+            grid.appendChild(cell);
         }
+        container.appendChild(grid);
+    }
+
+    // --- CARD CREATOR ---
+    function createStockCard(s) {
+        const el = document.createElement('div');
+        el.className = 'card-full';
         
-        // Guidance / Links
-        const yahooUrl = `https://finance.yahoo.com/quote/${stock.symbol}`;
-        const tvUrl = `https://www.tradingview.com/chart/?symbol=${stock.symbol}`;
-        analysisHtml += `<div style="margin-top:15px;">
-            <a href="${yahooUrl}" target="_blank" style="color:var(--accent-blue); text-decoration:none; margin-left:10px;">🔗 Yahoo Finance</a>
-            <a href="${tvUrl}" target="_blank" style="color:var(--accent-blue); text-decoration:none;">📈 TradingView</a>
-        </div>`;
-        setHtml('mGuidanceText', analysisHtml);
+        let strip = '#848e9c';
+        if(s.sector.includes('Tech')) strip='#2962ff';
+        if(s.sector.includes('Fin')) strip='#0ecb81';
+        
+        el.innerHTML = `
+            <div class="card-strip" style="background:${strip}"></div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <img src="https://assets.parqet.com/logos/symbol/${s.symbol}?format=png" style="width:32px; height:32px; border-radius:50%; background:#fff; padding:2px;" onerror="this.style.opacity=0">
+                <div>
+                    <div style="font-weight:700; font-size:16px;">${s.symbol}</div>
+                    <div style="font-size:11px; color:var(--text-muted);">$${formatNum(s.marketCap)}</div>
+                </div>
+            </div>
+            <div style="font-size:12px; color:var(--text-muted); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; direction:ltr; text-align:left;">${s.name}</div>
+            <div style="display:flex; justify-content:space-between; margin-top:auto;">
+                <span class="badge">${s.sector}</span>
+                <span class="badge">${s.time.includes('After')?'🌙':'☀️'}</span>
+            </div>
+        `;
+        el.onclick = () => openModal(s);
+        return el;
+    }
+
+    // --- MODAL & CHART LOGIC ---
+    function openModal(s) {
+        // Populate Texts
+        setText('mSymbol', s.symbol);
+        setText('mName', s.name);
+        document.getElementById('mLogo').src = `https://assets.parqet.com/logos/symbol/${s.symbol}?format=png`;
+        
+        setText('mCap', formatNum(s.marketCap));
+        setText('mPE', s.trailingPE ? s.trailingPE.toFixed(2) : "-");
+        setText('mRev', formatNum(s.revenue));
+        setText('mDiv', s.dividendYield ? (s.dividendYield*100).toFixed(2)+"%" : "-");
+        
+        const roeEl = document.getElementById('mROE');
+        roeEl.innerText = s.returnOnEquity ? (s.returnOnEquity*100).toFixed(2)+"%" : "-";
+        roeEl.className = (s.returnOnEquity > 0.15) ? "kpi-value val-green" : "kpi-value";
+
+        // Links
+        document.getElementById('linkYahoo').href = `https://finance.yahoo.com/quote/${s.symbol}`;
+        document.getElementById('linkTrading').href = `https://www.tradingview.com/chart/?symbol=${s.symbol}`;
+
+        // History Processing
+        const hist = historyData[s.symbol];
+        const tableBody = document.querySelector('#mTable tbody');
+        tableBody.innerHTML = '';
+        
+        if(hist) {
+            // 1. Chart
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            if(chartInstance) chartInstance.destroy();
+            
+            // Prepare Data (Reverse for chart left-to-right)
+            const dates = hist.quarterlyHistory.map(h => h.date).reverse();
+            const revs = hist.quarterlyHistory.map(h => h.revenue).reverse();
+            const profits = hist.quarterlyHistory.map(h => h.netIncome).reverse();
+            
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        { label: 'הכנסות', data: revs, backgroundColor: '#2962ff', borderRadius:4 },
+                        { label: 'רווח נקי', data: profits, backgroundColor: '#0ecb81', borderRadius:4 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#848e9c' } } },
+                    scales: {
+                        x: { ticks: { color: '#848e9c' }, grid: { display:false } },
+                        y: { ticks: { color: '#848e9c', callback: val => '$' + formatNum(val) }, grid: { color: '#2b3139' } }
+                    }
+                }
+            });
+
+            // 2. Analysis Text
+            let html = "";
+            if(hist.yoyRevenueGrowth) {
+                const color = hist.yoyRevenueGrowth > 0 ? "val-green" : "val-red";
+                html += `<div><strong>צמיחה שנתית (YoY):</strong> <span class="${color}">${hist.yoyRevenueGrowth}%</span></div>`;
+            }
+            if(s.forwardPE && s.trailingPE) {
+                const sentiment = s.forwardPE < s.trailingPE ? "חיובי (צפי לעלייה ברווחים)" : "שלילי/מעורב";
+                html += `<div><strong>תחזית שוק (Forward P/E):</strong> ${sentiment}</div>`;
+            }
+            setHtml('mGuidance', html);
+
+            // 3. Table
+            hist.quarterlyHistory.forEach(q => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${q.date}</td>
+                    <td>${formatNum(q.revenue)}</td>
+                    <td class="${q.netIncome>0?'val-green':'val-red'}">${formatNum(q.netIncome)}</td>
+                    <td>${q.margin}%</td>
+                    <td>${formatNum(q.freeCashFlow)}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+        } else {
+            tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">אין נתונים היסטוריים</td></tr>';
+            setHtml('mGuidance', 'נתונים היסטוריים חסרים. הרץ את get_history.py');
+            if(chartInstance) chartInstance.destroy();
+        }
 
         document.getElementById('finModal').classList.add('open');
     }
 
     function closeModal() { document.getElementById('finModal').classList.remove('open'); }
 
-    // --- FILTERS & LIST VIEW ---
-    function applyFilters() {
-        const q = document.getElementById('searchInput').value.toLowerCase().trim();
-        let filtered = allData.filter(item => {
-            const mCap = item.marketCap >= minCap && item.marketCap <= maxCap;
-            const mSec = activeFilters.sectors.length === 0 || activeFilters.sectors.includes(item.sector);
-            let mIdx = true;
-            if (activeFilters.indices.length > 0) {
-                mIdx = false;
-                if (activeFilters.indices.includes('sp500') && item.inSp500) mIdx = true;
-                if (activeFilters.indices.includes('nasdaq100') && item.inNasdaq100) mIdx = true;
-                // ETFs Check
-                if (activeFilters.indices.includes('vti') && item.symbol === 'VTI') mIdx = true;
-                if (activeFilters.indices.includes('schd') && item.symbol === 'SCHD') mIdx = true;
-                if (activeFilters.indices.includes('vug') && item.symbol === 'VUG') mIdx = true;
-            }
-            return mSec && mCap && mIdx;
-        });
-
-        if (q) filtered = filtered.filter(i => i.symbol.toLowerCase().includes(q) || i.name.toLowerCase().includes(q));
-        else filtered.sort((a, b) => new Date(a.earningsDate) - new Date(b.earningsDate));
-        
-        // Date Filtering based on View
-        let displayData = [];
-        if (currentView === 'month') {
-            const y = navigationDate.getFullYear(), m = navigationDate.getMonth();
-            displayData = filtered.filter(d => { const dt = new Date(d.earningsDate); return dt.getFullYear()===y && dt.getMonth()===m; });
-        } else {
-            const d = new Date(navigationDate); const day = d.getDay(); d.setDate(d.getDate() - day);
-            const start = new Date(d); const end = new Date(d); end.setDate(end.getDate() + 7);
-            displayData = filtered.filter(i => { const dt = new Date(i.earningsDate); return dt >= start && dt < end; });
-        }
-        
-        setText('stats-counter', `נמצאו ${displayData.length}`);
-        const container = document.getElementById('main-container');
-        container.innerHTML = '';
-        
-        if(currentView === 'list') {
-            // Group by Date
-            const grouped = {}; displayData.forEach(s => { if(!grouped[s.earningsDate]) grouped[s.earningsDate]=[]; grouped[s.earningsDate].push(s); });
-            Object.keys(grouped).sort().forEach(date => {
-                const sect = document.createElement('div');
-                const dObj = new Date(date);
-                sect.innerHTML = `<div style="font-weight:500; color:var(--accent-blue); margin:20px 0 10px 0; border-bottom:1px solid var(--border-color);">${date} - ${dObj.toLocaleDateString('he-IL',{weekday:'long'})}</div>`;
-                const grid = document.createElement('div'); grid.className = 'cards-grid';
-                grouped[date].forEach(s => grid.appendChild(createCard(s)));
-                sect.appendChild(grid); container.appendChild(sect);
-            });
-        } else {
-            // Calendar View logic (Simplified for this full-merge)
-            container.innerHTML = `<div style="text-align:center; padding:20px;">תצוגת לוח שנה (חודשי) - יש לגלול ברשימה</div>`;
-            const grid = document.createElement('div'); grid.className = 'cards-grid';
-            displayData.forEach(s => grid.appendChild(createCard(s)));
-            container.appendChild(grid);
-        }
-    }
-
-    function createCard(stock) {
-        const el = document.createElement('div');
-        el.className = 'stock-card';
-        let strip = '#64748b';
-        if(stock.sector.includes('Tech')) strip='#3b82f6';
-        if(stock.sector.includes('Fin')) strip='#10b981';
-        
-        el.innerHTML = `
-            <div class="card-strip" style="background:${strip}"></div>
-            <div class="card-top">
-                <img src="https://assets.parqet.com/logos/symbol/${stock.symbol}?format=png" class="stock-logo" onerror="this.style.opacity=0">
-                <div><span class="symbol">${stock.symbol}</span><span class="market-cap">$${formatCompact(stock.marketCap)}</span></div>
-            </div>
-            <div class="company-name">${stock.name}</div>
-            <div class="card-footer">
-                <span class="tag-text" style="background:rgba(255,255,255,0.05)">${stock.sector}</span>
-                ${stock.time ? `<span class="badge" style="background:rgba(255,255,255,0.1)">${stock.time.includes('After')?'🌙':'☀️'}</span>` : ''}
-            </div>
-        `;
-        el.onclick = () => openFinancialModal(stock);
-        return el;
-    }
-
-    // --- HELPERS & CONTROLS ---
-    function formatMoney(n) { 
-        if (!n) return "-";
-        if (n >= 1e12) return "$" + (n / 1e12).toFixed(2) + "T";
-        if (n >= 1e9) return "$" + (n / 1e9).toFixed(2) + "B";
-        if (n >= 1e6) return "$" + (n / 1e6).toFixed(2) + "M";
-        return n.toLocaleString();
-    }
-    function formatCompact(n) { // Short version for charts
-        if (!n) return "0";
-        if (Math.abs(n) >= 1e9) return (n / 1e9).toFixed(1) + "B";
-        if (Math.abs(n) >= 1e6) return (n / 1e6).toFixed(1) + "M";
-        return n.toLocaleString();
-    }
-
+    // --- SLIDER ---
     function initSlider() {
         const s = document.getElementById('marketCapSlider');
-        if(s.noUiSlider) return;
-        noUiSlider.create(s, { start: [minCap, maxCap], connect: true, range: { 'min': 1e9, '30%': 50e9, '70%': 200e9, 'max': 5e12 } });
+        if(!s || s.noUiSlider) return; // Prevent double init
+        
+        noUiSlider.create(s, {
+            start: [1e9, 5e12], connect: true,
+            range: { 'min': 1e9, '30%': 50e9, '70%': 200e9, 'max': 5e12 }
+        });
         sliderInstance = s.noUiSlider;
-        s.noUiSlider.on('update', (v) => { minCap=parseFloat(v[0]); maxCap=parseFloat(v[1]); document.getElementById('sliderValues').innerText = `${formatCompact(minCap)} - ${formatCompact(maxCap)}`; applyFilters(); });
+        s.noUiSlider.on('update', vals => {
+            minCap = parseFloat(vals[0]); maxCap = parseFloat(vals[1]);
+            setText('sliderValues', `$${formatNum(minCap)} - $${formatNum(maxCap)}`);
+            applyFilters();
+        });
     }
-    function setSliderRange(a, b) { if(sliderInstance) sliderInstance.set([a, b]); }
-    
-    function changeDate(d) { 
-        if(currentView==='month') navigationDate.setMonth(navigationDate.getMonth()+d); 
-        else navigationDate.setDate(navigationDate.getDate()+(d*7)); 
-        updateDateDisplay(); applyFilters(); 
+    function setSliderRange(min, max) { if(sliderInstance) sliderInstance.set([min, max]); }
+
+    // --- NAV ---
+    function changeDate(d) {
+        if(currentView==='month') navigationDate.setMonth(navigationDate.getMonth()+d);
+        else navigationDate.setDate(navigationDate.getDate()+(d*7));
+        updateDateDisplay(); applyFilters();
+    }
+    function switchView(v) {
+        currentView = v;
+        document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`btn-${v}`).classList.add('active');
+        updateDateDisplay(); applyFilters();
     }
     function updateDateDisplay() {
         const opts = { month: 'long', year: 'numeric' };
-        let txt = navigationDate.toLocaleDateString('he-IL', opts);
-        if(currentView!=='month') {
-            const d = new Date(navigationDate); const day = d.getDay(); d.setDate(d.getDate()-day);
-            const e = new Date(d); e.setDate(e.getDate()+6);
-            txt = `${d.getDate()}/${d.getMonth()+1} - ${e.getDate()}/${e.getMonth()+1}`;
+        let txt = "";
+        if(currentView === 'month') {
+            txt = navigationDate.toLocaleDateString('he-IL', opts);
+        } else {
+            const curr = new Date(navigationDate);
+            const day = curr.getDay(); 
+            const start = new Date(curr); start.setDate(curr.getDate() - day);
+            const end = new Date(start); end.setDate(start.getDate() + 6);
+            txt = `${start.getDate()}/${start.getMonth()+1} - ${end.getDate()}/${end.getMonth()+1}`;
         }
         setText('dateDisplay', txt);
     }
-    function switchView(v) { currentView = v; document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active')); document.getElementById(`btn-${v}`).classList.add('active'); updateDateDisplay(); applyFilters(); }
-    
-    // Toggle Dropdowns
-    function toggleDropdown(id) { document.querySelector(`#${id} .ms-content`).classList.toggle('show'); }
-    function toggleFilter(type, val) { 
-        const arr = activeFilters[type]; 
-        const idx = arr.indexOf(val); 
-        if(idx>-1) arr.splice(idx,1); else arr.push(val); 
-        applyFilters(); 
-        // Update Button Style
-        const btn = document.querySelector(`#${type==='indices'?'indexMS':'sectorMS'} .ms-btn`);
-        if(arr.length>0) btn.style.borderColor = 'var(--accent-blue)'; else btn.style.borderColor = 'var(--border-color)';
+
+    // --- FORMATTER ---
+    function formatNum(n) {
+        if(!n) return "-";
+        if(n >= 1e12) return (n/1e12).toFixed(2) + "T";
+        if(n >= 1e9) return (n/1e9).toFixed(2) + "B";
+        if(n >= 1e6) return (n/1e6).toFixed(2) + "M";
+        return n.toLocaleString();
     }
-    
-    // Theme
-    function toggleTheme() { 
-        const r = document.documentElement; 
-        const isDark = r.getAttribute('data-theme')==='dark';
-        r.setAttribute('data-theme', isDark?'light':'dark'); 
-        // Re-render charts to fix colors if modal is open
-        const modal = document.getElementById('finModal');
-        if(modal.classList.contains('open')) closeModal(); 
-    }
-    
-    window.onclick = (e) => { if(!e.target.closest('.multi-select')) document.querySelectorAll('.ms-content').forEach(el=>el.classList.remove('show')); }
+
     document.getElementById('searchInput').addEventListener('keyup', applyFilters);
 </script>
 </body>
