@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Earnings Pro - Mobile Fit</title>
+    <title>Earnings Pro - Mobile Final</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
@@ -16,7 +16,7 @@
             --text-high: #f4f4f5; --text-med: #a1a1aa; --text-low: #52525b;
             --border: #3f3f46;
             --accent: #3b82f6; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --purple: #8b5cf6;
-            --modal-overlay: rgba(0, 0, 0, 0.85);
+            --modal-overlay: rgba(0, 0, 0, 0.9);
             --font-main: 'Rubik', sans-serif; --font-num: 'Inter', sans-serif;
         }
 
@@ -24,7 +24,7 @@
             --bg-body: #f8fafc; --bg-surface: #ffffff; --bg-elevated: #f1f5f9;
             --text-high: #0f172a; --text-med: #64748b; --text-low: #94a3b8;
             --border: #e2e8f0;
-            --modal-overlay: rgba(255, 255, 255, 0.8);
+            --modal-overlay: rgba(255, 255, 255, 0.95);
         }
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -33,20 +33,16 @@
 
         /* HEADER */
         header { background-color: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 10px 15px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .logo { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; } .logo span { color: var(--accent); }
-        
+        .logo { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; } .logo span { color: var(--accent); }
         .controls-group { display: flex; gap: 8px; }
         .icon-btn { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-med); width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; }
 
-        /* Nav Row */
+        /* Nav & Actions */
         .nav-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-        
         .date-controls { display: flex; align-items: center; gap: 5px; background: var(--bg-body); padding: 2px 4px; border-radius: 6px; border: 1px solid var(--border); flex: 1; min-width: 140px; justify-content: space-between; }
         .nav-arrow { background: transparent; border: none; color: var(--text-med); font-size: 18px; padding: 4px 10px; cursor: pointer; }
         .current-date { font-weight: 500; font-size: 13px; direction: ltr; white-space: nowrap; }
-
         .view-switch { display: flex; background: var(--bg-body); padding: 2px; border-radius: 6px; border: 1px solid var(--border); }
         .v-btn { background: transparent; border: none; color: var(--text-med); padding: 5px 8px; font-size: 11px; cursor: pointer; border-radius: 4px; font-weight: 500; }
         .v-btn.active { background: var(--bg-elevated); color: var(--text-high); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
@@ -54,11 +50,9 @@
         .action-bar { display: flex; gap: 8px; align-items: center; }
         .search-wrap { flex: 1; position: relative; }
         .search-input { width: 100%; background: var(--bg-body); border: 1px solid var(--border); color: var(--text-high); padding: 8px 10px; border-radius: 6px; font-size: 13px; outline: none; }
-        
         .btn-ui { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-high); padding: 0 10px; height: 34px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 500; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
         .btn-ui.active { background: var(--accent); border-color: var(--accent); color: white; }
 
-        /* Filter Panel */
         .filter-panel { display: none; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 15px; margin-top: 10px; }
         .filter-panel.show { display: block; animation: slideDown 0.2s ease-out; }
         .chip-container { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -67,130 +61,105 @@
         .slider-wrap { padding: 0 10px; margin-top: 10px; }
         .noUi-connect { background: var(--accent); } .noUi-target { background: var(--border); border: none; height: 4px; } .noUi-handle { width: 16px; height: 16px; right: -8px; top: -6px; border-radius: 50%; background: var(--text-high); border: 1px solid var(--border); }
 
-        /* --- GRID SYSTEM (FIXED FOR MOBILE) --- */
-        .container { 
-            max-width: 100%; 
-            padding: 10px; 
-            overflow: hidden; /* No scroll */
-        }
+        /* --- GRID SYSTEM --- */
+        .container { max-width: 100%; padding: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
         
-        .grid-view { 
-            display: grid; 
-            gap: 4px; 
-            width: 100%;
-        }
-        
-        .grid-view.month, .grid-view.week { 
-            grid-template-columns: repeat(7, 1fr); /* Force 7 columns */
-        }
-        
-        .grid-view.list { display: flex; flex-direction: column; gap: 10px; }
+        /* Ensures calendar is scrollable on mobile but not squished */
+        .grid-view { display: grid; gap: 6px; width: 100%; min-width: 900px; } 
+        .grid-view.month, .grid-view.week { grid-template-columns: repeat(7, 1fr); }
+        .grid-view.list { display: flex; flex-direction: column; gap: 10px; min-width: 0; } /* List fits screen */
 
-        .cal-day { 
-            background: var(--bg-surface); border: 1px solid var(--border); 
-            min-height: 100px; /* Reduced height for mobile */
-            border-radius: 6px; padding: 4px; 
-            display: flex; flex-direction: column; gap: 4px; 
-            overflow: hidden;
-        }
+        .cal-day { background: var(--bg-surface); border: 1px solid var(--border); min-height: 120px; border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
         .cal-day.today { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
         .day-header { font-size: 11px; color: var(--text-med); font-weight: 600; padding-bottom: 4px; border-bottom: 1px solid var(--border); margin-bottom: 2px; display: flex; justify-content: center; text-align: center; }
-        
-        /* Mobile specific Day Header adjustments */
-        @media (max-width: 768px) {
-            .day-header span:first-child { display: none; } /* Hide Day Name (Sun/Mon) on mobile, keep date */
-            .day-header .eng-font { font-size: 10px; }
-        }
 
-        /* --- RESPONSIVE CARDS --- */
+        /* --- CARDS (Consistent Design) --- */
         .card-full {
             background: var(--bg-body); border: 1px solid var(--border); border-radius: 6px; 
             padding: 8px; display: flex; flex-direction: column; gap: 4px; 
-            cursor: pointer; position: relative; overflow: hidden; 
-            height: 100%; justify-content: space-between;
+            cursor: pointer; transition: transform 0.1s; position: relative; overflow: hidden; 
+            height: 120px; justify-content: space-between;
         }
+        .card-full:active { transform: scale(0.98); }
         .card-full .strip { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
         
+        /* Top: Logo + Symbol + Star */
         .cf-top { display: flex; align-items: center; gap: 8px; }
-        .cf-logo { width: 32px; height: 32px; border-radius: 50%; background: #fff; padding: 2px; object-fit: contain; border: 1px solid var(--border); }
+        .cf-logo { width: 28px; height: 28px; border-radius: 50%; background: #fff; padding: 2px; object-fit: contain; border: 1px solid var(--border); }
         .cf-sym { font-weight: 700; font-size: 14px; font-family: var(--font-num); color: var(--text-high); }
+        .star-pos { margin-right: auto; font-size: 14px; cursor: pointer; padding: 2px; }
+
+        /* Middle: Name (Hidden on very small height if needed) */
+        .cf-name { font-size: 10px; color: var(--text-med); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
         
-        .star-pos { margin-right: auto; font-size: 14px; cursor: pointer; }
-        .cf-name { font-size: 11px; color: var(--text-med); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        /* Bottom: Cap + Time + Links */
         .cf-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--bg-elevated); padding-top: 4px; margin-top: auto; }
-        .cap-badge { font-size: 10px; padding: 1px 4px; border-radius: 4px; background: var(--bg-elevated); color: var(--text-high); border: 1px solid var(--border); font-family: var(--font-num); }
+        .capsule { display: flex; align-items: center; gap: 4px; }
+        .cap-badge { font-size: 9px; padding: 1px 4px; border-radius: 4px; background: var(--bg-elevated); color: var(--text-high); border: 1px solid var(--border); font-family: var(--font-num); }
+        .sector-text { font-size: 10px; }
         .card-links { display: flex; gap: 6px; opacity: 0.6; }
-        .card-link-icon { width: 12px; height: 12px; }
+        .card-link-icon { width: 12px; height: 12px; filter: grayscale(1); }
 
-        /* --- MOBILE CARD OVERRIDE (THE FIX) --- */
-        @media (max-width: 768px) {
-            /* Force cards to be tiny blocks */
-            .card-full {
-                padding: 2px;
-                gap: 2px;
-                height: auto;
-                min-height: 40px;
-                border: none;
-                background: transparent;
-                align-items: center;
-                text-align: center;
-            }
-            .card-full .strip { display: none; } /* Hide colored strip to save space */
-            
-            /* Hide details on mobile */
-            .cf-name, .cf-footer, .star-pos { display: none; }
-            
-            /* Stack Logo and Symbol vertically */
-            .cf-top { 
-                flex-direction: column; 
-                gap: 2px; 
-                width: 100%;
-            }
-            .cf-logo { width: 22px; height: 22px; margin: 0 auto; }
-            .cf-sym { font-size: 9px; line-height: 1; }
-            
-            /* Calendar Cell Adjustments */
-            .cal-day { min-height: 80px; padding: 2px; gap: 2px; }
-            .grid-view { gap: 2px; }
-        }
-
-        .card-mini { background: var(--bg-body); border: 1px solid var(--border); border-radius: 4px; padding: 2px; display: flex; align-items: center; gap: 4px; cursor: pointer; position: relative; font-size: 10px; margin-bottom: 2px; }
-        .card-mini .strip { position: absolute; left: 0; top: 0; bottom: 0; width: 2px; }
+        .card-mini { background: var(--bg-body); border: 1px solid var(--border); border-radius: 4px; padding: 4px; display: flex; align-items: center; gap: 4px; cursor: pointer; position: relative; font-size: 10px; margin-bottom: 2px; }
+        .card-mini .strip { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
         .cm-logo { width: 14px; height: 14px; border-radius: 50%; background: #fff; }
-        
-        /* Mobile Mini Card */
-        @media (max-width: 768px) {
-            .card-mini { flex-direction: column; padding: 2px; border: none; background: transparent; }
-            .card-mini .strip { display: none; }
-            .cm-sym { font-size: 8px; }
-            .cm-logo { width: 16px; height: 16px; }
-            .cm-time { display: none; } /* Hide time icon */
-        }
+        .cm-sym { font-size: 10px; font-weight: 700; flex: 1; font-family: var(--font-num); }
 
         .more-btn { background: var(--bg-elevated); color: var(--text-med); font-size: 10px; text-align: center; padding: 2px; border-radius: 4px; margin-top: auto; cursor: pointer; }
+        .more-card { background: var(--bg-elevated); border: 1px dashed var(--border); border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: var(--text-med); height: 100px; }
 
-        /* MODALS */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-overlay); z-index: 1000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        /* --- MODAL RESPONSIVE FIXES --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-overlay); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
         .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease-out; }
         
-        .fin-modal { background: var(--bg-body); width: 95%; max-width: 1300px; height: 90vh; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-        @media (max-width: 768px) { .fin-modal { width: 100%; height: 100%; border-radius: 0; } }
+        .fin-modal { 
+            background: var(--bg-body); width: 95%; max-width: 1300px; height: 90vh; 
+            border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; 
+        }
         
-        .fm-header { padding: 10px 15px; border-bottom: 1px solid var(--border); background: var(--bg-surface); display: flex; justify-content: space-between; align-items: center; }
-        .fm-body { flex: 1; padding: 15px; overflow-y: auto; display: grid; grid-template-columns: 240px 1fr; gap: 20px; }
-        @media (max-width: 900px) { .fm-body { grid-template-columns: 1fr; } }
+        /* Mobile Modal Override */
+        @media (max-width: 900px) {
+            .fin-modal { 
+                width: 100%; height: 100%; border-radius: 0; border: none; 
+            }
+            .fm-body { 
+                padding: 15px; 
+                display: flex; /* Stack vertically */
+                flex-direction: column;
+                gap: 20px;
+            }
+            /* Sidebar becomes Top Bar */
+            .fm-sidebar { 
+                display: grid; 
+                grid-template-columns: 1fr 1fr; /* 2 Columns for KPIs */
+                gap: 8px;
+            }
+            .kpi-tile { min-height: 60px; padding: 8px; }
+            .kpi-num { font-size: 14px; }
+            
+            /* Charts stack */
+            .charts-split { 
+                display: flex; flex-direction: column; height: auto; gap: 15px;
+            }
+            .chart-box { height: 220px; }
+        }
 
-        .day-modal { background: var(--bg-body); width: 90%; max-width: 600px; height: 70vh; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+        .fm-header { padding: 12px 15px; border-bottom: 1px solid var(--border); background: var(--bg-surface); display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Desktop Modal Layout */
+        @media (min-width: 901px) {
+            .fm-body { display: grid; grid-template-columns: 240px 1fr; gap: 20px; padding: 20px; }
+            .fm-sidebar { display: flex; flex-direction: column; gap: 10px; }
+            .charts-split { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; height: 320px; }
+        }
+
+        /* Day Modal */
+        .day-modal { background: var(--bg-body); width: 90%; max-width: 600px; height: 80vh; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
         .day-body { flex: 1; padding: 15px; overflow-y: auto; }
 
-        .fm-sidebar { display: flex; flex-direction: column; gap: 10px; }
-        .kpi-tile { background: var(--bg-surface); border: 1px solid var(--border); padding: 10px; border-radius: 6px; display: flex; flex-direction: column; justify-content: center; min-height: 60px; }
+        .kpi-tile { background: var(--bg-surface); border: 1px solid var(--border); padding: 12px; border-radius: 6px; display: flex; flex-direction: column; justify-content: center; }
         .kpi-head { font-size: 10px; color: var(--text-med); text-transform: uppercase; margin-bottom: 4px; font-weight: 700; }
         .kpi-num { font-size: 16px; font-weight: 600; color: var(--text-high); font-family: var(--font-num); }
-        
-        .fm-main { display: flex; flex-direction: column; gap: 15px; }
-        .charts-split { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; height: 300px; }
-        @media (max-width: 768px) { .charts-split { grid-template-columns: 1fr; height: auto; } .chart-box { height: 250px; } }
         
         .chart-box { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; }
         .chart-title { font-size: 11px; font-weight: 700; color: var(--text-med); text-transform: uppercase; display: flex; justify-content: space-between; margin-bottom: 5px; }
@@ -204,14 +173,12 @@
         .list-header { font-size: 14px; color: var(--accent); margin: 15px 0 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-family: var(--font-num); }
         .cards-flex { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
         
-        /* AutoComplete */
         .suggestions-box { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 6px; margin-top: 5px; max-height: 250px; overflow-y: auto; z-index: 200; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none; }
         .suggestions-box.active { display: block; }
         .s-item { padding: 10px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         
         .c-blue { color: var(--accent); } .c-gold { color: var(--warning); } .c-green { color: var(--success); }
-        .more-card { background: var(--bg-elevated); border: 1px dashed var(--border); border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: var(--text-med); height: 100px; }
-    
+        
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
@@ -297,11 +264,12 @@
                 <div class="kpi-tile"><div class="kpi-head" data-i18n="revenue">Revenue</div><div class="kpi-num c-blue" id="mRev">-</div></div>
                 <div class="kpi-tile"><div class="kpi-head" data-i18n="dividend">Dividend</div><div class="kpi-num" id="mDiv">-</div></div>
                 <div class="kpi-tile"><div class="kpi-head" data-i18n="ROE">ROE</div><div class="kpi-num" id="mROE">-</div></div>
-                <div style="display:flex; gap:5px; margin-top:5px;">
+                <div style="display:flex; gap:5px; align-items:center;">
                     <a id="lnkYahoo" href="#" target="_blank" class="btn-ui" style="flex:1; justify-content:center;">Yahoo</a>
                     <a id="lnkTV" href="#" target="_blank" class="btn-ui" style="flex:1; justify-content:center;">TV</a>
                 </div>
             </div>
+            
             <div class="fm-main">
                 <div class="charts-split">
                     <div class="chart-box"><div class="chart-title"><span data-i18n="income">INCOME</span> <span><span class="c-blue">● Rev</span> <span class="c-gold">● Net</span></span></div><div class="chart-wrap"><canvas id="incomeChart"></canvas></div></div>
@@ -487,7 +455,13 @@
         el.onclick = () => openModal(s); return el;
     }
 
-    function toggleFav(e, sym) { e.stopPropagation(); if(favorites.has(sym)) favorites.delete(sym); else favorites.add(sym); localStorage.setItem('favStocks', JSON.stringify([...favorites])); updateUI(); }
+    function toggleFav(e, sym) { 
+        e.stopPropagation(); 
+        if(favorites.has(sym)) favorites.delete(sym); else favorites.add(sym); 
+        localStorage.setItem('favStocks', JSON.stringify([...favorites])); 
+        e.target.style.color = favorites.has(sym) ? 'var(--warning)' : 'var(--border)';
+        updateUI(); 
+    }
 
     function openModal(s) {
         setText('mSymbol', s.symbol); setText('mName', s.name); setText('mSector', getSectorName(s.sector || 'Unknown'));
