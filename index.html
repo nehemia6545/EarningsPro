@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Earnings Pro - Ultimate</title>
+    <title>Earnings Pro - Final</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
@@ -13,594 +13,482 @@
 
     <style>
         :root {
-            --bg-color: #0b0e11; --card-bg: #151a21; --panel-bg: #1e2329;
-            --text-main: #eaecef; --text-muted: #848e9c;
-            --accent-blue: #2962ff; --accent-gold: #f0b90b; 
-            --accent-green: #0ecb81; --accent-red: #f6465d;
-            --border-color: #2b3139; --shadow: 0 4px 24px rgba(0,0,0,0.4);
-            --modal-bg: rgba(0, 0, 0, 0.85);
+            --bg-body: #09090b; --bg-surface: #18181b; --bg-elevated: #27272a;
+            --text-high: #f4f4f5; --text-med: #a1a1aa; --text-low: #52525b;
+            --border: #3f3f46;
+            --accent: #3b82f6; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --purple: #8b5cf6;
+            --modal-overlay: rgba(0, 0, 0, 0.85);
+            --font-main: 'Rubik', sans-serif; --font-num: 'Inter', sans-serif;
+        }
+
+        [data-theme="light"] {
+            --bg-body: #f8fafc; --bg-surface: #ffffff; --bg-elevated: #f1f5f9;
+            --text-high: #0f172a; --text-med: #64748b; --text-low: #94a3b8;
+            --border: #e2e8f0;
+            --modal-overlay: rgba(255, 255, 255, 0.8);
         }
         
         * { box-sizing: border-box; }
-        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Rubik', sans-serif; margin: 0; padding: 0; overflow-y: scroll; -webkit-tap-highlight-color: transparent; }
-        
+        body { background-color: var(--bg-body); color: var(--text-high); font-family: var(--font-main); margin: 0; padding: 0; transition: background 0.3s; }
+        .eng-font { font-family: var(--font-num); }
+
         /* HEADER */
-        header { 
-            background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); 
-            padding: 15px 20px; position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow); 
-        }
-        .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .logo { font-size: 22px; font-weight: 700; letter-spacing: 1px; }
-        .logo span { color: var(--accent-gold); }
+        header { background-color: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 15px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .logo { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; } .logo span { color: var(--accent); }
         
-        .date-nav { 
-            display: flex; align-items: center; gap: 15px; background: var(--panel-bg); 
-            padding: 5px 15px; border-radius: 8px; border: 1px solid var(--border-color); 
-        }
-        .nav-btn { background: none; border: none; color: var(--text-main); font-size: 18px; cursor: pointer; }
-        
-        .view-toggle { display: flex; gap: 2px; background: var(--panel-bg); padding: 3px; border-radius: 6px; border: 1px solid var(--border-color); }
-        .view-btn { border: none; background: transparent; color: var(--text-muted); padding: 6px 15px; font-size: 13px; font-weight: 500; border-radius: 4px; cursor: pointer; transition: 0.2s; }
-        .view-btn.active { background: var(--border-color); color: var(--text-main); }
+        .controls-group { display: flex; gap: 10px; }
+        .icon-btn { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-med); width: 36px; height: 36px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .icon-btn:hover { border-color: var(--accent); color: var(--text-high); }
 
-        .controls-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        input[type="text"] { 
-            background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); 
-            padding: 0 15px; border-radius: 6px; font-size: 14px; height: 40px; outline: none; flex: 1; min-width: 200px;
-        }
-        input[type="text"]:focus { border-color: var(--accent-gold); }
+        .date-controls { display: flex; align-items: center; gap: 10px; background: var(--bg-body); padding: 4px; border-radius: 6px; border: 1px solid var(--border); }
+        .nav-arrow { background: transparent; border: none; color: var(--text-med); font-size: 18px; padding: 4px 12px; cursor: pointer; transition: 0.2s; }
+        .nav-arrow:hover { color: var(--text-high); }
+        .current-date { min-width: 150px; text-align: center; font-weight: 500; font-size: 14px; direction: ltr; }
 
-        .filter-btn {
-            background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main);
-            padding: 0 20px; height: 40px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500;
-        }
+        .view-switch { display: flex; background: var(--bg-body); padding: 3px; border-radius: 6px; border: 1px solid var(--border); }
+        .v-btn { background: transparent; border: none; color: var(--text-med); padding: 6px 14px; font-size: 13px; cursor: pointer; border-radius: 4px; font-weight: 500; transition: 0.2s; }
+        .v-btn.active { background: var(--bg-elevated); color: var(--text-high); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+        .action-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 15px; }
+        .search-wrap { flex: 1; position: relative; min-width: 250px; }
+        .search-input { width: 100%; background: var(--bg-body); border: 1px solid var(--border); color: var(--text-high); padding: 10px 15px; border-radius: 6px; font-size: 14px; outline: none; transition: 0.2s; }
+        .search-input:focus { border-color: var(--accent); }
         
-        /* CALENDAR GRID */
+        .suggestions-box {
+            position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-surface); border: 1px solid var(--border);
+            border-radius: 6px; margin-top: 5px; max-height: 300px; overflow-y: auto; z-index: 200; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: none;
+        }
+        .suggestions-box.active { display: block; }
+        .s-item { padding: 10px 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); transition: 0.2s; }
+        .s-item:last-child { border-bottom: none; }
+        .s-item:hover { background: var(--bg-elevated); }
+        .s-left { display: flex; flex-direction: column; }
+        .s-sym { font-weight: 700; color: var(--text-high); font-family: var(--font-num); }
+        .s-name { font-size: 11px; color: var(--text-med); }
+        .s-date { font-size: 11px; color: var(--accent); background: var(--bg-body); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); font-family: var(--font-num); }
+
+        .btn-ui { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-high); padding: 0 16px; height: 38px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .btn-ui:hover { border-color: var(--text-med); }
+        .btn-ui.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+        .filter-panel { display: none; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-top: 15px; }
+        .filter-panel.show { display: block; animation: slideDown 0.2s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .f-label { font-size: 11px; color: var(--text-med); text-transform: uppercase; margin-bottom: 10px; font-weight: 700; letter-spacing: 0.5px; }
+        .chip-container { display: flex; flex-wrap: wrap; gap: 8px; }
+        .filter-chip { background: var(--bg-body); border: 1px solid var(--border); padding: 6px 12px; border-radius: 20px; font-size: 12px; color: var(--text-med); cursor: pointer; user-select: none; transition: 0.2s; }
+        .filter-chip.selected { background: rgba(59, 130, 246, 0.15); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+
+        .slider-wrap { padding: 0 10px; }
+        .noUi-connect { background: var(--accent); }
+        .noUi-target { background: var(--border); border: none; height: 4px; }
+        .noUi-handle { width: 16px; height: 16px; right: -8px; top: -6px; border-radius: 50%; background: var(--text-high); border: 1px solid var(--border); cursor: grab; }
+
         .container { max-width: 1800px; margin: 0 auto; padding: 20px; }
-        
-        .calendar-grid { display: grid; gap: 10px; }
-        .calendar-grid.month { grid-template-columns: repeat(7, 1fr); }
-        .calendar-grid.week { grid-template-columns: repeat(5, 1fr); } /* 5 Business Days */
-        
-        .cal-header { text-align: center; color: var(--text-muted); padding: 10px; font-size: 14px; border-bottom: 2px solid var(--border-color); margin-bottom: 10px; }
-        
-        .cal-day { 
-            background: var(--card-bg); border: 1px solid var(--border-color); min-height: 150px; border-radius: 8px; padding: 10px; 
-            display: flex; flex-direction: column; gap: 8px; transition: 0.2s;
-        }
-        .cal-day.today { border: 1px solid var(--accent-gold); box-shadow: 0 0 10px rgba(240, 185, 11, 0.1); }
-        .day-num { font-size: 14px; color: var(--text-muted); font-weight: bold; margin-bottom: 5px; }
+        .grid-view { display: grid; gap: 10px; }
+        .grid-view.month, .grid-view.week { grid-template-columns: repeat(7, 1fr); }
+        @media (max-width: 1000px) { .grid-view.week, .grid-view.month { display: flex; flex-direction: column; } .cal-day { min-height: auto !important; } }
 
-        .stock-item {
-            display: flex; align-items: center; gap: 8px; padding: 6px; background: var(--panel-bg); 
-            border-radius: 6px; cursor: pointer; transition: 0.2s; border: 1px solid transparent;
-        }
-        .stock-item:hover { border-color: var(--accent-blue); transform: translateX(-2px); }
-        .stock-img { width: 20px; height: 20px; border-radius: 50%; background: #fff; }
-        .stock-sym { font-weight: 700; font-size: 12px; flex: 1; }
-        .stock-time { font-size: 10px; color: var(--text-muted); }
+        .cal-day { background: var(--bg-surface); border: 1px solid var(--border); min-height: 160px; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+        .cal-day.today { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+        .day-header { font-size: 13px; color: var(--text-med); font-weight: 600; padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-bottom: 4px; display: flex; justify-content: space-between; }
 
-        /* LIST VIEW */
-        .list-group { margin-bottom: 25px; }
-        .list-date { font-size: 16px; color: var(--accent-gold); margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; font-weight: 500; }
-        .cards-flex { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        
+        /* --- REDESIGNED CARD --- */
         .card-full {
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px;
-            display: flex; flex-direction: column; justify-content: space-between; height: 160px; cursor: pointer; position: relative; overflow: hidden;
+            background: var(--bg-body); border: 1px solid var(--border); border-radius: 8px; 
+            padding: 12px; display: flex; flex-direction: column; gap: 8px; 
+            cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden; 
+            height: 150px; justify-content: space-between;
         }
-        .card-full:hover { border-color: var(--accent-gold); }
-        .card-strip { position: absolute; top: 0; left: 0; width: 100%; height: 3px; }
+        .card-full:hover { transform: translateY(-3px); border-color: var(--text-med); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .card-full .strip { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
         
-        /* MODAL - PROFESSIONAL DASHBOARD */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
-        .modal-overlay.open { display: flex; animation: fadeIn 0.2s; }
+        .cf-top { display: flex; align-items: center; gap: 12px; position: relative; }
+        .cf-logo { width: 36px; height: 36px; border-radius: 50%; background: #fff; padding: 2px; object-fit: contain; border: 1px solid var(--border); }
+        .cf-sym { font-weight: 700; font-size: 18px; font-family: var(--font-num); letter-spacing: 0.5px; color: var(--text-high); }
         
-        .fin-modal { 
-            background: var(--bg-color); width: 95%; max-width: 1100px; height: 90vh; border-radius: 12px; 
-            border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; 
-            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.8); 
-        }
-        .fin-header { 
-            padding: 20px 30px; border-bottom: 1px solid var(--border-color); background: var(--card-bg); 
-            display: flex; justify-content: space-between; align-items: center; 
-        }
-        .fin-body { flex: 1; overflow-y: auto; padding: 30px; }
-        
-        /* KPI Cards */
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .kpi-card { 
-            background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 15px; 
-            display: flex; flex-direction: column; justify-content: center; text-align: center;
-        }
-        .kpi-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; }
-        .kpi-value { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; direction: ltr; }
-        
-        /* Chart Section */
-        .chart-container { 
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; 
-            margin-bottom: 30px; height: 350px; position: relative;
-        }
-        
-        /* Table */
-        .hist-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; direction: ltr; }
-        .hist-table th { color: var(--text-muted); padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 500; }
-        .hist-table td { padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
-        .hist-table tr:hover { background: var(--panel-bg); }
-        
-        /* Helpers */
-        .val-green { color: var(--accent-green); } .val-red { color: var(--accent-red); }
-        .badge { font-size: 10px; padding: 3px 8px; border-radius: 4px; background: var(--panel-bg); border: 1px solid var(--border-color); }
-        .bg-tech { background: #2962ff; } .bg-fin { background: #0ecb81; } .bg-health { background: #f6465d; } .bg-other { background: #848e9c; }
+        .star-pos { margin-right: auto; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        .star-pos:hover { transform: scale(1.2); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        .cf-name { font-size: 12px; color: var(--text-med); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.4; }
         
-        /* Filters */
-        .advanced-filters { display: none; margin-top: 15px; background: var(--panel-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); }
-        .advanced-filters.show { display: block; }
+        .cf-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--bg-elevated); padding-top: 8px; margin-top: auto; }
+        .capsule { display: flex; align-items: center; gap: 6px; }
+        .cap-badge { font-size: 11px; padding: 2px 6px; border-radius: 4px; background: var(--bg-elevated); color: var(--text-high); border: 1px solid var(--border); font-family: var(--font-num); font-weight: 500; }
+        .sector-text { font-size: 10px; color: var(--text-med); }
+
+        .card-links { display: flex; gap: 8px; opacity: 0.4; transition: 0.2s; }
+        .card-full:hover .card-links { opacity: 1; }
+        .card-link-icon { width: 14px; height: 14px; filter: grayscale(1); transition: 0.2s; }
+        .card-link-icon:hover { filter: grayscale(0); transform: scale(1.2); }
+
+        .card-mini { background: var(--bg-body); border: 1px solid var(--border); border-radius: 4px; padding: 4px 6px; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: 0.2s; position: relative; }
+        .card-mini:hover { border-color: var(--accent); }
+        .card-mini .strip { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+        .cm-logo { width: 16px; height: 16px; border-radius: 50%; background: #fff; }
+        .cm-sym { font-size: 11px; font-weight: 700; flex: 1; font-family: var(--font-num); }
+
+        /* SHOW MORE */
+        .more-btn { background: var(--bg-elevated); color: var(--text-med); font-size: 11px; text-align: center; padding: 4px; border-radius: 4px; cursor: pointer; transition: 0.2s; }
+        .more-btn:hover { color: var(--text-high); background: var(--border); }
+        .more-card { background: var(--bg-elevated); border: 1px dashed var(--border); border-radius: 6px; height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; color: var(--text-med); }
+        .more-card:hover { border-color: var(--accent); color: var(--accent); background: var(--bg-body); }
+
+        /* MODALS */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-overlay); z-index: 1000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease-out; }
         
-        .slider-section { margin-top: 20px; padding: 0 10px; }
-        .noUi-target { background: var(--border-color); border: none; height: 4px; }
-        .noUi-connect { background: var(--accent-gold); }
-        .slider-values { color: var(--accent-gold); font-family: monospace; font-size: 14px; margin-left: 10px; }
+        .fin-modal { background: var(--bg-body); width: 96%; max-width: 1300px; height: 92vh; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .fm-header { padding: 15px 25px; border-bottom: 1px solid var(--border); background: var(--bg-surface); display: flex; justify-content: space-between; align-items: center; }
+        .fm-body { flex: 1; padding: 20px; overflow-y: auto; display: grid; grid-template-columns: 240px 1fr; gap: 20px; }
+        @media (max-width: 900px) { .fm-body { grid-template-columns: 1fr; } }
+
+        .day-modal { background: var(--bg-body); width: 90%; max-width: 1000px; height: 85vh; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+        .day-body { flex: 1; padding: 20px; overflow-y: auto; }
+
+        .fm-sidebar { display: flex; flex-direction: column; gap: 10px; }
+        .kpi-tile { background: var(--bg-surface); border: 1px solid var(--border); padding: 12px; border-radius: 6px; display: flex; flex-direction: column; justify-content: center; min-height: 70px; }
+        .kpi-head { font-size: 10px; color: var(--text-med); text-transform: uppercase; margin-bottom: 4px; font-weight: 700; }
+        .kpi-num { font-size: 16px; font-weight: 600; color: var(--text-high); font-family: var(--font-num); }
+        
+        .fm-main { display: flex; flex-direction: column; gap: 20px; }
+        .charts-split { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; height: 320px; }
+        .chart-box { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 15px; display: flex; flex-direction: column; }
+        .chart-title { font-size: 11px; font-weight: 700; color: var(--text-med); text-transform: uppercase; display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .chart-wrap { flex: 1; min-height: 0; position: relative; }
+
+        .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; margin-top: auto; }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: var(--font-num); }
+        .data-table th { text-align: right; background: var(--bg-elevated); color: var(--text-med); padding: 10px; border-bottom: 1px solid var(--border); font-weight: 600; }
+        .data-table td { padding: 10px; border-bottom: 1px solid var(--border); color: var(--text-high); text-align: right; }
+        .data-table tr:hover { background: var(--bg-elevated); }
+        
+        .list-header { font-size: 16px; color: var(--accent); margin: 20px 0 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-family: var(--font-num); }
+        .cards-flex { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .c-blue { color: var(--accent); } .c-gold { color: var(--warning); } .c-green { color: var(--success); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="top-row">
+    <div class="top-bar">
         <div class="logo">Earnings<span>Pro</span></div>
-        <div class="date-nav">
-            <button class="nav-btn" onclick="changeDate(-1)">&#10094;</button>
-            <div id="dateDisplay" style="font-weight:500; min-width:160px; text-align:center; direction:ltr;">-</div>
-            <button class="nav-btn" onclick="changeDate(1)">&#10095;</button>
+        <div class="controls-group">
+            <button class="icon-btn" onclick="toggleTheme()" title="Theme">🌗</button>
+            <button class="icon-btn eng-font" onclick="toggleLang()" id="langBtn" style="font-weight:700; font-size:12px;">EN</button>
         </div>
-        <div class="right-actions">
-            <div class="view-toggle">
-                <button class="view-btn active" onclick="switchView('list')" id="btn-list">רשימה</button>
-                <button class="view-btn" onclick="switchView('week')" id="btn-week">שבועי</button>
-                <button class="view-btn" onclick="switchView('month')" id="btn-month">חודשי</button>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div class="date-controls">
+            <button class="nav-arrow" onclick="changeDate(-1)">&#10094;</button>
+            <div id="dateDisplay" class="current-date">-</div>
+            <button class="nav-arrow" onclick="changeDate(1)">&#10095;</button>
+        </div>
+        <div class="view-switch">
+            <button class="v-btn active" onclick="switchView('list')" id="btn-list" data-i18n="list">רשימה</button>
+            <button class="v-btn" onclick="switchView('week')" id="btn-week" data-i18n="week">שבועי</button>
+            <button class="v-btn" onclick="switchView('month')" id="btn-month" data-i18n="month">חודשי</button>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <div class="search-wrap">
+            <input type="text" id="searchInput" class="search-input" placeholder="חפש מניה..." data-i18n-ph="search" autocomplete="off">
+            <div id="searchSuggestions" class="suggestions-box"></div>
+        </div>
+        <button class="btn-ui" id="favBtn" onclick="toggleFavFilter()"><span style="color:var(--warning)">★</span> <span data-i18n="favorites">מועדפים</span></button>
+        <button class="btn-ui" onclick="document.querySelector('.filter-panel').classList.toggle('show')"><span>⚡</span> <span data-i18n="filters">סינון</span></button>
+    </div>
+
+    <div class="filter-panel">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            <div class="filter-group">
+                <div class="f-label" data-i18n="sectors">סקטורים</div>
+                <div class="chip-container" id="sectorChips"></div>
+            </div>
+            <div>
+                <div class="filter-group">
+                    <div class="f-label" data-i18n="indices">מדדים</div>
+                    <div class="chip-container">
+                        <div class="filter-chip" onclick="toggleChip(this, 'indices', 'sp500')">S&P 500</div>
+                        <div class="filter-chip" onclick="toggleChip(this, 'indices', 'nasdaq100')">Nasdaq 100</div>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <div class="f-label" style="display:flex; justify-content:space-between;"><span data-i18n="marketCap">שווי שוק</span><span id="sliderVal" class="eng-font">-</span></div>
+                    <div class="slider-wrap"><div id="capSlider"></div></div>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="controls-row">
-        <input type="text" id="searchInput" placeholder="חפש סימול או שם חברה...">
-        <button class="filter-btn" onclick="document.querySelector('.advanced-filters').classList.toggle('show')">סינון מתקדם ▼</button>
-    </div>
-
-    <div class="advanced-filters">
-        <div style="color:var(--text-muted); margin-bottom:10px;">סנן לפי שווי שוק: <span id="sliderValues" class="slider-values">Loading...</span></div>
-        <div class="slider-section">
-            <div id="marketCapSlider"></div>
-        </div>
-        <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
-            <button class="view-btn" onclick="setSliderRange(1e9, 5e12)">הכל</button>
-            <button class="view-btn" onclick="setSliderRange(200e9, 5e12)">ענקיות (>200B)</button>
-            <button class="view-btn" onclick="setSliderRange(10e9, 200e9)">בינוניות</button>
-        </div>
-        <div id="stats-counter" style="margin-top:15px; font-size:12px; color:var(--text-muted);"></div>
+        <div id="statsBar" style="margin-top:10px; font-size:12px; color:var(--text-med);"></div>
     </div>
 </header>
 
-<div class="container" id="main-container">
-    <div style="text-align:center; padding:50px; color:var(--text-muted);">טוען נתונים...</div>
+<div class="container" id="mainContainer">
+    <div style="text-align:center; padding:50px; color:var(--text-low);">Loading...</div>
 </div>
 
-<div class="modal-overlay" id="finModal" onclick="closeModal()">
+<div class="modal-overlay" id="finModal" onclick="closeModal('finModal')">
     <div class="fin-modal" onclick="event.stopPropagation()">
-        <div class="fin-header">
+        <div class="fm-header">
             <div style="display:flex; align-items:center; gap:15px;">
-                <img id="mLogo" src="" style="width:36px; height:36px; border-radius:50%; background:#fff; padding:2px;">
+                <img id="mLogo" src="" style="width:40px; height:40px; border-radius:50%; background:#fff; padding:2px;">
                 <div>
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <h2 id="mSymbol" style="margin:0; font-size:24px;">AAPL</h2>
-                        <span id="mSector" class="badge">Tech</span>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <h2 id="mSymbol" class="eng-font" style="margin:0; font-size:24px;">-</h2>
+                        <span id="mSector" style="font-size:11px; background:var(--bg-body); padding:2px 8px; border-radius:4px; border:1px solid var(--border); color:var(--text-med);">-</span>
                     </div>
-                    <div id="mName" style="font-size:13px; color:var(--text-muted);">Apple Inc.</div>
+                    <div id="mName" style="font-size:13px; color:var(--text-med);">-</div>
                 </div>
             </div>
-            <div style="text-align:left;">
-                <span style="font-size:28px; cursor:pointer; color:var(--text-muted);" onclick="closeModal()">✕</span>
+            <span style="font-size:24px; cursor:pointer;" onclick="closeModal('finModal')">✕</span>
+        </div>
+        <div class="fm-body">
+            <div class="fm-sidebar">
+                <div class="kpi-tile"><div class="kpi-head" data-i18n="marketCap">Market Cap</div><div class="kpi-num" id="mCap">-</div></div>
+                <div class="kpi-tile"><div class="kpi-head">P/E (LTM)</div><div class="kpi-num" id="mPE">-</div></div>
+                <div class="kpi-tile"><div class="kpi-head" data-i18n="revenue">Revenue</div><div class="kpi-num c-blue" id="mRev">-</div></div>
+                <div class="kpi-tile"><div class="kpi-head" data-i18n="dividend">Dividend</div><div class="kpi-num" id="mDiv">-</div></div>
+                <div class="kpi-tile"><div class="kpi-head" data-i18n="ROE">ROE</div><div class="kpi-num" id="mROE">-</div></div>
+                <div style="display:flex; gap:5px; margin-top:5px;">
+                    <a id="lnkYahoo" href="#" target="_blank" class="btn-ui" style="flex:1; justify-content:center;">Yahoo</a>
+                    <a id="lnkTV" href="#" target="_blank" class="btn-ui" style="flex:1; justify-content:center;">TV</a>
+                </div>
+            </div>
+            <div class="fm-main">
+                <div class="charts-split">
+                    <div class="chart-box"><div class="chart-title"><span data-i18n="income">INCOME</span> <span><span class="c-blue">● Rev</span> <span class="c-gold">● Net</span></span></div><div class="chart-wrap"><canvas id="incomeChart"></canvas></div></div>
+                    <div class="chart-box"><div class="chart-title"><span data-i18n="efficiency">EFFICIENCY</span> <span><span class="c-green">● FCF</span> <span style="color:var(--purple)">● Margin</span></span></div><div class="chart-wrap"><canvas id="ratioChart"></canvas></div></div>
+                </div>
+                <div id="mAnalysis" style="font-size:14px; color:var(--text-high); padding:10px; background:var(--bg-elevated); border-radius:6px;"></div>
+                <div class="table-wrap">
+                    <table class="data-table" id="mTable"><thead><tr><th data-i18n="date">Date</th><th data-i18n="revenue">Revenue</th><th data-i18n="netIncome">Net Income</th><th data-i18n="margin">Margin</th><th>FCF</th></tr></thead><tbody></tbody></table>
+                </div>
             </div>
         </div>
-        
-        <div class="fin-body">
-            
-            <div class="kpi-grid">
-                <div class="kpi-card"><span class="kpi-label">Market Cap</span><span class="kpi-value" id="mCap">-</span></div>
-                <div class="kpi-card"><span class="kpi-label">P/E Ratio</span><span class="kpi-value" id="mPE">-</span></div>
-                <div class="kpi-card"><span class="kpi-label">Revenue (TTM)</span><span class="kpi-value" id="mRev">-</span></div>
-                <div class="kpi-card"><span class="kpi-label">Dividend</span><span class="kpi-value" id="mDiv">-</span></div>
-                <div class="kpi-card"><span class="kpi-label">ROE</span><span class="kpi-value" id="mROE">-</span></div>
-            </div>
+    </div>
+</div>
 
-            <div class="chart-container">
-                <canvas id="mainChart"></canvas>
-            </div>
-
-            <div id="mGuidance" style="margin-bottom:20px; padding:15px; background:var(--panel-bg); border-radius:8px; border:1px solid var(--border-color);"></div>
-
-            <h3 style="margin-bottom:15px; font-size:16px; color:var(--text-main);">היסטוריה רבעונית</h3>
-            <div style="overflow-x:auto;">
-                <table class="hist-table" id="mTable">
-                    <thead><tr><th>Date</th><th>Revenue</th><th>Net Income</th><th>Margin</th><th>Free Cash Flow</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            
-            <div style="margin-top:20px; display:flex; gap:15px; justify-content:center;">
-                <a id="linkYahoo" href="#" target="_blank" class="view-btn active" style="text-decoration:none;">Yahoo Finance</a>
-                <a id="linkTrading" href="#" target="_blank" class="view-btn active" style="text-decoration:none;">TradingView</a>
-            </div>
+<div class="modal-overlay" id="dayModal" onclick="closeModal('dayModal')">
+    <div class="day-modal" onclick="event.stopPropagation()">
+        <div class="fm-header">
+            <h2 id="dayTitle" class="eng-font" style="margin:0; font-size:20px;">-</h2>
+            <span style="font-size:24px; cursor:pointer;" onclick="closeModal('dayModal')">✕</span>
+        </div>
+        <div class="day-body">
+            <div class="cards-flex" id="dayGrid"></div>
         </div>
     </div>
 </div>
 
 <script>
-    // --- SAFE DOM UPDATES ---
-    function setText(id, val) { const el = document.getElementById(id); if(el) el.innerText = (val!==undefined && val!==null) ? val : "-"; }
-    function setHtml(id, val) { const el = document.getElementById(id); if(el) el.innerHTML = val || ""; }
-    
-    // --- GLOBALS ---
+    const dict = {
+        list: { he: 'רשימה', en: 'List' }, week: { he: 'שבועי', en: 'Week' }, month: { he: 'חודשי', en: 'Month' }, search: { he: 'חפש מניה...', en: 'Search Ticker...' }, favorites: { he: 'מועדפים', en: 'Favorites' }, filters: { he: 'סינון', en: 'Filters' }, sectors: { he: 'סקטורים', en: 'Sectors' }, indices: { he: 'מדדים', en: 'Indices' }, marketCap: { he: 'שווי שוק', en: 'Market Cap' }, revenue: { he: 'הכנסות', en: 'Revenue' }, netIncome: { he: 'רווח נקי', en: 'Net Income' }, dividend: { he: 'דיבידנד', en: 'Dividend' }, income: { he: 'דוח רווח והפסד', en: 'INCOME STATEMENT' }, efficiency: { he: 'יעילות ותזרים', en: 'EFFICIENCY & FLOW' }, date: { he: 'תאריך', en: 'Date' }, margin: { he: 'שולי רווח', en: 'Margin' }, results: { he: 'נמצאו %s מניות', en: '%s Results Found' }, growth: { he: 'צמיחה שנתית', en: 'YoY Growth' },
+        showAll: { he: 'הצג הכל', en: 'Show All' }, ROE: { he: 'תשואה להון', en: 'ROE' }
+    };
+    const sectorDict = { "Technology": "טכנולוגיה", "Financial Services": "פיננסים", "Healthcare": "בריאות", "Consumer Cyclical": "צרכנות מחזורית", "Industrials": "תעשייה", "Communication Services": "תקשורת", "Consumer Defensive": "צרכנות בסיסית", "Energy": "אנרגיה", "Basic Materials": "חומרי גלם", "Real Estate": "נדל\"ן", "Utilities": "תשתיות", "ETF": "תעודת סל", "Unknown": "אחר" };
+    let currentLang = 'he';
+
+    const $ = (id) => document.getElementById(id);
+    const setText = (id, val) => { const el = $(id); if(el) el.innerText = (val!=null) ? val : "-"; }
+    const getProp = (obj, key, fb='') => (obj && obj[key]!=null) ? obj[key] : fb;
+    const formatNum = (n) => { if(!n) return "-"; if(n>=1e12) return (n/1e12).toFixed(2)+"T"; if(n>=1e9) return (n/1e9).toFixed(2)+"B"; if(n>=1e6) return (n/1e6).toFixed(2)+"M"; return n.toLocaleString(); };
+    function toISODate(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+    function getSectorName(sec) { return currentLang === 'en' ? sec : (sectorDict[sec] || sec); }
+
     let allData = [], historyData = {};
-    let currentView = 'list'; // 'list', 'week', 'month'
-    let navigationDate = new Date();
-    let minCap = 1e9, maxCap = 5e12;
-    let sliderInstance = null;
-    let chartInstance = null;
+    let currentView = 'week';
+    let navDate = new Date();
+    let filters = { sectors: new Set(), indices: new Set(), minCap: 1e9, maxCap: 5e12, favOnly: false };
+    let favorites = new Set(JSON.parse(localStorage.getItem('favStocks') || '[]'));
+    let chart1 = null, chart2 = null;
 
-    // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', async () => {
-        const loader = document.getElementById('main-container');
-        const buster = new Date().getTime();
-        
+        const buster = Date.now();
         try {
-            // 1. Fetch Main Data
-            const res = await fetch(`./data.json?v=${buster}`);
-            if (!res.ok) throw new Error("Missing data.json");
-            const data = await res.json();
-            allData = data.filter(d => d.earningsDate !== '?' && d.earningsDate !== 'TBD');
-            
-            // 2. Fetch History (Optional)
-            fetch(`./history_data.json?v=${buster}`)
-                .then(r => r.json())
-                .then(h => { historyData = h; })
-                .catch(() => console.log("History not available"));
-
-            // 3. Init UI
-            initSlider();
-            updateDateDisplay();
-            applyFilters(); // First Render
-
-        } catch (err) {
-            loader.innerHTML = `<div style="color:#f6465d;">שגיאה: ${err.message}<br>נא להריץ את get_data.py</div>`;
-        }
+            const r1 = await fetch(`./data.json?v=${buster}`);
+            allData = (await r1.json()).filter(d => d.earningsDate && d.earningsDate !== '?' && d.earningsDate !== 'TBD');
+            fetch(`./history_data.json?v=${buster}`).then(r=>r.json()).then(h=>{ historyData=h; }).catch(console.error);
+            initSectorChips(); initSlider(); updateUI();
+        } catch(e) { $('mainContainer').innerHTML = `<div style="text-align:center; color:var(--danger)">Error: ${e.message}</div>`; }
     });
 
-    // --- RENDER LOGIC (THE HEART) ---
-    function applyFilters() {
-        const q = document.getElementById('searchInput').value.toLowerCase().trim();
-        
-        // Filter Logic
-        let filtered = allData.filter(d => {
-            const matchCap = d.marketCap >= minCap && d.marketCap <= maxCap;
-            const matchSearch = q === '' || d.symbol.toLowerCase().includes(q) || d.name.toLowerCase().includes(q);
-            return matchCap && matchSearch;
-        });
-        
-        // Sort by Date
-        filtered.sort((a, b) => new Date(a.earningsDate) - new Date(b.earningsDate));
-        
-        setText('stats-counter', `נמצאו ${filtered.length} תוצאות`);
-        const container = document.getElementById('main-container');
-        container.innerHTML = '';
+    function toggleTheme() { const root = document.documentElement; root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }
+    function toggleLang() { currentLang = currentLang === 'he' ? 'en' : 'he'; document.documentElement.dir = currentLang === 'he' ? 'rtl' : 'ltr'; $('langBtn').innerText = currentLang === 'he' ? 'EN' : 'HE'; updateStaticTranslations(); initSectorChips(); updateUI(); }
+    function updateStaticTranslations() { document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if(dict[key]) el.innerText = dict[key][currentLang]; }); const search = $('searchInput'); if(search) search.placeholder = dict.search[currentLang]; }
 
-        if (currentView === 'list') {
-            renderListView(container, filtered);
-        } else if (currentView === 'week') {
-            renderWeekView(container, filtered);
-        } else {
-            renderMonthView(container, filtered);
+    function initSectorChips() { const rawSectors = [...new Set(allData.map(d => d.sector || 'Other'))].sort(); const container = $('sectorChips'); container.innerHTML = ''; rawSectors.forEach(rawSec => { const translated = getSectorName(rawSec); const chip = document.createElement('div'); chip.className = 'filter-chip'; chip.innerText = translated; if(filters.sectors.has(rawSec)) chip.classList.add('selected'); chip.onclick = () => toggleChip(chip, 'sectors', rawSec); container.appendChild(chip); }); }
+    function initSlider() { const s = $('capSlider'); noUiSlider.create(s, { start: [1e9, 5e12], connect: true, range: { 'min': 1e9, '30%': 50e9, '70%': 200e9, 'max': 5e12 } }); s.noUiSlider.on('update', (vals) => { filters.minCap = parseFloat(vals[0]); filters.maxCap = parseFloat(vals[1]); setText('sliderVal', `$${formatNum(filters.minCap)} - $${formatNum(filters.maxCap)}`); updateUI(); }); }
+
+    function toggleChip(el, type, val) { if(filters[type].has(val)) { filters[type].delete(val); el.classList.remove('selected'); } else { filters[type].add(val); el.classList.add('selected'); } updateUI(); }
+    function toggleFavFilter() { filters.favOnly = !filters.favOnly; $('favBtn').classList.toggle('active'); updateUI(); }
+
+    // SEARCH LOGIC (Starts With Priority)
+    const searchInput = $('searchInput');
+    const suggestionsBox = $('searchSuggestions');
+    searchInput.addEventListener('input', (e) => {
+        const val = e.target.value.toLowerCase().trim();
+        if(val.length < 1) { suggestionsBox.style.display = 'none'; updateUI(); return; }
+        
+        const matches = allData.filter(d => d.symbol.toLowerCase().startsWith(val) || d.name.toLowerCase().includes(val)).sort((a,b) => {
+            const sA = a.symbol.toLowerCase(); const sB = b.symbol.toLowerCase();
+            if(sA === val) return -1; if(sB === val) return 1;
+            if(sA.startsWith(val) && !sB.startsWith(val)) return -1;
+            if(!sA.startsWith(val) && sB.startsWith(val)) return 1;
+            return 0;
+        }).slice(0, 10);
+        
+        if(matches.length > 0) {
+            suggestionsBox.innerHTML = '';
+            matches.forEach(s => {
+                const item = document.createElement('div'); item.className = 's-item';
+                item.innerHTML = `<div class="s-left"><span class="s-sym">${s.symbol}</span><span class="s-name">${s.name}</span></div><span class="s-date">${s.earningsDate}</span>`;
+                item.onclick = () => { navDate = new Date(s.earningsDate); openModal(s); searchInput.value = ''; suggestionsBox.style.display = 'none'; updateUI(); };
+                suggestionsBox.appendChild(item);
+            });
+            suggestionsBox.style.display = 'block';
+        } else { suggestionsBox.style.display = 'none'; }
+    });
+    document.addEventListener('click', (e) => { if(!e.target.closest('.search-wrap')) suggestionsBox.style.display = 'none'; });
+
+    function updateUI() {
+        const q = searchInput.value.toLowerCase().trim();
+        const filtered = allData.filter(d => {
+            const mCap = getProp(d, 'marketCap', 0);
+            const matchesCap = mCap >= filters.minCap && mCap <= filters.maxCap;
+            const matchesSearch = !q || d.symbol.toLowerCase().includes(q) || d.name.toLowerCase().includes(q);
+            const matchesSec = filters.sectors.size === 0 || filters.sectors.has(d.sector);
+            let matchesIdx = true;
+            if(filters.indices.size > 0) { matchesIdx = false; if(filters.indices.has('sp500') && d.inSp500) matchesIdx = true; if(filters.indices.has('nasdaq100') && d.inNasdaq100) matchesIdx = true; }
+            const matchesFav = !filters.favOnly || favorites.has(d.symbol);
+            return matchesCap && matchesSearch && matchesSec && matchesIdx && matchesFav;
+        });
+        filtered.sort((a, b) => new Date(a.earningsDate) - new Date(b.earningsDate));
+        const countStr = dict.results[currentLang].replace('%s', filtered.length); setText('statsBar', countStr);
+        const container = $('mainContainer'); container.innerHTML = '';
+        if(currentView === 'list') renderList(container, filtered); else if(currentView === 'week') renderWeek(container, filtered); else renderMonth(container, filtered);
+        updateDateDisplay();
+    }
+
+    function renderWeek(container, data) {
+        container.className = 'grid-view week';
+        const day = navDate.getDay(); const start = new Date(navDate); start.setDate(navDate.getDate() - day);
+        for(let i=0; i<7; i++) {
+            const d = new Date(start); d.setDate(start.getDate() + i); const dateStr = toISODate(d);
+            const col = document.createElement('div'); col.className = 'cal-day'; if(dateStr === toISODate(new Date())) col.classList.add('today');
+            const dayName = d.toLocaleDateString(currentLang==='he'?'he-IL':'en-US', {weekday:'short'});
+            col.innerHTML = `<div class="day-header"><span>${dayName}</span> <span class="eng-font">${d.getDate()}/${d.getMonth()+1}</span></div>`;
+            const daily = data.filter(s => s.earningsDate === dateStr).sort((a,b)=>b.marketCap-a.marketCap);
+            daily.forEach(s => col.appendChild(createCard(s, 'full'))); container.appendChild(col);
         }
     }
 
-    // --- VIEW 1: LIST ---
-    function renderListView(container, data) {
-        // Filter by current viewed range isn't strictly necessary for list, but let's filter next 7 days from nav date
-        const start = new Date(navigationDate); start.setHours(0,0,0,0);
-        const end = new Date(start); end.setDate(end.getDate() + 7);
-        
-        const subset = data.filter(d => {
-            const dt = new Date(d.earningsDate);
-            return dt >= start && dt < end;
-        });
+    function renderMonth(container, data) {
+        container.className = 'grid-view month';
+        const year = navDate.getFullYear(), month = navDate.getMonth(); const days = new Date(year, month + 1, 0).getDate();
+        for(let i=1; i<=days; i++) {
+            const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+            const cell = document.createElement('div'); cell.className = 'cal-day'; cell.innerHTML = `<div class="day-header">${i}</div>`;
+            const daily = data.filter(s => s.earningsDate === dateStr).sort((a,b)=>b.marketCap-a.marketCap);
+            daily.slice(0, 4).forEach(s => cell.appendChild(createCard(s, 'mini')));
+            if(daily.length > 4) {
+                const more = document.createElement('div'); more.className = 'more-btn'; more.innerText = `+${daily.length-4}`;
+                more.onclick = (e) => { e.stopPropagation(); openDayModal(dateStr, daily); };
+                cell.appendChild(more);
+            }
+            container.appendChild(cell);
+        }
+    }
 
-        if(subset.length === 0) { container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted)">אין דוחות בתאריכים אלו</div>'; return; }
-
-        const grouped = {};
-        subset.forEach(s => { if(!grouped[s.earningsDate]) grouped[s.earningsDate]=[]; grouped[s.earningsDate].push(s); });
-        
+    function renderList(container, data) {
+        container.className = 'grid-view';
+        const start = new Date(navDate); start.setHours(0,0,0,0); const end = new Date(start); end.setDate(end.getDate() + 30);
+        const subset = data.filter(d => { const dt = new Date(d.earningsDate); return dt >= start && dt < end; });
+        if(subset.length === 0) { container.innerHTML = '<div style="text-align:center; padding:40px;">No Earnings</div>'; return; }
+        const grouped = {}; subset.forEach(s => { if(!grouped[s.earningsDate]) grouped[s.earningsDate]=[]; grouped[s.earningsDate].push(s); });
         Object.keys(grouped).sort().forEach(date => {
             const dObj = new Date(date);
-            const dateHeader = document.createElement('div');
-            dateHeader.className = 'list-date';
-            dateHeader.innerText = `${date} - ${dObj.toLocaleDateString('he-IL', {weekday:'long'})}`;
-            container.appendChild(dateHeader);
-            
-            const grid = document.createElement('div');
-            grid.className = 'cards-flex';
-            grouped[date].sort((a,b)=>b.marketCap-a.marketCap).forEach(s => grid.appendChild(createStockCard(s)));
+            const header = document.createElement('div'); header.className='list-header';
+            header.innerText = `${date} / ${dObj.toLocaleDateString(currentLang==='he'?'he-IL':'en-US', {weekday:'long'})}`;
+            container.appendChild(header);
+            const grid = document.createElement('div'); grid.className='cards-flex';
+            const stocks = grouped[date].sort((a,b)=>b.marketCap-a.marketCap);
+            const limit = 12;
+            stocks.slice(0, limit).forEach(s => grid.appendChild(createCard(s, 'full')));
+            if(stocks.length > limit) {
+                const moreCard = document.createElement('div'); moreCard.className = 'more-card';
+                moreCard.innerHTML = `<div class="eng-font" style="font-size:24px; font-weight:700;">+${stocks.length - limit}</div><div style="font-size:12px;">${dict.showAll[currentLang]}</div>`;
+                moreCard.onclick = () => openDayModal(date, stocks);
+                grid.appendChild(moreCard);
+            }
             container.appendChild(grid);
         });
     }
 
-    // --- VIEW 2: WEEK CALENDAR (RESTORED!) ---
-    function renderWeekView(container, data) {
-        // Calculate start of week (Sunday)
-        const current = new Date(navigationDate);
-        const day = current.getDay(); 
-        const startOfWeek = new Date(current); 
-        startOfWeek.setDate(current.getDate() - day);
-        
-        const grid = document.createElement('div');
-        grid.className = 'calendar-grid week';
-        
-        // Loop 0 (Sun) to 4 (Thu) or 6 (Sat)
-        for(let i=0; i<5; i++) { 
-            const d = new Date(startOfWeek);
-            d.setDate(startOfWeek.getDate() + i);
-            const dateStr = d.toISOString().split('T')[0];
-            
-            const col = document.createElement('div');
-            col.className = 'cal-day';
-            const today = new Date().toISOString().split('T')[0];
-            if(dateStr === today) col.classList.add('today');
-            
-            col.innerHTML = `<div class="day-num">${d.toLocaleDateString('he-IL',{weekday:'long'})} ${d.getDate()}/${d.getMonth()+1}</div>`;
-            
-            // Find stocks for this day
-            const daily = data.filter(s => s.earningsDate === dateStr).sort((a,b)=>b.marketCap-a.marketCap);
-            
-            daily.forEach(s => {
-                const item = document.createElement('div');
-                item.className = 'stock-item';
-                item.innerHTML = `
-                    <img src="https://assets.parqet.com/logos/symbol/${s.symbol}?format=png" class="stock-img" onerror="this.style.opacity=0">
-                    <span class="stock-sym">${s.symbol}</span>
-                    <span class="stock-time">${s.time.includes('After')?'🌙':'☀️'}</span>
-                `;
-                item.onclick = () => openModal(s);
-                col.appendChild(item);
-            });
-            
-            grid.appendChild(col);
-        }
-        container.appendChild(grid);
-    }
-
-    // --- VIEW 3: MONTH CALENDAR ---
-    function renderMonthView(container, data) {
-        const year = navigationDate.getFullYear();
-        const month = navigationDate.getMonth();
-        
-        const grid = document.createElement('div');
-        grid.className = 'calendar-grid month';
-        
-        // Days in month
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        
-        for(let i=1; i<=daysInMonth; i++) {
-            const d = new Date(year, month, i);
-            const dateStr = d.toISOString().split('T')[0];
-            
-            const cell = document.createElement('div');
-            cell.className = 'cal-day';
-            cell.style.minHeight = '100px';
-            
-            cell.innerHTML = `<div class="day-num">${i}</div>`;
-            
-            const daily = data.filter(s => s.earningsDate === dateStr);
-            if(daily.length > 0) {
-                // Show only dots/small icons for month view to save space
-                const dots = document.createElement('div');
-                dots.style.display = 'flex'; dots.style.flexWrap = 'wrap'; dots.style.gap = '2px';
-                
-                daily.sort((a,b)=>b.marketCap-a.marketCap).slice(0, 6).forEach(s => {
-                    const img = document.createElement('img');
-                    img.src = `https://assets.parqet.com/logos/symbol/${s.symbol}?format=png`;
-                    img.style.width = '20px'; img.style.height = '20px'; img.style.borderRadius = '50%';
-                    img.style.cursor = 'pointer';
-                    img.onclick = (e) => { e.stopPropagation(); openModal(s); };
-                    dots.appendChild(img);
-                });
-                if(daily.length > 6) {
-                    const more = document.createElement('span');
-                    more.innerText = `+${daily.length-6}`;
-                    more.style.fontSize = '10px'; more.style.color = 'var(--text-muted)';
-                    dots.appendChild(more);
-                }
-                cell.appendChild(dots);
-            }
-            grid.appendChild(cell);
-        }
-        container.appendChild(grid);
-    }
-
-    // --- CARD CREATOR ---
-    function createStockCard(s) {
+    function createCard(s, type='full') {
         const el = document.createElement('div');
-        el.className = 'card-full';
-        
-        let strip = '#848e9c';
-        if(s.sector.includes('Tech')) strip='#2962ff';
-        if(s.sector.includes('Fin')) strip='#0ecb81';
-        
-        el.innerHTML = `
-            <div class="card-strip" style="background:${strip}"></div>
-            <div style="display:flex; align-items:center; gap:10px;">
-                <img src="https://assets.parqet.com/logos/symbol/${s.symbol}?format=png" style="width:32px; height:32px; border-radius:50%; background:#fff; padding:2px;" onerror="this.style.opacity=0">
-                <div>
-                    <div style="font-weight:700; font-size:16px;">${s.symbol}</div>
-                    <div style="font-size:11px; color:var(--text-muted);">$${formatNum(s.marketCap)}</div>
+        const sector = getSectorName(s.sector || 'Unknown');
+        let stripColor = 'var(--text-low)';
+        if(s.sector && s.sector.includes('Tech')) stripColor = 'var(--accent)'; if(s.sector && s.sector.includes('Fin')) stripColor = 'var(--success)'; if(s.sector && s.sector.includes('Health')) stripColor = 'var(--danger)';
+        let timeIcon = ''; const t = (s.time || '').toLowerCase(); if(t.includes('after') || t.includes('close')) timeIcon = '🌙'; else if(t.includes('before') || t.includes('open')) timeIcon = '☀️';
+        const isFav = favorites.has(s.symbol); const starColor = isFav ? 'var(--warning)' : 'var(--border)';
+
+        if(type === 'full') {
+            el.className = 'card-full'; el.innerHTML = `
+                <div class="strip" style="background:${stripColor}"></div>
+                <div class="cf-top">
+                    <img src="https://assets.parqet.com/logos/symbol/${s.symbol}?format=png" class="cf-logo" onerror="this.style.opacity=0">
+                    <span class="cf-sym">${s.symbol}</span>
+                    <div class="star-pos" style="color:${starColor}" onclick="toggleFav(event, '${s.symbol}')">★</div>
                 </div>
-            </div>
-            <div style="font-size:12px; color:var(--text-muted); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; direction:ltr; text-align:left;">${s.name}</div>
-            <div style="display:flex; justify-content:space-between; margin-top:auto;">
-                <span class="badge">${s.sector}</span>
-                <span class="badge">${s.time.includes('After')?'🌙':'☀️'}</span>
-            </div>
-        `;
-        el.onclick = () => openModal(s);
-        return el;
+                <div class="cf-name">${s.name}</div>
+                <div class="cf-footer">
+                    <div class="capsule"><span class="cap-badge">$${formatNum(s.marketCap)}</span><span class="sector-text">${timeIcon}</span></div>
+                    <div class="card-links"><a href="https://finance.yahoo.com/quote/${s.symbol}" target="_blank" onclick="event.stopPropagation()"><img src="https://www.google.com/s2/favicons?domain=finance.yahoo.com" class="card-link-icon"></a><a href="https://www.tradingview.com/chart/?symbol=${s.symbol}" target="_blank" onclick="event.stopPropagation()"><img src="https://www.google.com/s2/favicons?domain=tradingview.com" class="card-link-icon"></a></div>
+                </div>`;
+        } else {
+            el.className = 'card-mini'; el.style.borderLeft = `3px solid ${stripColor}`; el.innerHTML = `<img src="https://assets.parqet.com/logos/symbol/${s.symbol}?format=png" class="cm-logo" onerror="this.style.opacity=0"><span class="cm-sym eng-font">${s.symbol}</span><span class="cm-time">${timeIcon}</span><a href="https://finance.yahoo.com/quote/${s.symbol}" target="_blank" onclick="event.stopPropagation()" style="opacity:0.5"><img src="https://www.google.com/s2/favicons?domain=finance.yahoo.com" style="width:10px"></a>`;
+        }
+        el.onclick = () => openModal(s); return el;
     }
 
-    // --- MODAL & CHART LOGIC ---
+    function toggleFav(e, sym) { e.stopPropagation(); if(favorites.has(sym)) favorites.delete(sym); else favorites.add(sym); localStorage.setItem('favStocks', JSON.stringify([...favorites])); updateUI(); }
+
     function openModal(s) {
-        // Populate Texts
-        setText('mSymbol', s.symbol);
-        setText('mName', s.name);
-        document.getElementById('mLogo').src = `https://assets.parqet.com/logos/symbol/${s.symbol}?format=png`;
-        
-        setText('mCap', formatNum(s.marketCap));
-        setText('mPE', s.trailingPE ? s.trailingPE.toFixed(2) : "-");
-        setText('mRev', formatNum(s.revenue));
-        setText('mDiv', s.dividendYield ? (s.dividendYield*100).toFixed(2)+"%" : "-");
-        
-        const roeEl = document.getElementById('mROE');
-        roeEl.innerText = s.returnOnEquity ? (s.returnOnEquity*100).toFixed(2)+"%" : "-";
-        roeEl.className = (s.returnOnEquity > 0.15) ? "kpi-value val-green" : "kpi-value";
-
-        // Links
-        document.getElementById('linkYahoo').href = `https://finance.yahoo.com/quote/${s.symbol}`;
-        document.getElementById('linkTrading').href = `https://www.tradingview.com/chart/?symbol=${s.symbol}`;
-
-        // History Processing
-        const hist = historyData[s.symbol];
-        const tableBody = document.querySelector('#mTable tbody');
-        tableBody.innerHTML = '';
-        
-        if(hist) {
-            // 1. Chart
-            const ctx = document.getElementById('mainChart').getContext('2d');
-            if(chartInstance) chartInstance.destroy();
-            
-            // Prepare Data (Reverse for chart left-to-right)
-            const dates = hist.quarterlyHistory.map(h => h.date).reverse();
-            const revs = hist.quarterlyHistory.map(h => h.revenue).reverse();
-            const profits = hist.quarterlyHistory.map(h => h.netIncome).reverse();
-            
-            chartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: dates,
-                    datasets: [
-                        { label: 'הכנסות', data: revs, backgroundColor: '#2962ff', borderRadius:4 },
-                        { label: 'רווח נקי', data: profits, backgroundColor: '#0ecb81', borderRadius:4 }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#848e9c' } } },
-                    scales: {
-                        x: { ticks: { color: '#848e9c' }, grid: { display:false } },
-                        y: { ticks: { color: '#848e9c', callback: val => '$' + formatNum(val) }, grid: { color: '#2b3139' } }
-                    }
-                }
-            });
-
-            // 2. Analysis Text
-            let html = "";
-            if(hist.yoyRevenueGrowth) {
-                const color = hist.yoyRevenueGrowth > 0 ? "val-green" : "val-red";
-                html += `<div><strong>צמיחה שנתית (YoY):</strong> <span class="${color}">${hist.yoyRevenueGrowth}%</span></div>`;
-            }
-            if(s.forwardPE && s.trailingPE) {
-                const sentiment = s.forwardPE < s.trailingPE ? "חיובי (צפי לעלייה ברווחים)" : "שלילי/מעורב";
-                html += `<div><strong>תחזית שוק (Forward P/E):</strong> ${sentiment}</div>`;
-            }
-            setHtml('mGuidance', html);
-
-            // 3. Table
-            hist.quarterlyHistory.forEach(q => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${q.date}</td>
-                    <td>${formatNum(q.revenue)}</td>
-                    <td class="${q.netIncome>0?'val-green':'val-red'}">${formatNum(q.netIncome)}</td>
-                    <td>${q.margin}%</td>
-                    <td>${formatNum(q.freeCashFlow)}</td>
-                `;
-                tableBody.appendChild(tr);
-            });
-
-        } else {
-            tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">אין נתונים היסטוריים</td></tr>';
-            setHtml('mGuidance', 'נתונים היסטוריים חסרים. הרץ את get_history.py');
-            if(chartInstance) chartInstance.destroy();
-        }
-
-        document.getElementById('finModal').classList.add('open');
+        setText('mSymbol', s.symbol); setText('mName', s.name); setText('mSector', getSectorName(s.sector || 'Unknown'));
+        $('mLogo').src = `https://assets.parqet.com/logos/symbol/${s.symbol}?format=png`;
+        setText('mCap', formatNum(s.marketCap)); setText('mPE', getProp(s, 'trailingPE') ? s.trailingPE.toFixed(2) : "-"); setText('mRev', formatNum(s.revenue)); setText('mDiv', getProp(s, 'dividendYield') ? (s.dividendYield*100).toFixed(2)+"%" : "-"); setText('mROE', getProp(s, 'returnOnEquity') ? (s.returnOnEquity*100).toFixed(1)+"%" : "-");
+        $('lnkYahoo').href = `https://finance.yahoo.com/quote/${s.symbol}`; $('lnkTV').href = `https://www.tradingview.com/chart/?symbol=${s.symbol}`;
+        const hist = historyData[s.symbol]; const tbody = $('mTable').querySelector('tbody'); tbody.innerHTML = '';
+        if(hist && hist.quarterlyHistory) {
+            const dates = hist.quarterlyHistory.map(h=>h.date).reverse(); const rev = hist.quarterlyHistory.map(h=>h.revenue).reverse(); const net = hist.quarterlyHistory.map(h=>h.netIncome).reverse(); const fcf = hist.quarterlyHistory.map(h=>h.freeCashFlow).reverse(); const margin = hist.quarterlyHistory.map(h=>h.margin).reverse();
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark'; const gridColor = isDark ? '#333' : '#eee'; const textColor = isDark ? '#888' : '#555';
+            const ctx1 = $('incomeChart').getContext('2d'); if(chart1) chart1.destroy(); chart1 = new Chart(ctx1, { type: 'bar', data: { labels: dates, datasets: [{ label: 'Rev', data: rev, backgroundColor: '#3b82f6' }, { label: 'Net', data: net, backgroundColor: '#f59e0b' }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: {display:false}, ticks:{color:textColor} }, y: { grid: {color:gridColor}, ticks:{color:textColor, callback:formatNum} } }, plugins: { legend: {display:false} } } });
+            const ctx2 = $('ratioChart').getContext('2d'); if(chart2) chart2.destroy(); chart2 = new Chart(ctx2, { type: 'bar', data: { labels: dates, datasets: [{ label: 'FCF', data: fcf, backgroundColor: 'rgba(16, 185, 129, 0.6)', borderColor: '#10b981', borderWidth:1 }, { label: 'Margin %', data: margin, type:'line', borderColor: '#8b5cf6', yAxisID:'y1' }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: {display:false}, ticks:{color:textColor} }, y: { grid: {color:gridColor}, ticks:{color:textColor, callback:formatNum} }, y1: { position: 'right', grid: {display:false}, ticks:{color:'#8b5cf6'} } }, plugins: { legend: {display:false} } } });
+            hist.quarterlyHistory.forEach(q => { const tr = document.createElement('tr'); tr.innerHTML = `<td class="eng-font" style="color:var(--text-med)">${q.date}</td><td class="eng-font c-blue">${formatNum(q.revenue)}</td><td class="eng-font c-gold">${formatNum(q.netIncome)}</td><td class="eng-font">${q.margin}%</td><td class="eng-font c-green">${formatNum(q.freeCashFlow)}</td>`; tbody.appendChild(tr); });
+            $('mAnalysis').innerHTML = `${dict.growth[currentLang]}: <strong style="color:${hist.yoyRevenueGrowth>0?'var(--success)':'var(--danger)'}">${hist.yoyRevenueGrowth}%</strong>`;
+        } else { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No History</td></tr>'; if(chart1) chart1.destroy(); if(chart2) chart2.destroy(); $('mAnalysis').innerText = '-'; }
+        $('finModal').classList.add('open');
     }
 
-    function closeModal() { document.getElementById('finModal').classList.remove('open'); }
-
-    // --- SLIDER ---
-    function initSlider() {
-        const s = document.getElementById('marketCapSlider');
-        if(!s || s.noUiSlider) return; // Prevent double init
-        
-        noUiSlider.create(s, {
-            start: [1e9, 5e12], connect: true,
-            range: { 'min': 1e9, '30%': 50e9, '70%': 200e9, 'max': 5e12 }
-        });
-        sliderInstance = s.noUiSlider;
-        s.noUiSlider.on('update', vals => {
-            minCap = parseFloat(vals[0]); maxCap = parseFloat(vals[1]);
-            setText('sliderValues', `$${formatNum(minCap)} - $${formatNum(maxCap)}`);
-            applyFilters();
-        });
-    }
-    function setSliderRange(min, max) { if(sliderInstance) sliderInstance.set([min, max]); }
-
-    // --- NAV ---
-    function changeDate(d) {
-        if(currentView==='month') navigationDate.setMonth(navigationDate.getMonth()+d);
-        else navigationDate.setDate(navigationDate.getDate()+(d*7));
-        updateDateDisplay(); applyFilters();
-    }
-    function switchView(v) {
-        currentView = v;
-        document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(`btn-${v}`).classList.add('active');
-        updateDateDisplay(); applyFilters();
-    }
-    function updateDateDisplay() {
-        const opts = { month: 'long', year: 'numeric' };
-        let txt = "";
-        if(currentView === 'month') {
-            txt = navigationDate.toLocaleDateString('he-IL', opts);
-        } else {
-            const curr = new Date(navigationDate);
-            const day = curr.getDay(); 
-            const start = new Date(curr); start.setDate(curr.getDate() - day);
-            const end = new Date(start); end.setDate(start.getDate() + 6);
-            txt = `${start.getDate()}/${start.getMonth()+1} - ${end.getDate()}/${end.getMonth()+1}`;
-        }
-        setText('dateDisplay', txt);
+    function openDayModal(dateStr, stocks) {
+        setText('dayTitle', dateStr);
+        const grid = $('dayGrid'); grid.innerHTML = '';
+        stocks.forEach(s => grid.appendChild(createCard(s, 'full')));
+        $('dayModal').classList.add('open');
     }
 
-    // --- FORMATTER ---
-    function formatNum(n) {
-        if(!n) return "-";
-        if(n >= 1e12) return (n/1e12).toFixed(2) + "T";
-        if(n >= 1e9) return (n/1e9).toFixed(2) + "B";
-        if(n >= 1e6) return (n/1e6).toFixed(2) + "M";
-        return n.toLocaleString();
-    }
+    function closeModal(id) { $(id).classList.remove('open'); }
 
-    document.getElementById('searchInput').addEventListener('keyup', applyFilters);
+    function changeDate(d) { if(currentView === 'month') navDate.setMonth(navDate.getMonth() + d); else navDate.setDate(navDate.getDate() + (d * 7)); updateDateDisplay(); updateUI(); }
+    function switchView(v) { currentView = v; document.querySelectorAll('.v-btn').forEach(b => b.classList.remove('active')); $(`btn-${v}`).classList.add('active'); updateDateDisplay(); updateUI(); }
+    function updateDateDisplay() { const opts = { month: 'long', year: 'numeric' }; if(currentView === 'month') { $('dateDisplay').innerText = navDate.toLocaleDateString(currentLang==='he'?'he-IL':'en-US', opts); } else { const d = new Date(navDate); const day = d.getDay(); const start = new Date(d); start.setDate(d.getDate() - day); const end = new Date(start); end.setDate(start.getDate() + 6); $('dateDisplay').innerText = `${start.getDate()}/${start.getMonth()+1} - ${end.getDate()}/${end.getMonth()+1}`; } }
+
+    $('searchInput').addEventListener('keyup', updateUI);
 </script>
 </body>
 </html>
