@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Earnings Pro - Mobile Fixed</title>
+    <title>Earnings Pro - Mobile Ready</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
@@ -16,7 +16,7 @@
             --text-high: #f4f4f5; --text-med: #a1a1aa; --text-low: #52525b;
             --border: #3f3f46;
             --accent: #3b82f6; --success: #10b981; --danger: #ef4444; --warning: #f59e0b; --purple: #8b5cf6;
-            --modal-overlay: rgba(0, 0, 0, 0.85);
+            --modal-overlay: rgba(0, 0, 0, 0.9);
             --font-main: 'Rubik', sans-serif; --font-num: 'Inter', sans-serif;
         }
 
@@ -24,169 +24,161 @@
             --bg-body: #f8fafc; --bg-surface: #ffffff; --bg-elevated: #f1f5f9;
             --text-high: #0f172a; --text-med: #64748b; --text-low: #94a3b8;
             --border: #e2e8f0;
-            --modal-overlay: rgba(255, 255, 255, 0.8);
+            --modal-overlay: rgba(255, 255, 255, 0.9);
         }
         
-        * { box-sizing: border-box; }
-        body { background-color: var(--bg-body); color: var(--text-high); font-family: var(--font-main); margin: 0; padding: 0; transition: background 0.3s; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-body); color: var(--text-high); font-family: var(--font-main); margin: 0; padding: 0; transition: background 0.3s; overflow-y: scroll; }
         .eng-font { font-family: var(--font-num); }
 
         /* HEADER */
-        header { background-color: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 15px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .logo { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; } .logo span { color: var(--accent); }
+        header { background-color: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 10px 15px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .logo { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; } .logo span { color: var(--accent); }
         
-        .controls-group { display: flex; gap: 10px; }
-        .icon-btn { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-med); width: 36px; height: 36px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .icon-btn:hover { border-color: var(--accent); color: var(--text-high); }
+        .controls-group { display: flex; gap: 8px; }
+        .icon-btn { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-med); width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; }
 
-        .date-controls { display: flex; align-items: center; gap: 10px; background: var(--bg-body); padding: 4px; border-radius: 6px; border: 1px solid var(--border); }
-        .nav-arrow { background: transparent; border: none; color: var(--text-med); font-size: 18px; padding: 4px 12px; cursor: pointer; transition: 0.2s; }
-        .nav-arrow:hover { color: var(--text-high); }
-        .current-date { min-width: 150px; text-align: center; font-weight: 500; font-size: 14px; direction: ltr; }
+        /* Navigation Row - Stack on Mobile */
+        .nav-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+        
+        .date-controls { display: flex; align-items: center; gap: 5px; background: var(--bg-body); padding: 3px; border-radius: 6px; border: 1px solid var(--border); flex: 1; justify-content: space-between; }
+        .nav-arrow { background: transparent; border: none; color: var(--text-med); font-size: 18px; padding: 4px 10px; cursor: pointer; }
+        .current-date { font-weight: 500; font-size: 13px; direction: ltr; white-space: nowrap; }
 
         .view-switch { display: flex; background: var(--bg-body); padding: 3px; border-radius: 6px; border: 1px solid var(--border); }
-        .v-btn { background: transparent; border: none; color: var(--text-med); padding: 6px 14px; font-size: 13px; cursor: pointer; border-radius: 4px; font-weight: 500; transition: 0.2s; }
+        .v-btn { background: transparent; border: none; color: var(--text-med); padding: 6px 10px; font-size: 12px; cursor: pointer; border-radius: 4px; font-weight: 500; }
         .v-btn.active { background: var(--bg-elevated); color: var(--text-high); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
-        /* Responsive Action Bar */
-        .action-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 15px; }
-        .search-wrap { flex: 1; position: relative; min-width: 250px; }
-        .search-input { width: 100%; background: var(--bg-body); border: 1px solid var(--border); color: var(--text-high); padding: 10px 15px; border-radius: 6px; font-size: 14px; outline: none; transition: 0.2s; }
-        .search-input:focus { border-color: var(--accent); }
+        .action-bar { display: flex; gap: 8px; align-items: center; margin-top: 5px; }
+        .search-wrap { flex: 1; position: relative; }
+        .search-input { width: 100%; background: var(--bg-body); border: 1px solid var(--border); color: var(--text-high); padding: 8px 12px; border-radius: 6px; font-size: 14px; outline: none; }
         
-        .suggestions-box { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 6px; margin-top: 5px; max-height: 300px; overflow-y: auto; z-index: 200; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: none; }
-        .suggestions-box.active { display: block; }
-        .s-item { padding: 10px 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); transition: 0.2s; }
-        .s-item:last-child { border-bottom: none; }
-        .s-item:hover { background: var(--bg-elevated); }
-        .s-left { display: flex; flex-direction: column; }
-        .s-sym { font-weight: 700; color: var(--text-high); font-family: var(--font-num); }
-        .s-name { font-size: 11px; color: var(--text-med); }
-        .s-date { font-size: 11px; color: var(--accent); background: var(--bg-body); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); font-family: var(--font-num); }
-
-        .btn-ui { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-high); padding: 0 16px; height: 38px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: 0.2s; white-space: nowrap; }
-        .btn-ui:hover { border-color: var(--text-med); }
+        .btn-ui { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-high); padding: 0 12px; height: 36px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
         .btn-ui.active { background: var(--accent); border-color: var(--accent); color: white; }
 
-        .filter-panel { display: none; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-top: 15px; }
+        /* Filter Panel */
+        .filter-panel { display: none; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 15px; margin-top: 10px; }
         .filter-panel.show { display: block; animation: slideDown 0.2s ease-out; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .f-label { font-size: 11px; color: var(--text-med); text-transform: uppercase; margin-bottom: 10px; font-weight: 700; letter-spacing: 0.5px; }
-        .chip-container { display: flex; flex-wrap: wrap; gap: 8px; }
-        .filter-chip { background: var(--bg-body); border: 1px solid var(--border); padding: 6px 12px; border-radius: 20px; font-size: 12px; color: var(--text-med); cursor: pointer; user-select: none; transition: 0.2s; }
+        .chip-container { display: flex; flex-wrap: wrap; gap: 6px; }
+        .filter-chip { background: var(--bg-body); border: 1px solid var(--border); padding: 5px 10px; border-radius: 15px; font-size: 11px; color: var(--text-med); cursor: pointer; }
         .filter-chip.selected { background: rgba(59, 130, 246, 0.15); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+        .slider-wrap { padding: 0 10px; margin-top: 10px; }
+        .noUi-connect { background: var(--accent); } .noUi-target { background: var(--border); border: none; height: 4px; } .noUi-handle { width: 16px; height: 16px; right: -8px; top: -6px; border-radius: 50%; background: var(--text-high); border: 1px solid var(--border); }
 
-        .slider-wrap { padding: 0 10px; }
-        .noUi-connect { background: var(--accent); }
-        .noUi-target { background: var(--border); border: none; height: 4px; }
-        .noUi-handle { width: 16px; height: 16px; right: -8px; top: -6px; border-radius: 50%; background: var(--text-high); border: 1px solid var(--border); cursor: grab; }
-
-        /* --- GRID & RESPONSIVE SCROLL --- */
+        /* --- GRID SYSTEM (The Mobile Fix) --- */
         .container { 
-            max-width: 1800px; margin: 0 auto; padding: 20px; 
-            /* Enable horizontal scroll on mobile if content is wide */
+            max-width: 100%; 
+            padding: 15px; 
+            /* Critical for Mobile: Allow Horizontal Scroll */
             overflow-x: auto; 
             -webkit-overflow-scrolling: touch; 
         }
         
         .grid-view { 
             display: grid; 
-            gap: 10px; 
-            /* Force desktop minimum width so it doesn't stack vertically on mobile */
-            min-width: 900px; 
+            gap: 8px; 
+            /* Force Width: Ensures 7 columns don't squash on mobile */
+            min-width: 1000px; 
         }
+        
         .grid-view.month, .grid-view.week { grid-template-columns: repeat(7, 1fr); }
+        .grid-view.list { display: flex; flex-direction: column; min-width: 0; } /* List adapts to screen */
 
-        .cal-day { background: var(--bg-surface); border: 1px solid var(--border); min-height: 160px; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-        .cal-day.today { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-        .day-header { font-size: 13px; color: var(--text-med); font-weight: 600; padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-bottom: 4px; display: flex; justify-content: space-between; }
+        .cal-day { 
+            background: var(--bg-surface); border: 1px solid var(--border); 
+            min-height: 140px; border-radius: 8px; padding: 8px; 
+            display: flex; flex-direction: column; gap: 6px; 
+            overflow: hidden; /* Prevent spillover */
+        }
+        .cal-day.today { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+        .day-header { font-size: 12px; color: var(--text-med); font-weight: 600; padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 4px; display: flex; justify-content: space-between; }
 
         /* CARDS */
         .card-full {
-            background: var(--bg-body); border: 1px solid var(--border); border-radius: 8px; 
-            padding: 12px; display: flex; flex-direction: column; gap: 8px; 
-            cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden; 
-            height: 150px; justify-content: space-between;
+            background: var(--bg-body); border: 1px solid var(--border); border-radius: 6px; 
+            padding: 10px; display: flex; flex-direction: column; gap: 6px; 
+            cursor: pointer; transition: transform 0.1s; position: relative; overflow: hidden; 
+            height: 140px; justify-content: space-between;
         }
-        .card-full:hover { transform: translateY(-3px); border-color: var(--text-med); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .card-full .strip { position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+        .card-full:active { transform: scale(0.98); }
+        .card-full .strip { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
         
-        .cf-top { display: flex; align-items: center; gap: 12px; position: relative; }
-        .cf-logo { width: 36px; height: 36px; border-radius: 50%; background: #fff; padding: 2px; object-fit: contain; border: 1px solid var(--border); }
-        .cf-sym { font-weight: 700; font-size: 18px; font-family: var(--font-num); letter-spacing: 0.5px; color: var(--text-high); }
+        .cf-top { display: flex; align-items: center; gap: 10px; }
+        .cf-logo { width: 32px; height: 32px; border-radius: 50%; background: #fff; padding: 2px; object-fit: contain; border: 1px solid var(--border); }
+        .cf-sym { font-weight: 700; font-size: 16px; font-family: var(--font-num); color: var(--text-high); }
+        .star-pos { margin-right: auto; font-size: 16px; cursor: pointer; padding: 5px; }
+
+        .cf-name { font-size: 11px; color: var(--text-med); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         
-        .star-pos { margin-right: auto; font-size: 16px; cursor: pointer; transition: 0.2s; }
-        .star-pos:hover { transform: scale(1.2); }
+        .cf-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--bg-elevated); padding-top: 6px; margin-top: auto; }
+        .capsule { display: flex; align-items: center; gap: 4px; }
+        .cap-badge { font-size: 10px; padding: 2px 5px; border-radius: 4px; background: var(--bg-elevated); color: var(--text-high); border: 1px solid var(--border); font-family: var(--font-num); }
+        .sector-text { font-size: 12px; }
 
-        .cf-name { font-size: 12px; color: var(--text-med); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.4; }
-        
-        .cf-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--bg-elevated); padding-top: 8px; margin-top: auto; }
-        .capsule { display: flex; align-items: center; gap: 6px; }
-        .cap-badge { font-size: 11px; padding: 2px 6px; border-radius: 4px; background: var(--bg-elevated); color: var(--text-high); border: 1px solid var(--border); font-family: var(--font-num); font-weight: 500; }
-        .sector-text { font-size: 10px; color: var(--text-med); }
+        .card-links { display: flex; gap: 8px; opacity: 0.6; }
+        .card-link-icon { width: 14px; height: 14px; filter: grayscale(1); }
 
-        .card-links { display: flex; gap: 8px; opacity: 0.4; transition: 0.2s; }
-        .card-full:hover .card-links { opacity: 1; }
-        .card-link-icon { width: 14px; height: 14px; filter: grayscale(1); transition: 0.2s; }
-        .card-link-icon:hover { filter: grayscale(0); transform: scale(1.2); }
-
-        .card-mini { background: var(--bg-body); border: 1px solid var(--border); border-radius: 4px; padding: 4px 6px; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: 0.2s; position: relative; }
-        .card-mini:hover { border-color: var(--accent); }
+        .card-mini { background: var(--bg-body); border: 1px solid var(--border); border-radius: 4px; padding: 4px 6px; display: flex; align-items: center; gap: 6px; cursor: pointer; position: relative; }
         .card-mini .strip { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
         .cm-logo { width: 16px; height: 16px; border-radius: 50%; background: #fff; }
         .cm-sym { font-size: 11px; font-weight: 700; flex: 1; font-family: var(--font-num); }
 
-        .more-btn { background: var(--bg-elevated); color: var(--text-med); font-size: 11px; text-align: center; padding: 4px; border-radius: 4px; cursor: pointer; transition: 0.2s; }
-        .more-btn:hover { color: var(--text-high); background: var(--border); }
-        .more-card { background: var(--bg-elevated); border: 1px dashed var(--border); border-radius: 6px; height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; color: var(--text-med); }
-        .more-card:hover { border-color: var(--accent); color: var(--accent); background: var(--bg-body); }
+        /* Mobile specific adjustments */
+        @media (max-width: 600px) {
+            .top-bar { margin-bottom: 5px; }
+            .nav-row { flex-direction: column; align-items: stretch; gap: 8px; }
+            .action-bar { margin-top: 8px; }
+            .btn-ui { padding: 0 10px; font-size: 11px; }
+            .filter-panel { grid-template-columns: 1fr !important; }
+            
+            /* Ensure modal fits screen */
+            .fin-modal { width: 100%; height: 100%; border-radius: 0; border: none; }
+            .fm-body { padding: 15px; grid-template-columns: 1fr; }
+            .charts-split { grid-template-columns: 1fr; height: auto; }
+            .chart-box { height: 250px; }
+        }
 
         /* MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-overlay); z-index: 1000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
-        .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease-out; }
+        .modal-overlay.open { display: flex; }
         
-        /* Modal Responsive Changes */
-        .fin-modal { 
-            background: var(--bg-body); width: 96%; max-width: 1300px; height: 92vh; 
-            border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
-        }
-        .fm-header { padding: 15px 25px; border-bottom: 1px solid var(--border); background: var(--bg-surface); display: flex; justify-content: space-between; align-items: center; }
+        .fin-modal { background: var(--bg-body); width: 95%; max-width: 1300px; height: 90vh; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+        .fm-header { padding: 15px; border-bottom: 1px solid var(--border); background: var(--bg-surface); display: flex; justify-content: space-between; align-items: center; }
         .fm-body { flex: 1; padding: 20px; overflow-y: auto; display: grid; grid-template-columns: 240px 1fr; gap: 20px; }
-        
-        /* Mobile specific for Modals */
-        @media (max-width: 900px) { 
-            .fin-modal { width: 100%; height: 100%; border-radius: 0; }
-            .fm-body { grid-template-columns: 1fr; } /* Stack sidebar and charts */
-            .charts-split { grid-template-columns: 1fr; height: auto; }
-            .action-bar { gap: 5px; }
-            .btn-ui { padding: 0 12px; font-size: 12px; }
-        }
 
-        .day-modal { background: var(--bg-body); width: 90%; max-width: 1000px; height: 85vh; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-        .day-body { flex: 1; padding: 20px; overflow-y: auto; }
+        .day-modal { background: var(--bg-body); width: 95%; max-width: 800px; height: 80vh; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+        .day-body { flex: 1; padding: 15px; overflow-y: auto; }
 
         .fm-sidebar { display: flex; flex-direction: column; gap: 10px; }
-        .kpi-tile { background: var(--bg-surface); border: 1px solid var(--border); padding: 12px; border-radius: 6px; display: flex; flex-direction: column; justify-content: center; min-height: 70px; }
+        .kpi-tile { background: var(--bg-surface); border: 1px solid var(--border); padding: 10px; border-radius: 6px; display: flex; flex-direction: column; justify-content: center; min-height: 60px; }
         .kpi-head { font-size: 10px; color: var(--text-med); text-transform: uppercase; margin-bottom: 4px; font-weight: 700; }
         .kpi-num { font-size: 16px; font-weight: 600; color: var(--text-high); font-family: var(--font-num); }
         
-        .fm-main { display: flex; flex-direction: column; gap: 20px; }
-        .charts-split { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; height: 320px; }
-        .chart-box { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 15px; display: flex; flex-direction: column; }
-        .chart-title { font-size: 11px; font-weight: 700; color: var(--text-med); text-transform: uppercase; display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .fm-main { display: flex; flex-direction: column; gap: 15px; }
+        .charts-split { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; height: 300px; }
+        .chart-box { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; }
+        .chart-title { font-size: 11px; font-weight: 700; color: var(--text-med); text-transform: uppercase; display: flex; justify-content: space-between; margin-bottom: 5px; }
         .chart-wrap { flex: 1; min-height: 0; position: relative; }
 
         .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; margin-top: auto; }
-        .data-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: var(--font-num); }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: var(--font-num); min-width: 500px; }
         .data-table th { text-align: right; background: var(--bg-elevated); color: var(--text-med); padding: 10px; border-bottom: 1px solid var(--border); font-weight: 600; }
         .data-table td { padding: 10px; border-bottom: 1px solid var(--border); color: var(--text-high); text-align: right; }
-        .data-table tr:hover { background: var(--bg-elevated); }
         
         .list-header { font-size: 16px; color: var(--accent); margin: 20px 0 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-family: var(--font-num); }
-        .cards-flex { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .cards-flex { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+        
+        /* AutoComplete */
+        .suggestions-box { position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 6px; margin-top: 5px; max-height: 250px; overflow-y: auto; z-index: 200; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none; }
+        .suggestions-box.active { display: block; }
+        .s-item { padding: 10px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        
         .c-blue { color: var(--accent); } .c-gold { color: var(--warning); } .c-green { color: var(--success); }
+        .more-btn { background: var(--bg-elevated); font-size: 11px; text-align: center; padding: 4px; border-radius: 4px; margin-top: auto; cursor: pointer; }
+        .more-card { background: var(--bg-elevated); border: 1px dashed var(--border); border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: var(--text-med); }
+    
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
@@ -196,12 +188,12 @@
     <div class="top-bar">
         <div class="logo">Earnings<span>Pro</span></div>
         <div class="controls-group">
-            <button class="icon-btn" onclick="toggleTheme()" title="Theme">🌗</button>
+            <button class="icon-btn" onclick="toggleTheme()">🌗</button>
             <button class="icon-btn eng-font" onclick="toggleLang()" id="langBtn" style="font-weight:700; font-size:12px;">EN</button>
         </div>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+    <div class="nav-row">
         <div class="date-controls">
             <button class="nav-arrow" onclick="changeDate(-1)">&#10094;</button>
             <div id="dateDisplay" class="current-date">-</div>
@@ -224,26 +216,24 @@
     </div>
 
     <div class="filter-panel">
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-            <div class="filter-group">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
                 <div class="f-label" data-i18n="sectors">סקטורים</div>
                 <div class="chip-container" id="sectorChips"></div>
             </div>
             <div>
-                <div class="filter-group">
-                    <div class="f-label" data-i18n="indices">מדדים</div>
-                    <div class="chip-container">
-                        <div class="filter-chip" onclick="toggleChip(this, 'indices', 'sp500')">S&P 500</div>
-                        <div class="filter-chip" onclick="toggleChip(this, 'indices', 'nasdaq100')">Nasdaq 100</div>
-                    </div>
+                <div class="f-label" data-i18n="indices">מדדים</div>
+                <div class="chip-container">
+                    <div class="filter-chip" onclick="toggleChip(this, 'indices', 'sp500')">S&P 500</div>
+                    <div class="filter-chip" onclick="toggleChip(this, 'indices', 'nasdaq100')">Nasdaq 100</div>
                 </div>
-                <div class="filter-group">
+                <div style="margin-top:20px;">
                     <div class="f-label" style="display:flex; justify-content:space-between;"><span data-i18n="marketCap">שווי שוק</span><span id="sliderVal" class="eng-font">-</span></div>
                     <div class="slider-wrap"><div id="capSlider"></div></div>
                 </div>
             </div>
         </div>
-        <div id="statsBar" style="margin-top:10px; font-size:12px; color:var(--text-med);"></div>
+        <div id="statsBar" style="margin-top:15px; font-size:12px; color:var(--text-med);"></div>
     </div>
 </header>
 
@@ -254,14 +244,14 @@
 <div class="modal-overlay" id="finModal" onclick="closeModal('finModal')">
     <div class="fin-modal" onclick="event.stopPropagation()">
         <div class="fm-header">
-            <div style="display:flex; align-items:center; gap:15px;">
-                <img id="mLogo" src="" style="width:40px; height:40px; border-radius:50%; background:#fff; padding:2px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <img id="mLogo" src="" style="width:36px; height:36px; border-radius:50%; background:#fff;">
                 <div>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <h2 id="mSymbol" class="eng-font" style="margin:0; font-size:24px;">-</h2>
-                        <span id="mSector" style="font-size:11px; background:var(--bg-body); padding:2px 8px; border-radius:4px; border:1px solid var(--border); color:var(--text-med);">-</span>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <h2 id="mSymbol" class="eng-font" style="margin:0; font-size:20px;">-</h2>
+                        <span id="mSector" style="font-size:10px; background:var(--bg-body); padding:2px 6px; border-radius:4px; border:1px solid var(--border);">-</span>
                     </div>
-                    <div id="mName" style="font-size:13px; color:var(--text-med);">-</div>
+                    <div id="mName" style="font-size:12px; color:var(--text-med);">-</div>
                 </div>
             </div>
             <span style="font-size:24px; cursor:pointer;" onclick="closeModal('finModal')">✕</span>
@@ -283,7 +273,7 @@
                     <div class="chart-box"><div class="chart-title"><span data-i18n="income">INCOME</span> <span><span class="c-blue">● Rev</span> <span class="c-gold">● Net</span></span></div><div class="chart-wrap"><canvas id="incomeChart"></canvas></div></div>
                     <div class="chart-box"><div class="chart-title"><span data-i18n="efficiency">EFFICIENCY</span> <span><span class="c-green">● FCF</span> <span style="color:var(--purple)">● Margin</span></span></div><div class="chart-wrap"><canvas id="ratioChart"></canvas></div></div>
                 </div>
-                <div id="mAnalysis" style="font-size:14px; color:var(--text-high); padding:10px; background:var(--bg-elevated); border-radius:6px;"></div>
+                <div id="mAnalysis" style="font-size:13px; color:var(--text-high); padding:10px; background:var(--bg-elevated); border-radius:6px;"></div>
                 <div class="table-wrap">
                     <table class="data-table" id="mTable"><thead><tr><th data-i18n="date">Date</th><th data-i18n="revenue">Revenue</th><th data-i18n="netIncome">Net Income</th><th data-i18n="margin">Margin</th><th>FCF</th></tr></thead><tbody></tbody></table>
                 </div>
@@ -295,7 +285,7 @@
 <div class="modal-overlay" id="dayModal" onclick="closeModal('dayModal')">
     <div class="day-modal" onclick="event.stopPropagation()">
         <div class="fm-header">
-            <h2 id="dayTitle" class="eng-font" style="margin:0; font-size:20px;">-</h2>
+            <h2 id="dayTitle" class="eng-font" style="margin:0; font-size:18px;">-</h2>
             <span style="font-size:24px; cursor:pointer;" onclick="closeModal('dayModal')">✕</span>
         </div>
         <div class="day-body">
@@ -346,21 +336,16 @@
     function toggleChip(el, type, val) { if(filters[type].has(val)) { filters[type].delete(val); el.classList.remove('selected'); } else { filters[type].add(val); el.classList.add('selected'); } updateUI(); }
     function toggleFavFilter() { filters.favOnly = !filters.favOnly; $('favBtn').classList.toggle('active'); updateUI(); }
 
-    // SEARCH LOGIC
     const searchInput = $('searchInput');
     const suggestionsBox = $('searchSuggestions');
     searchInput.addEventListener('input', (e) => {
         const val = e.target.value.toLowerCase().trim();
         if(val.length < 1) { suggestionsBox.style.display = 'none'; updateUI(); return; }
-        
         const matches = allData.filter(d => d.symbol.toLowerCase().startsWith(val) || d.name.toLowerCase().includes(val)).sort((a,b) => {
             const sA = a.symbol.toLowerCase(); const sB = b.symbol.toLowerCase();
             if(sA === val) return -1; if(sB === val) return 1;
-            if(sA.startsWith(val) && !sB.startsWith(val)) return -1;
-            if(!sA.startsWith(val) && sB.startsWith(val)) return 1;
-            return 0;
+            if(sA.startsWith(val) && !sB.startsWith(val)) return -1; if(!sA.startsWith(val) && sB.startsWith(val)) return 1; return 0;
         }).slice(0, 10);
-        
         if(matches.length > 0) {
             suggestionsBox.innerHTML = '';
             matches.forEach(s => {
@@ -424,7 +409,7 @@
     }
 
     function renderList(container, data) {
-        container.className = 'grid-view';
+        container.className = 'grid-view list';
         const start = new Date(navDate); start.setHours(0,0,0,0); const end = new Date(start); end.setDate(end.getDate() + 30);
         const subset = data.filter(d => { const dt = new Date(d.earningsDate); return dt >= start && dt < end; });
         if(subset.length === 0) { container.innerHTML = '<div style="text-align:center; padding:40px;">No Earnings</div>'; return; }
@@ -459,16 +444,9 @@
         if(type === 'full') {
             el.className = 'card-full'; el.innerHTML = `
                 <div class="strip" style="background:${stripColor}"></div>
-                <div class="cf-top">
-                    <img src="https://assets.parqet.com/logos/symbol/${s.symbol}?format=png" class="cf-logo" onerror="this.style.opacity=0">
-                    <span class="cf-sym">${s.symbol}</span>
-                    <div class="star-pos" style="color:${starColor}" onclick="toggleFav(event, '${s.symbol}')">★</div>
-                </div>
+                <div class="cf-top"><img src="https://assets.parqet.com/logos/symbol/${s.symbol}?format=png" class="cf-logo" onerror="this.style.opacity=0"><span class="cf-sym">${s.symbol}</span><div class="star-pos" style="color:${starColor}" onclick="toggleFav(event, '${s.symbol}')">★</div></div>
                 <div class="cf-name">${s.name}</div>
-                <div class="cf-footer">
-                    <div class="capsule"><span class="cap-badge">$${formatNum(s.marketCap)}</span><span class="sector-text">${timeIcon}</span></div>
-                    <div class="card-links"><a href="https://finance.yahoo.com/quote/${s.symbol}" target="_blank" onclick="event.stopPropagation()"><img src="https://www.google.com/s2/favicons?domain=finance.yahoo.com" class="card-link-icon"></a><a href="https://www.tradingview.com/chart/?symbol=${s.symbol}" target="_blank" onclick="event.stopPropagation()"><img src="https://www.google.com/s2/favicons?domain=tradingview.com" class="card-link-icon"></a></div>
-                </div>`;
+                <div class="cf-footer"><div class="capsule"><span class="cap-badge">$${formatNum(s.marketCap)}</span><span class="sector-text">${timeIcon}</span></div><div class="card-links"><a href="https://finance.yahoo.com/quote/${s.symbol}" target="_blank" onclick="event.stopPropagation()"><img src="https://www.google.com/s2/favicons?domain=finance.yahoo.com" class="card-link-icon"></a><a href="https://www.tradingview.com/chart/?symbol=${s.symbol}" target="_blank" onclick="event.stopPropagation()"><img src="https://www.google.com/s2/favicons?domain=tradingview.com" class="card-link-icon"></a></div></div>`;
         } else {
             el.className = 'card-mini'; el.style.borderLeft = `3px solid ${stripColor}`; el.innerHTML = `<img src="https://assets.parqet.com/logos/symbol/${s.symbol}?format=png" class="cm-logo" onerror="this.style.opacity=0"><span class="cm-sym eng-font">${s.symbol}</span><span class="cm-time">${timeIcon}</span><a href="https://finance.yahoo.com/quote/${s.symbol}" target="_blank" onclick="event.stopPropagation()" style="opacity:0.5"><img src="https://www.google.com/s2/favicons?domain=finance.yahoo.com" style="width:10px"></a>`;
         }
