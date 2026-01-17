@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Earnings Pro - Perfect Fit</title>
+    <title>Earnings Pro - Full Headers</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
@@ -28,17 +28,11 @@
         }
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        /* FORCE NO HORIZONTAL SCROLL ON BODY */
-        body { 
-            background-color: var(--bg-body); color: var(--text-high); 
-            font-family: var(--font-main); margin: 0; padding: 0; 
-            overflow-x: hidden; width: 100vw;
-        }
+        body { background-color: var(--bg-body); color: var(--text-high); font-family: var(--font-main); margin: 0; padding: 0; overflow-y: scroll; overflow-x: hidden; }
         .eng-font { font-family: var(--font-num); }
 
         /* HEADER */
-        header { background-color: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 8px 10px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; }
+        header { background-color: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 8px 10px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .logo { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; } .logo span { color: var(--accent); }
         .controls-group { display: flex; gap: 8px; }
@@ -48,7 +42,6 @@
         .date-controls { display: flex; align-items: center; gap: 2px; background: var(--bg-body); padding: 2px; border-radius: 6px; border: 1px solid var(--border); flex: 1; min-width: 120px; justify-content: space-between; }
         .nav-arrow { background: transparent; border: none; color: var(--text-med); font-size: 16px; padding: 2px 8px; cursor: pointer; }
         .current-date { font-weight: 500; font-size: 12px; direction: ltr; white-space: nowrap; }
-        
         .view-switch { display: flex; background: var(--bg-body); padding: 2px; border-radius: 6px; border: 1px solid var(--border); }
         .v-btn { background: transparent; border: none; color: var(--text-med); padding: 4px 8px; font-size: 11px; cursor: pointer; border-radius: 4px; font-weight: 500; }
         .v-btn.active { background: var(--bg-elevated); color: var(--text-high); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
@@ -67,64 +60,33 @@
         .slider-wrap { padding: 0 10px; margin-top: 10px; }
         .noUi-connect { background: var(--accent); } .noUi-target { background: var(--border); border: none; height: 4px; } .noUi-handle { width: 16px; height: 16px; right: -8px; top: -6px; border-radius: 50%; background: var(--text-high); border: 1px solid var(--border); }
 
-        /* --- GRID SYSTEM (TRUE FIT) --- */
-        .container { 
-            width: 100%; 
-            max-width: 100%;
-            padding: 5px; 
-            overflow: hidden; /* Prevent scrolling entirely */
-        }
-        
-        .grid-view { 
-            display: grid; 
-            width: 100%;
-            gap: 2px; /* Tiny gap for mobile */
-        }
-        
-        /* 7 Columns Always */
-        .grid-view.month, .grid-view.week { 
-            grid-template-columns: repeat(7, 1fr); 
-        }
-        
-        /* List View */
+        /* --- GRID SYSTEM --- */
+        .container { width: 100%; padding: 5px; overflow: hidden; }
+        .grid-view { display: grid; gap: 2px; width: 100%; }
+        .grid-view.month, .grid-view.week { grid-template-columns: repeat(7, 1fr); min-width: 0; }
         .grid-view.list { display: flex; flex-direction: column; gap: 10px; } 
 
-        /* Desktop Adjustments */
-        @media (min-width: 769px) {
-            .grid-view.month, .grid-view.week { 
-                grid-template-columns: repeat(7, 1fr); 
-                gap: 8px;
-                min-width: 1000px; /* Only scroll on desktop if needed? No, let's keep desktop fit too */
-            }
-            .container { padding: 20px; overflow-x: auto; } /* Allow scroll on desktop if window small */
-        }
-
-        /* MOBILE FIX: Force fit */
-        @media (max-width: 768px) {
-            .grid-view.month, .grid-view.week { 
-                min-width: 0; /* Remove min-width to fit screen */
-            }
-        }
-
-        .cal-day { 
-            background: var(--bg-surface); border: 1px solid var(--border); 
-            border-radius: 4px; padding: 2px; 
-            display: flex; flex-direction: column; gap: 2px; 
-            overflow: hidden; 
-        }
-        
-        /* Day Heights */
+        .cal-day { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 4px; padding: 2px; display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
         @media (min-width: 769px) { .cal-day { min-height: 140px; padding: 8px; gap: 6px; } }
         @media (max-width: 768px) { .cal-day { min-height: 70px; } }
 
         .cal-day.today { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
         
-        .day-header { font-size: 11px; color: var(--text-med); font-weight: 600; padding-bottom: 4px; border-bottom: 1px solid var(--border); margin-bottom: 2px; display: flex; justify-content: center; text-align: center; }
+        /* HEADER STYLING FIX */
+        .day-header { 
+            font-size: 11px; color: var(--text-high); font-weight: 600; 
+            padding-bottom: 4px; border-bottom: 1px solid var(--border); margin-bottom: 2px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+            line-height: 1.2;
+        }
+        .day-date-sub {
+            font-size: 9px; color: var(--text-med); font-family: var(--font-num); margin-top: 1px;
+        }
         
-        /* Mobile Header: Only Number */
+        /* Mobile Header Adjustments */
         @media (max-width: 768px) { 
-            .day-header { font-size: 9px; padding: 0; margin: 0 0 2px 0; border: none; }
-            .day-header span:first-child { display: none; } 
+            .day-header { font-size: 9px; padding: 2px 0; background: rgba(255,255,255,0.03); border-radius: 2px; }
+            .day-date-sub { font-size: 8px; }
         }
 
         /* --- CARDS --- */
@@ -136,7 +98,6 @@
         }
         .card-full .strip { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
         
-        /* Desktop Card Look */
         .cf-top { display: flex; align-items: center; gap: 8px; }
         .cf-logo { width: 28px; height: 28px; border-radius: 50%; background: #fff; padding: 2px; object-fit: contain; border: 1px solid var(--border); }
         .cf-sym { font-weight: 700; font-size: 14px; font-family: var(--font-num); color: var(--text-high); }
@@ -149,39 +110,16 @@
         .card-links { display: flex; gap: 6px; opacity: 0.6; }
         .card-link-icon { width: 12px; height: 12px; filter: grayscale(1); }
 
-        /* --- MOBILE CARD (MICRO MODE) --- */
+        /* Mobile Micro-Card */
         @media (max-width: 768px) {
-            /* Force cards to be tiny blocks inside Grid */
             .grid-view:not(.list) .card-full {
-                height: auto !important;
-                min-height: 0 !important;
-                padding: 1px !important;
-                gap: 0 !important;
-                background: transparent;
-                border: none;
-                align-items: center;
-                justify-content: center;
-                margin-bottom: 2px;
+                height: auto !important; min-height: 0 !important; padding: 1px !important; gap: 0 !important;
+                background: transparent; border: none; align-items: center; justify-content: center; margin-bottom: 2px;
             }
-            
-            /* Hide almost everything */
-            .grid-view:not(.list) .cf-name, 
-            .grid-view:not(.list) .cf-footer, 
-            .grid-view:not(.list) .star-pos,
-            .grid-view:not(.list) .strip { display: none !important; }
-            
-            /* Vertical Stack for Logo/Sym */
-            .grid-view:not(.list) .cf-top { 
-                flex-direction: column; 
-                gap: 1px; width: 100%; margin: 0; 
-            }
-            .grid-view:not(.list) .cf-logo { 
-                width: 14px; height: 14px; border: none; padding: 0; 
-            }
-            .grid-view:not(.list) .cf-sym { 
-                font-size: 8px; line-height: 1; text-align: center; 
-                width: 100%; overflow: hidden; white-space: nowrap; 
-            }
+            .grid-view:not(.list) .cf-name, .grid-view:not(.list) .cf-footer, .grid-view:not(.list) .star-pos, .grid-view:not(.list) .strip { display: none !important; }
+            .grid-view:not(.list) .cf-top { flex-direction: column; gap: 1px; width: 100%; margin: 0; }
+            .grid-view:not(.list) .cf-logo { width: 14px; height: 14px; border: none; padding: 0; }
+            .grid-view:not(.list) .cf-sym { font-size: 8px; line-height: 1; text-align: center; width: 100%; overflow: hidden; white-space: nowrap; }
         }
 
         .card-mini { background: var(--bg-body); border: 1px solid var(--border); border-radius: 4px; padding: 4px; display: flex; align-items: center; gap: 4px; cursor: pointer; position: relative; font-size: 10px; margin-bottom: 2px; }
@@ -189,16 +127,13 @@
         .cm-logo { width: 14px; height: 14px; border-radius: 50%; background: #fff; }
         .cm-sym { font-size: 10px; font-weight: 700; flex: 1; font-family: var(--font-num); }
         
-        /* Mobile Mini Card */
         @media (max-width: 768px) {
             .card-mini { flex-direction: column; padding: 1px; gap: 0; border: none; background: transparent; }
             .card-mini .strip { display: none; }
-            .cm-sym { font-size: 8px; text-align: center; max-width: 100%; overflow: hidden; } 
-            .cm-logo { width: 14px; height: 14px; } 
-            .cm-time { display: none; }
+            .cm-sym { font-size: 8px; text-align: center; } .cm-logo { width: 14px; height: 14px; } .cm-time { display: none; }
         }
 
-        .more-btn { background: var(--bg-elevated); color: var(--text-med); font-size: 8px; text-align: center; padding: 1px; border-radius: 3px; margin-top: auto; cursor: pointer; width: 100%; }
+        .more-btn { background: var(--bg-elevated); color: var(--text-med); font-size: 9px; text-align: center; padding: 1px; border-radius: 3px; margin-top: auto; cursor: pointer; width: 100%; }
         .more-card { background: var(--bg-elevated); border: 1px dashed var(--border); border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: var(--text-med); height: 100px; }
 
         /* MODALS */
@@ -225,8 +160,6 @@
 
         .day-modal { background: var(--bg-body); width: 90%; max-width: 600px; height: 80vh; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
         .day-body { flex: 1; padding: 15px; overflow-y: auto; }
-        
-        /* Restore Card in Day Modal */
         .day-body .card-full { height: 120px !important; flex-direction: column !important; justify-content: space-between !important; align-items: stretch !important; padding: 8px !important; background: var(--bg-body) !important; border: 1px solid var(--border) !important; }
         .day-body .card-full .cf-top { flex-direction: row !important; width: auto !important; justify-content: flex-start !important; gap: 8px !important; }
         .day-body .card-full .cf-logo { width: 28px !important; height: 28px !important; }
@@ -463,8 +396,11 @@
         for(let i=0; i<7; i++) {
             const d = new Date(start); d.setDate(start.getDate() + i); const dateStr = toISODate(d);
             const col = document.createElement('div'); col.className = 'cal-day'; if(dateStr === toISODate(new Date())) col.classList.add('today');
+            
             const dayName = d.toLocaleDateString(currentLang==='he'?'he-IL':'en-US', {weekday:'short'});
-            col.innerHTML = `<div class="day-header"><span>${dayName}</span> <span class="eng-font">${d.getDate()}/${d.getMonth()+1}</span></div>`;
+            const dateSub = d.toLocaleDateString('en-GB', {day:'2-digit', month:'2-digit', year:'2-digit'}); // 16.01.26
+            
+            col.innerHTML = `<div class="day-header"><span>${dayName}</span><span class="day-date-sub">${dateSub}</span></div>`;
             const daily = data.filter(s => s.earningsDate === dateStr).sort((a,b)=>b.marketCap-a.marketCap);
             
             daily.slice(0, limit).forEach(s => col.appendChild(createCard(s, 'full')));
@@ -484,7 +420,13 @@
         const year = navDate.getFullYear(), month = navDate.getMonth(); const days = new Date(year, month + 1, 0).getDate();
         for(let i=1; i<=days; i++) {
             const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-            const cell = document.createElement('div'); cell.className = 'cal-day'; cell.innerHTML = `<div class="day-header">${i}</div>`;
+            const cell = document.createElement('div'); cell.className = 'cal-day'; 
+            
+            // Build date object for header
+            const dObj = new Date(year, month, i);
+            const dayName = dObj.toLocaleDateString(currentLang==='he'?'he-IL':'en-US', {weekday:'short'});
+            
+            cell.innerHTML = `<div class="day-header"><span>${dayName}</span><span class="day-date-sub">${i}</span></div>`;
             const daily = data.filter(s => s.earningsDate === dateStr).sort((a,b)=>b.marketCap-a.marketCap);
             const isMobile = window.innerWidth <= 768;
             const limit = isMobile ? 1 : 4;
